@@ -13,7 +13,7 @@ model Rooms {
   name          String     @unique
   description   String?
   price         Int        @default(0)
-  location      String     
+  location      Json     
   image_url     String
 }
 
