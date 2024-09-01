@@ -1,7 +1,7 @@
 class RoomsService {
   api: string;
   constructor(baseURL = "/api/rooms") {
-    this.api = `${process.env.NEXT_PUBLIC_APP_URL}/${baseURL}`;
+    this.api = `${process.env.NEXT_PUBLIC_APP_URL}${baseURL}`;
   }
 
   async getAll() {
