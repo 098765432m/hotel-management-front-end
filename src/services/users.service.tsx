@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { BookingsDtoCreate } from "@/types/dto/bookingsCreate.dto";
+import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 
 class BookingsService {
   private api: any;
@@ -9,14 +9,14 @@ class BookingsService {
 
   async getAll() {
     try {
-      return (await this.api.get("/")).data;
+      return (await this.api("/")).data;
     } catch (error) {
       console.log(error);
     }
   }
 
-  //Create A Booking
-  async CreateOne(body: BookingsDtoCreate) {
+  //Create A User
+  async CreateOne(body: UserCreateDto) {
     try {
       return (await this.api.post(`/`, body)).data;
     } catch (error: any) {

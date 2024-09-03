@@ -1,30 +1,32 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { RoomsDtoCreate } from "@/types/dto/roomsCreate.dto";
+import { RoomTypeDtoCreate } from "@/types/dto/roomTypesCreate.dto";
 
-class RoomsService {
+class RoomTypesService {
   api: any;
-  constructor(baseURL = "/api/rooms") {
+  constructor(baseURL = "/api/roomTypes") {
     this.api = axiosInstance(baseURL);
   }
 
+  //Get All
   async getAll() {
     try {
-      return (await this.api("/")).data;
+      return (await this.api.get("/")).data;
     } catch (error) {
       console.log(error);
     }
   }
 
+  // Get One By Id
   async getOneById(id: string) {
     try {
-      return (await this.api(`/${id}`)).data;
+      return (await this.api.get(`/${id}`)).data;
     } catch (error) {
       console.log(error);
     }
   }
 
-  //Create A Room
-  async CreateOne(body: RoomsDtoCreate) {
+  //Create A RoomType
+  async CreateOne(body: RoomTypeDtoCreate) {
     try {
       return (await this.api.post(`/`, body)).data;
     } catch (error: any) {
@@ -33,6 +35,6 @@ class RoomsService {
   }
 }
 
-const roomsServices = new RoomsService();
+const roomTypesServices = new RoomTypesService();
 
-export default roomsServices;
+export default roomTypesServices;

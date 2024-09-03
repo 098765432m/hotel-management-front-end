@@ -1,7 +1,6 @@
 import { Status_Room } from "@prisma/client";
 
-export interface Room {
-  id: string;
+export interface RoomsDtoCreate {
   name: string;
   description?: string;
   status_room?: Status_Room;
