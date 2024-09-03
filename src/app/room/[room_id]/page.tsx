@@ -24,7 +24,7 @@ export default function RoomDetail({
     };
     getRoom();
   }, [params.room_id]);
-  if (room == null) return <div></div>;
+  if (room == undefined) return <div></div>;
   return (
     <div className="border-white border-2 rounded-xl">
       <div className="flex justify-center space-x-2">

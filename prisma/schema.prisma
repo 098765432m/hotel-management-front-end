@@ -8,20 +8,96 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Rooms {
-  id            String     @default(cuid()) @id
-  name          String     @unique
-  description   String?
-  price         Int        @default(0)
-  location      Json     
-  image_url     String
+enum Role {
+  ADMIN
+  STAFF
+  GUEST
 }
 
-model Bookings {
-  id                String      @default(cuid()) @id
-  room_id           String      
-  user_name         String
-  check_in_date     DateTime    
-  check_out_date    DateTime    
-  status            Boolean     @default(true)
+enum Status_Room {
+  AVAILABLE
+  OCCUPIED
+  MAINTAINANCE
+}
+
+enum Status_Booking {
+  BOOKED
+  CHECK_IN
+  PAID
+}
+
+model User {
+  id          String     @default(cuid()) @id
+  username    String     @unique
+  password    String
+  fullName    String      
+  email       String     @unique
+  role        Role       @default(GUEST)
+  isActive    Boolean    @default(false)
+
+  //Booking
+  booking     Booking[]
+}
+
+model Hotel {
+  id            String    @default(cuid()) @id
+  name          String    @unique
+  address       Json
+
+  //Room
+  rooms         Room[]  //One to Many
+
+  //Room_Type
+  room_types    RoomTypes[]
+}
+
+model Room {
+  id              String        @default(cuid()) @id
+  name            String
+  description     String?
+  status_room     Status_Room   @default(AVAILABLE)
+
+  //Hotel
+  hotel_id        String
+  hotel           Hotel         @relation(fields: [hotel_id], references: [id])
+
+  //Room Type
+  room_type_id    String
+  room_type       RoomTypes     @relation(fields: [room_type_id], references: [id])
+
+  //Booking
+  booking         Booking[]
+}
+
+model Booking {
+  id                String          @default(cuid()) @id
+  check_in_date     DateTime        @default(now())
+  check_out_date    DateTime        
+  status            Status_Booking  @default(BOOKED)
+
+  //Room
+  room_id           String
+  Room              Room            @relation(fields: [room_id], references: [id])
+
+  //User
+  user_id           String?
+  User              User?           @relation(fields: [user_id], references: [id])
+
+  //Guest with no account
+  fullName          String?
+  phoneNumber       String?         
+}
+
+model RoomTypes {
+  id                String    @default(cuid()) @id
+  name              String    
+  price             Int           @default(0)
+  image_url         String
+
+  //Hotel
+  hotel_id          String
+  hotel             Hotel     @relation(fields: [hotel_id], references: [id])
+
+  //Room
+  rooms             Room[]
 }

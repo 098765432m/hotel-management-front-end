@@ -1,30 +1,22 @@
+import axiosInstance from "@/lib/axiosConfig";
+
 class RoomsService {
-  api: string;
+  api: any;
   constructor(baseURL = "/api/rooms") {
-    this.api = `${process.env.NEXT_PUBLIC_APP_URL}${baseURL}`;
+    this.api = axiosInstance(baseURL);
   }
 
   async getAll() {
     try {
-      const res = await fetch(this.api, {
-        cache: "no-cache",
-      });
-
-      return await res.json();
+      return (await this.api("/")).data;
     } catch (error) {
       console.log(error);
     }
   }
 
   async getOneById(id: string) {
-    console.log("room_id: " + id);
-
     try {
-      const res = await fetch(this.api + `/${id}`, {
-        cache: "no-store",
-      });
-
-      return res.json();
+      return (await this.api(`/${id}`)).data;
     } catch (error) {
       console.log(error);
     }

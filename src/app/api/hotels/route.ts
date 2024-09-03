@@ -1,17 +1,18 @@
-import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const prisma = new PrismaClient();
-  const rooms = await prisma.room.findMany();
-  return NextResponse.json(rooms);
+  const hotels = await prisma.hotel.findMany();
+
+  return NextResponse.json(hotels);
 }
 
 export async function POST(request: Request) {
   const prisma = new PrismaClient();
   const body = await request.json();
 
-  const result = await prisma.room.create({
+  const result = await prisma.hotel.create({
     data: body,
   });
 

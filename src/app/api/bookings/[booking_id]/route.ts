@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: { booking_id: string } }
 ) {
   const prisma = new PrismaClient();
-  const booking = await prisma.bookings.findFirst({
+  const booking = await prisma.booking.findFirst({
     where: {
       id: params.booking_id,
     },

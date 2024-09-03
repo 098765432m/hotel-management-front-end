@@ -7,7 +7,7 @@ export async function GET(
 ) {
   const prisma = new PrismaClient();
 
-  const room = await prisma.rooms.findFirst({
+  const room = await prisma.room.findFirst({
     where: {
       id: params.room_id,
     },

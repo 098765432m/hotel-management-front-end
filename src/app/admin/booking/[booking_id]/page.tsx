@@ -1,3 +1,3 @@
-export default function BookingDetail() {
+export default async function BookingDetail() {
   return <div></div>;
 }
