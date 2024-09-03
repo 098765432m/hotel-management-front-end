@@ -1,9 +1,9 @@
 import axiosInstance from "@/lib/axiosConfig";
 import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 
-class BookingsService {
+class UsersService {
   private api: any;
-  constructor(baseUrl = "/api/bookings") {
+  constructor(baseUrl = "/api/users") {
     this.api = axiosInstance(baseUrl);
   }
 
@@ -25,6 +25,6 @@ class BookingsService {
   }
 }
 
-const bookingsService = new BookingsService();
+const usersService = new UsersService();
 
-export default bookingsService;
+export default usersService;

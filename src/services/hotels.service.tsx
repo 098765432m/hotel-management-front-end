@@ -1,9 +1,9 @@
 import axiosInstance from "@/lib/axiosConfig";
 import { HotelsDtoCreate } from "@/types/dto/hotelsCreate.dto";
 
-class BookingsService {
+class HotelsService {
   private api: any;
-  constructor(baseUrl = "/api/bookings") {
+  constructor(baseUrl = "/api/hotels") {
     this.api = axiosInstance(baseUrl);
   }
 
@@ -15,7 +15,7 @@ class BookingsService {
     }
   }
 
-  //Create A Room
+  //Create A Hotel
   async CreateOne(body: HotelsDtoCreate) {
     try {
       return (await this.api.post(`/`, body)).data;
@@ -25,6 +25,6 @@ class BookingsService {
   }
 }
 
-const bookingsService = new BookingsService();
+const hotelsService = new HotelsService();
 
-export default bookingsService;
+export default hotelsService;
