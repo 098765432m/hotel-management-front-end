@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/axiosConfig";
 import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 
 class UsersService {
-  private api: any;
+  api: any;
   constructor(baseUrl = "/api/users") {
     this.api = axiosInstance(baseUrl);
   }
@@ -18,9 +18,11 @@ class UsersService {
   //Create A User
   async CreateOne(body: UserCreateDto) {
     try {
-      return (await this.api.post(`/`, body)).data;
+      return await this.api.post(`/`, body);
     } catch (error: any) {
-      throw new Error(error.message);
+      console.log(error.message);
+
+      throw new Error();
     }
   }
 }

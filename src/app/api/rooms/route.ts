@@ -3,7 +3,13 @@ import { PrismaClient } from "@prisma/client";
 
 export async function GET() {
   const prisma = new PrismaClient();
-  const rooms = await prisma.room.findMany();
+  const rooms = await prisma.room.findMany({
+    include: {
+      hotel: true,
+      room_type: true,
+      booking: true,
+    },
+  });
   return NextResponse.json(rooms);
 }
 

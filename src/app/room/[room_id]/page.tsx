@@ -1,6 +1,4 @@
-"use client";
-
-import Card from "@/components/Card";
+import CardDefault from "@/components/CardDefault";
 import roomsServices from "@/services/rooms.services";
 import { Room } from "@/types/room.interface";
 import { Collapse, Divider, Input, Rate } from "antd";
@@ -10,31 +8,23 @@ import { useEffect, useState } from "react";
 import { AiOutlineDownCircle } from "react-icons/ai";
 import { AiOutlineRightCircle } from "react-icons/ai";
 
-export default function RoomDetail({
+export default async function RoomDetail({
   params,
 }: {
   params: { room_id: string };
 }) {
-  const [room, setRoom] = useState<Room>();
-  // const room: Room = roomsServices.getOneById(room_id);
-  useEffect(() => {
-    const getRoom = async () => {
-      const data = await roomsServices.getOneById(params.room_id);
-      setRoom(data);
-    };
-    getRoom();
-  }, [params.room_id]);
+  const room: Room = await roomsServices.getOneById(params.room_id);
   if (room == undefined) return <div></div>;
   return (
     <div className="border-white border-2 rounded-xl">
       <div className="flex justify-center space-x-2">
         <div className="w-[65%] space-y-4">
           {/* Card thông tin phòng*/}
-          <Card>
+          <CardDefault>
             <div className="flex space-x-4">
               <span className="flex-grow">
                 <Image
-                  src={room.image_url}
+                  src={room.room_type!.image_url}
                   width={400}
                   height={300}
                   alt={room.name}
@@ -61,9 +51,9 @@ export default function RoomDetail({
                 </div>
               </span>
             </div>
-          </Card>
+          </CardDefault>
           {/* Card Input thông tin khách hàng */}
-          <Card>
+          <CardDefault>
             <div className="space-y-5">
               <div>
                 <div className="font-bold text-xl">Thông tin khách hàng</div>
@@ -99,10 +89,10 @@ export default function RoomDetail({
                 </div>
               </div>
             </div>
-          </Card>
+          </CardDefault>
 
           {/* Card yêu cầu đặt biệt */}
-          <Collapse
+          {/* <Collapse
             size="large"
             expandIconPosition="end"
             expandIcon={({ isActive }) => (
@@ -136,12 +126,12 @@ export default function RoomDetail({
                 ),
               },
             ]}
-          ></Collapse>
+          ></Collapse> */}
         </div>
 
         {/* Card giá phòng */}
         <div className="flex-grow">
-          <Card>
+          <CardDefault>
             <div className="space-y-2">
               <div className="space-y-1">
                 <div className="font-bold text-xl">Giá chi tiết</div>
@@ -168,7 +158,7 @@ export default function RoomDetail({
                 </div>
               </div>
             </div>
-          </Card>
+          </CardDefault>
         </div>
       </div>
     </div>

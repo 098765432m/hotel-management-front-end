@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: "sthotelsmalta.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "imgproxy.valpas.io",
+        pathname: "/**",
+      },
     ],
   },
 };

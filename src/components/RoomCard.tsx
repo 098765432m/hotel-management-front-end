@@ -2,7 +2,7 @@
 import { Room } from "@/types/room.interface";
 import { locationToString } from "@/utils/helpers";
 import Image from "next/image";
-import Card from "./Card";
+import Card from "./CardDefault";
 import Link from "next/link";
 import Button from "./Button";
 
@@ -17,15 +17,15 @@ export default function RoomCard({ Room }: Props) {
         <div className="relative ">
           <div className=" overflow-hidden w-[300px] h-[175px]">
             <Image
-              src={Room.image_url}
+              src={Room.room_type!.image_url}
               width={300}
               height={200}
               alt={Room.name}
             ></Image>
           </div>
           <div className="flex justify-between absolute bottom-0 left-0 w-full px-6 text-stone-200 text-lg font-bold">
-            <div>{Room.location.city}</div>
-            <div>{Room.price}đ</div>
+            <div>{Room.hotel!.address.province}</div>
+            <div>{Room.room_type!.price}đ</div>
           </div>
         </div>
       </div>

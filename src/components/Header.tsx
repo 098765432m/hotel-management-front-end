@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import Card from "./Card";
+import Card from "./CardDefault";
 import { FaCircleUser } from "react-icons/fa6";
 
 export default function Header() {

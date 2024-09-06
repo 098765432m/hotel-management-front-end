@@ -17,7 +17,7 @@ class RoomsService {
 
   async getOneById(id: string) {
     try {
-      return (await this.api(`/${id}`)).data;
+      return (await this.api.get(`/${id}`)).data;
     } catch (error) {
       console.log(error);
     }

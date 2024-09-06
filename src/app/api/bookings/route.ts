@@ -1,10 +1,15 @@
-import { Booking } from "@/types/booking.interfaces";
+import { Booking } from "@/types/booking.interface";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   const prisma = new PrismaClient();
-  const bookings = await prisma.booking.findMany();
+  const bookings = await prisma.booking.findMany({
+    include: {
+      room: true,
+      user: true,
+    },
+  });
   return NextResponse.json(bookings);
 }
 

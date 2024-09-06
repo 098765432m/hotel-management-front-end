@@ -10,6 +10,7 @@ datasource db {
 
 enum Role {
   ADMIN
+  MANAGER
   STAFF
   GUEST
 }
@@ -27,7 +28,7 @@ enum Status_Booking {
 }
 
 model User {
-  id          String     @default(cuid()) @id
+  id          String     @id @unique
   username    String     @unique
   password    String
   fullName    String      
@@ -37,6 +38,10 @@ model User {
 
   //Booking
   booking     Booking[]
+
+  // Only MANAGER and STAFF have this hotel field
+  hotel_id    String?
+  hotel       Hotel?       @relation(fields: [hotel_id], references: [id])
 }
 
 model Hotel {
@@ -49,6 +54,9 @@ model Hotel {
 
   //Room_Type
   room_types    RoomTypes[]
+
+  //List of users who work in this hotel
+  users         User[]
 }
 
 model Room {
@@ -77,11 +85,11 @@ model Booking {
 
   //Room
   room_id           String
-  Room              Room            @relation(fields: [room_id], references: [id])
+  room              Room            @relation(fields: [room_id], references: [id])
 
   //User
   user_id           String?
-  User              User?           @relation(fields: [user_id], references: [id])
+  user              User?           @relation(fields: [user_id], references: [id])
 
   //Guest with no account
   fullName          String?

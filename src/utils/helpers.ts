@@ -2,10 +2,10 @@ import { Room } from "@/types/room.interface";
 
 export function locationToString(Room: Room) {
   return (
-    Room.location.street +
+    Room.hotel!.address.street +
     ", quận " +
-    Room.location.ward +
+    Room.hotel!.address.ward +
     ", " +
-    Room.location.city
+    Room.hotel!.address.province
   );
 }

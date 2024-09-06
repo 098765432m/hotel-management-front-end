@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-  baseURL: process.env.PUBLIC_NEXT_APP_URL,
-  timeout: 8000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
-export default axiosInstance;
+export default (baseURL: string) =>
+  axios.create({
+    baseURL: `${process.env.NEXT_PUBLIC_APP_URL}${baseURL}`,
+    timeout: 8000,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });

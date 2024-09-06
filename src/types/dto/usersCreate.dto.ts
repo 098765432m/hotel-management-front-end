@@ -7,4 +7,6 @@ export interface UserCreateDto {
   email: string;
   role?: Role;
   isActive?: boolean;
+
+  hotel_id?: string;
 }
