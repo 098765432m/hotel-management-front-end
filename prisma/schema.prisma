@@ -99,7 +99,7 @@ model Booking {
 model RoomTypes {
   id                String    @default(cuid()) @id
   name              String    
-  price             Int           @default(0)
+  price             Int       @default(0)
   image_url         String
 
   //Hotel

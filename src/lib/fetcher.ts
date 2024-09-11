@@ -1,8 +1,9 @@
 import axios from "axios";
-import axiosInstance from "./axiosConfig";
 
-export const axiosFetcher = (url: string) =>
-  axiosInstance.get(url).then((res) => res.data);
+export const axiosFetcher = async (url: string) => {
+  const response = await axios.get(url);
+  return response.data;
+};
 
 export const axiosCustomFetcher = (url: string) =>
   axios(url).then((res) => res.data);

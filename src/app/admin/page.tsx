@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, notification, Select } from "antd";
-import Card from "@/components/Card";
+import CardDefault from "@/components/CardDefault";
 import { Form, Input } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher, axiosFetcher } from "@/lib/fetcher";
@@ -168,7 +168,7 @@ export default function AdminHome() {
   return (
     <div>
       {contextHolder}
-      <Card>
+      <CardDefault>
         <div className="space-y-6">
           <div className="flex justify-between items-center px-8">
             <div className="text-2xl font-semibold">Booking</div>
@@ -321,7 +321,7 @@ export default function AdminHome() {
             </div>
           </div>
         </div>
-      </Card>
+      </CardDefault>
       {selectedProvince + " - " + selectedDistrict + " - " + selectedWard}
     </div>
   );

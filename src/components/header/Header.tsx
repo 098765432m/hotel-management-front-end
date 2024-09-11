@@ -1,10 +1,9 @@
-"use client";
-
 import Link from "next/link";
-import Card from "./CardDefault";
-import { FaCircleUser } from "react-icons/fa6";
+import Card from "../CardDefault";
+import HeaderLoginButton from "./HeaderLoginButton";
 
 export default function Header() {
+  const introspect = false;
   return (
     <Card>
       <div className="flex justify-between">
@@ -13,11 +12,8 @@ export default function Header() {
         </span>
         <span className="flex space-x-8 items-center">
           <span>Trợ giúp</span>
-          <span className="flex space-x-2">
-            <span>
-              <FaCircleUser size={26}></FaCircleUser>
-            </span>
-            <span>098765432m</span>
+          <span>
+            <HeaderLoginButton isLogin={introspect}></HeaderLoginButton>
           </span>
         </span>
       </div>

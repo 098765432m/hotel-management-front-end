@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,21 +20,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ConfigProvider
-          theme={{
-            components: {
-              Collapse: {
-                headerBg: "#ffffff",
-                contentBg: "#ffffff",
+        <AppRouterCacheProvider>
+          <ConfigProvider
+            theme={{
+              components: {
+                Collapse: {
+                  headerBg: "#ffffff",
+                  contentBg: "#ffffff",
+                },
               },
-            },
-          }}
-        >
-          <main className="py-6 px-12 bg-stone-100">
-            <Header></Header>
-            {children}
-          </main>
-        </ConfigProvider>
+            }}
+          >
+            <main className="py-6 px-12 bg-stone-100">
+              <Header></Header>
+              {children}
+            </main>
+          </ConfigProvider>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
