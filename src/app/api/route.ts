@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/client";
+
 export async function GET() {
-  const prima = new PrismaClient();
-  const rooms = await prima.room.findMany();
+  const rooms = await prisma.room.findMany();
   return NextResponse.json(rooms);
 }

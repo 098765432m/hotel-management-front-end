@@ -1,9 +1,8 @@
 import { Booking } from "@/types/booking.interface";
-import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/client";
 
 export async function GET() {
-  const prisma = new PrismaClient();
   const bookings = await prisma.booking.findMany({
     include: {
       room: true,
@@ -15,7 +14,6 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const prisma = new PrismaClient();
     const data: Booking = await request.json();
     let additionalField: any = {};
 

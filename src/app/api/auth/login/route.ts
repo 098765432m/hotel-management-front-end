@@ -1,6 +1,6 @@
 import { verifyPassword } from "@/lib/auth";
 import { createSession } from "@/lib/session";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/client";
 import { NextResponse } from "next/server";
 
 interface loginForm {
@@ -9,7 +9,6 @@ interface loginForm {
 }
 
 export async function POST(request: Request) {
-  const prisma = new PrismaClient();
   const body: loginForm = await request.json();
 
   // Find user with username
