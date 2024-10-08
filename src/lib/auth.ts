@@ -12,3 +12,5 @@ export const verifyPassword = async (
 ) => {
   return await bcrypt.compare(password, hashedPassword);
 };
+
+// bcrypt.compare('113446', '$2a$10$fUor9jOu5QrGL195fKp2Tesu8R0NZslAOobnA1VvtpVqmIvZk1W4m').then(value => console.log("brypt compare: " + value));

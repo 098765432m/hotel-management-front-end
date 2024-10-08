@@ -11,13 +11,17 @@ export async function POST(request: Request) {
 
   //Hashed Password
   body.password = await hashedPassword(body.password);
-
+  console.log("Hashed password: " + body.password);
+  
   const result = await prisma.user.create({
     data: {
       id: uid.rnd(),
       ...body,
     },
   });
+
+  console.log(result);
+  
 
   return NextResponse.json(result);
 }

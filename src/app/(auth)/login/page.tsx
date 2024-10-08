@@ -1,12 +1,11 @@
 "use client";
 
 import authService from "@/services/auth.service";
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, TextField, Snackbar } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import React from "react";
-import { promise1, promise2 } from "@/utils/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,15 +24,17 @@ export default function LoginPage() {
       formData.append("username", usernameRef.current.value);
       formData.append("password", passwordRef.current.value);
     }
-    let isSuccess;
+    let isSuccess = false;
     try {
       isSuccess = await authService.login(formData);
 
-      // console.log("Login successful", response);
+      console.log("Login successful", isSuccess);
     } catch (error) {
       throw new Error("Lỗi đăng nhập");
     }
+    
     if (isSuccess) router.push("/");
+    
   };
 
   return (

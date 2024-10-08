@@ -1,12 +1,20 @@
 "use client";
 
 import authService from "@/services/auth.service";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Snackbar,
+  Alert,
+  SnackbarCloseReason,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 
 export default function RegisterPage() {
+  const [isSuccess, setIsSuccess] = useState(false); // Trạng thái đăng ký thành công
+  const [isFailed, setIsFailed] = useState(false); // Trạng thái đăng ký thất bại
   const router = useRouter();
 
   // Giá trị của form input
@@ -35,13 +43,37 @@ export default function RegisterPage() {
       throw new Error("Lỗi input");
     }
 
+    console.log("Form Data: ");
+
+    console.log(formData);
+
     // Đăng ký tài khoản GUEST mới và chuyển trang
     try {
       await authService.register(formData);
+      setIsSuccess(true);
+      router.push("/login");
     } catch (error) {
-      throw new Error("Tài khoản đã tồn tại");
+      setIsFailed(true);
+      // throw new Error("Tài khoản đã tồn tại");
     }
-    // if (isSuccess) router.push("/");
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") return;
+
+    setIsSuccess(false);
+  };
+
+  const handleCloseFailed = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") return;
+
+    setIsFailed(false);
   };
 
   return (
@@ -94,6 +126,20 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
+      <Snackbar open={isSuccess} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+          Đăng ký thành công!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={isFailed}
+        autoHideDuration={6000}
+        onClose={handleCloseFailed}
+      >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+          Tài khoản đã tồn tại!
+        </Alert>
+      </Snackbar>
     </form>
   );
 }
