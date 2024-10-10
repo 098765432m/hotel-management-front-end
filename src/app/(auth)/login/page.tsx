@@ -1,13 +1,17 @@
 "use client";
 
 import authService from "@/services/auth.service";
-import { Alert, Button, TextField, Snackbar } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import Link from "next/link";
 import React from "react";
+import { AuthContext } from "@/context/AuthContext";
+import { UserCookieResponse } from "@/types/dto/user.dto";
+import { roleEnum } from "@/types/enum/role.enum";
 
 export default function LoginPage() {
+  const { setIsLogin, setAuth } = useContext(AuthContext);
   const router = useRouter();
 
   // Giá trị của form input
@@ -24,17 +28,29 @@ export default function LoginPage() {
       formData.append("username", usernameRef.current.value);
       formData.append("password", passwordRef.current.value);
     }
-    let isSuccess = false;
-    try {
-      isSuccess = await authService.login(formData);
 
-      console.log("Login successful", isSuccess);
-    } catch (error) {
-      throw new Error("Lỗi đăng nhập");
+    const user: UserCookieResponse | null = await authService.login(formData); //Get user info
+
+    if (user != null) {
+      setAuth(user);
+      setIsLogin(true);
+
+      // Redirect User by Role
+      switch (user.role) {
+        case roleEnum.ADMIN:
+          router.push("/admin");
+          break;
+        case roleEnum.MANAGER || roleEnum.STAFF:
+          router.push("/dashboard");
+          break;
+        case roleEnum.GUEST:
+          router.push("/");
+          break;
+
+        default:
+          break;
+      }
     }
-    
-    if (isSuccess) router.push("/");
-    
   };
 
   return (

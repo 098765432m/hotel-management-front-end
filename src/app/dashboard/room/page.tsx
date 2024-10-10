@@ -1,5 +1,6 @@
 "use client";
 
+import { roomCreate } from "@/action/room.action";
 import CardDefault from "@/components/CardDefault";
 import { axiosFetcher } from "@/lib/fetcher";
 import {
@@ -29,17 +30,22 @@ export default function RoomPage() {
   }
   return (
     <CardDefault>
-      <form>
+      <form action={roomCreate}>
         <div className="flex justify-center my-12">
-          <div className="space-y-4">
+          <div className="space-y-4 grid justify-items-center ">
             <div className="flex justify-center">
               <div className="text-2xl font-bold">Phòng</div>
             </div>
             <div>
-              <TextField variant="outlined" label="Tên phòng"></TextField>
+              <TextField
+                name="roomName"
+                variant="outlined"
+                label="Tên phòng"
+              ></TextField>
             </div>
             <div>
               <TextField
+                name="description"
                 multiline
                 variant="outlined"
                 label="Miêu tả"
@@ -49,6 +55,8 @@ export default function RoomPage() {
               <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel id="roomType">Loại phòng</InputLabel>
                 <Select
+                  onChange={(e) => setSelectedRoomType(e.target.value)}
+                  name="roomType"
                   value={selectedRoomType}
                   label="Mokas"
                   labelId="roomType"
@@ -65,8 +73,15 @@ export default function RoomPage() {
                 </Select>
               </FormControl>
             </div>
+            <input
+              type="hidden"
+              value={"cm0p7ecfe000484noke8n4yp4"}
+              name="hotelId"
+            ></input>
             <div className="flex justify-center">
-              <Button variant="contained">Tạo phòng</Button>
+              <Button variant="contained" type="submit">
+                Tạo phòng
+              </Button>
             </div>
           </div>
         </div>

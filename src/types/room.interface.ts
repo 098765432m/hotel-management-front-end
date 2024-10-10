@@ -8,7 +8,7 @@ export interface Room {
   status_room?: Status_Room;
 
   hotel_id: string;
-  hotel?: Hotel;
+  hotel: Hotel;
 
   room_type_id: string;
   room_type?: RoomTypes;

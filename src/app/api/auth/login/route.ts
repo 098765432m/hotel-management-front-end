@@ -2,6 +2,7 @@ import { verifyPassword } from "@/lib/auth";
 import { createSession } from "@/lib/session";
 import { prisma } from "@/lib/client";
 import { NextResponse } from "next/server";
+import { UserCookieResponse } from "@/types/dto/user.dto";
 
 interface loginForm {
   username: string;
@@ -18,22 +19,32 @@ export async function POST(request: Request) {
     },
   });
 
-  console.log("Username: " + body.username);
-  console.log("Input password: " + body.password);
-  console.log("Stored password: " + user?.password);
-  
-
   // Check if password is valid
   const result =
     user != undefined && (await verifyPassword(body.password, user.password));
 
-    if(user != undefined){
-      console.log("result: " + await verifyPassword(body.password, user.password));
-    }
-    
+  console.log("result: " + result);
+
   //Create jwt session
   if (result) {
-    await createSession(user.id);
+    await createSession({
+      userId: user.id,
+      role: user.role,
+      hotelId: user.hotel_id,
+    });
   }
-  return NextResponse.json(result);
+
+  const userResponse: UserCookieResponse | null =
+    user != undefined
+      ? {
+          id: user.id as string,
+          username: user?.username as string,
+          role: user?.role as string,
+          hotelId: user?.hotel_id ?? undefined,
+        }
+      : null;
+
+  console.log(userResponse);
+
+  return NextResponse.json(userResponse);
 }

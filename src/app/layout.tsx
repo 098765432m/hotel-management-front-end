@@ -4,6 +4,7 @@ import "./globals.css";
 import { ConfigProvider } from "antd";
 import Header from "@/components/header/Header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import AuthProvider from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,10 +32,12 @@ export default function RootLayout({
               },
             }}
           >
-            <main className="py-6 px-12 bg-stone-100">
-              <Header></Header>
-              {children}
-            </main>
+            <AuthProvider>
+              <main className="py-6 px-12 bg-stone-100">
+                <Header></Header>
+                {children}
+              </main>
+            </AuthProvider>
           </ConfigProvider>
         </AppRouterCacheProvider>
       </body>

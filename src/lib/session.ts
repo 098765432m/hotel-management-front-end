@@ -5,8 +5,10 @@ import { cookies } from "next/headers";
 const SESSION_SECRET_KEY = process.env.SESSION_SECRET;
 const encodeKey = new TextEncoder().encode(SESSION_SECRET_KEY);
 
-interface SessionPayload extends JwtPayload {
+export interface SessionPayload extends JwtPayload {
   userId: string;
+  role: string;
+  hotelId: string | null;
 }
 
 export async function encrypt(payload: SessionPayload) {
@@ -22,6 +24,9 @@ export async function decrypt(session: string | undefined = "") {
     const { payload } = await jwtVerify(session, encodeKey, {
       algorithms: ["HS256"],
     });
+    console.log("decrypt");
+
+    console.log(payload);
 
     return payload;
   } catch (error) {
@@ -29,14 +34,16 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string) {
+export async function createSession(payload: SessionPayload) {
   const expireAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({
-    userId: userId,
+    userId: payload.userId,
+    role: payload.role,
+    hotelId: payload.hotelId,
     exp: Math.floor(expireAt.getTime()),
   });
 
-  cookies().set("session", session, {
+  cookies().set("login", session, {
     httpOnly: true,
     secure: true,
     expires: expireAt,
@@ -46,7 +53,7 @@ export async function createSession(userId: string) {
 }
 
 export async function updateSession() {
-  const session = cookies().get("session")?.value;
+  const session = cookies().get("login")?.value;
   const payload = await decrypt(session);
 
   if (!session || !payload) {

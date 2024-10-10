@@ -1,6 +1,6 @@
 "use client";
 import { Room } from "@/types/room.interface";
-import { locationToString } from "@/utils/helpers";
+import { addressToString } from "@/utils/helpers";
 import Image from "next/image";
 import Card from "./CardDefault";
 import Link from "next/link";
@@ -17,6 +17,7 @@ export default function RoomCard({ Room }: Props) {
         <div className="relative ">
           <div className=" overflow-hidden w-[300px] h-[175px]">
             <Image
+              priority
               src={Room.room_type!.image_url}
               width={300}
               height={200}
@@ -24,7 +25,7 @@ export default function RoomCard({ Room }: Props) {
             ></Image>
           </div>
           <div className="flex justify-between absolute bottom-0 left-0 w-full px-6 text-stone-200 text-lg font-bold">
-            <div>{Room.hotel!.address.province}</div>
+            <div>{Room.hotel.address.province.name}</div>
             <div>{Room.room_type!.price}đ</div>
           </div>
         </div>
@@ -33,7 +34,7 @@ export default function RoomCard({ Room }: Props) {
         <div className="text-xl text-ellipsis overflow-hidden text-nowrap mb-1">
           {Room.name}
         </div>
-        <div className="text-sm">{locationToString(Room)}</div>
+        <div className="text-sm">{addressToString(Room.hotel.address)}</div>
         <div className="text-sm">Show more map</div>
         <div className="flex justify-center mt-4">
           <Link href={`/room/${Room.id}`}>

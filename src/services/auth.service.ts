@@ -10,8 +10,6 @@ class AuthService {
   async login(formData: FormData) {
     const username = formData.get("username");
     const password = formData.get("password");
-    console.log(username);
-    console.log(password);
 
     // Thành công sẽ chuyển tới trang chủ và tạo session
     const result = await this.api.post(`/login`, {

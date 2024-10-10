@@ -1,11 +1,5 @@
-import { Room } from "@/types/room.interface";
+import { AddressType } from "@/types/address.interface";
 
-export function locationToString(Room: Room) {
-  return (
-    Room.hotel!.address.street +
-    ", quận " +
-    Room.hotel!.address.ward +
-    ", " +
-    Room.hotel!.address.province
-  );
+export function addressToString(address: AddressType) {
+  return `Đường ${address.street}, ${address.ward}, ${address.district}, ${address.province}`;
 }

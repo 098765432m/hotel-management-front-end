@@ -78,7 +78,7 @@ export default function RegisterPage() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex justify-center  my-24">
+      <div className="flex justify-center my-24">
         <div className="space-y-4">
           <div className="flex justify-center">
             <div className="text-2xl font-bold">Đăng ký</div>

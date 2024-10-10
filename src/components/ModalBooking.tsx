@@ -1,7 +1,6 @@
 "use client";
-import { Booking } from "@/types/booking.interfaces";
+import { Booking } from "@/types/booking.interface";
 import { Modal } from "antd";
-import { useState } from "react";
 
 interface Props {
   booking: Booking;
