@@ -28,13 +28,15 @@ enum Status_Booking {
 }
 
 model User {
-  id          String     @id @unique
-  username    String     @unique
-  password    String
-  fullName    String     
-  email       String     @unique
-  role        Role       @default(GUEST)
-  isActive    Boolean    @default(false)
+    id                String     @id @unique
+    username          String     @unique
+    password          String
+    fullName          String     
+    email             String     @unique
+    role              Role       @default(GUEST)
+    isActive          Boolean    @default(false)
+    img_public_id     String?    @default("")
+    img_format        String?    @default("")
 
   //Booking
   booking     Booking[]

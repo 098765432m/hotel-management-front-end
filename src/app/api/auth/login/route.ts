@@ -23,28 +23,24 @@ export async function POST(request: Request) {
   const result =
     user != undefined && (await verifyPassword(body.password, user.password));
 
-  console.log("result: " + result);
-
   //Create jwt session
   if (result) {
     await createSession({
-      userId: user.id,
+      id: user.id,
+      username: user.username,
       role: user.role,
       hotelId: user.hotel_id,
     });
   }
 
-  const userResponse: UserCookieResponse | null =
-    user != undefined
-      ? {
-          id: user.id as string,
-          username: user?.username as string,
-          role: user?.role as string,
-          hotelId: user?.hotel_id ?? undefined,
-        }
-      : null;
-
-  console.log(userResponse);
+  const userResponse: UserCookieResponse | null = result
+    ? {
+        id: user.id as string,
+        username: user?.username as string,
+        role: user?.role as string,
+        hotelId: user?.hotel_id ?? null,
+      }
+    : null;
 
   return NextResponse.json(userResponse);
 }

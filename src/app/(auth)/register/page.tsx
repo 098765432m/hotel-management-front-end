@@ -43,10 +43,6 @@ export default function RegisterPage() {
       throw new Error("Lỗi input");
     }
 
-    console.log("Form Data: ");
-
-    console.log(formData);
-
     // Đăng ký tài khoản GUEST mới và chuyển trang
     try {
       await authService.register(formData);

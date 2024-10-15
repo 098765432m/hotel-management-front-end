@@ -17,6 +17,8 @@ class UsersService {
 
   //Create A User
   async CreateOne(body: UserCreateDto) {
+    console.log(body);
+
     try {
       return await this.api.post(`/`, body);
     } catch (error: any) {

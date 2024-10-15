@@ -3,9 +3,9 @@
 import { FaCircleUser } from "react-icons/fa6";
 import Link from "next/link";
 import React, { useContext, useState } from "react";
-import isAuthenticated, { logOut } from "@/lib/auth";
+import { logOut } from "@/lib/auth";
 import { AuthContext } from "@/context/AuthContext";
-import { MenuList, Button, Menu, MenuItem } from "@mui/material";
+import { Button, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 export default function HeaderLoginButton() {
@@ -50,6 +50,9 @@ export default function HeaderLoginButton() {
             }}
           >
             <MenuItem>
+              <Link href={"/profile"}>Trang cá nhân</Link>
+            </MenuItem>
+            <MenuItem>
               <span
                 onClick={() => {
                   setIsLogin(false);
@@ -60,9 +63,6 @@ export default function HeaderLoginButton() {
               >
                 Đăng xuất
               </span>
-            </MenuItem>
-            <MenuItem>
-              <Link href={"/profile"}></Link>
             </MenuItem>
           </Menu>
         </>

@@ -18,7 +18,6 @@ export const verifyPassword = async (
 
 export default async function isAuthenticated() {
   const session = cookies().get("login")?.value;
-  console.log("session: " + session);
 
   return session != null ? session : null;
 }

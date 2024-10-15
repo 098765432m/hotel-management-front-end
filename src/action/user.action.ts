@@ -2,6 +2,8 @@
 
 import { hashedPassword } from "@/lib/auth";
 import { prisma } from "@/lib/client";
+import { UserUpdateResponse } from "@/types/dto/user.dto";
+import { roleEnum } from "@/types/enum/role.enum";
 import ShortUniqueId from "short-unique-id";
 
 interface DetailInfo {
@@ -31,8 +33,6 @@ export async function createContact(formData: FormData) {
     district: JSON.parse(formData.get("district") as string),
     province: JSON.parse(formData.get("province") as string),
   };
-
-  console.log(newContact);
 
   //Check empty input
   if (
@@ -81,4 +81,46 @@ export async function createContact(formData: FormData) {
   } catch (error: any) {
     console.log("*Error: " + error.message);
   }
+}
+
+interface DashBoardUser {
+  username: string;
+  fullName: string;
+  email: string;
+  role: string;
+}
+
+// Create new Manager/Staff via Manager user
+export async function createDashboardUser(formData: FormData) {
+  //Lấy dữ liệu từ formData
+  const newDashBoardUser = {
+    hotel_name: formData.get("username") as string,
+    user_fullName: formData.get("fullName") as string,
+    user_email: formData.get("email") as string,
+    street: formData.get("role") as string,
+  };
+
+  // const user = await prisma.user.create({})
+}
+
+export async function updateAccount(formData: FormData) {
+  //Lây dữ liệu từ formData
+  const userRequest = {
+    username: formData.get("username") as string,
+    fullName: formData.get("fullName") as string,
+    email: formData.get("email") as string,
+  };
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      username: userRequest.username,
+    },
+    data: {
+      username: userRequest.username,
+      fullName: userRequest.fullName,
+      email: userRequest.email,
+    },
+  });
+
+  // const response: UserUpdateResponse = updatedUser;
 }

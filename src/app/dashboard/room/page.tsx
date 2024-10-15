@@ -23,11 +23,6 @@ export default function RoomPage() {
     error: roomTypeError,
   } = useSWR(`${process.env.NEXT_PUBLIC_APP_URL}/api/roomTypes`, axiosFetcher);
 
-  console.log(`${process.env.NEXT_PUBLIC_APP_URL}/api/roomTypes`);
-
-  if (roomTypeLoading != true) {
-    console.log(roomType);
-  }
   return (
     <CardDefault>
       <form action={roomCreate}>
