@@ -1,7 +1,10 @@
 import CardDefault from "@/components/CardDefault";
 import roomsServices from "@/services/rooms.services";
 import { Room } from "@/types/room.interface";
-import { Collapse, Divider, Input, Rate } from "antd";
+import { Button, Input, Rating } from "@mui/material";
+// import { Collapse, Divider, Input, Rate } from "antd";
+
+
 import TextArea from "antd/es/input/TextArea";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -13,6 +16,8 @@ export default async function RoomDetail({
 }: {
   params: { room_id: string };
 }) {
+
+  const cloudinary_path = process.env.NEXT_PUBLIC_CLOUDINARY_URL + '/' + process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + '/image/upload/v1';
   const room: Room = await roomsServices.getOneById(params.room_id);
   if (room == undefined) return <div></div>;
   return (
@@ -24,7 +29,7 @@ export default async function RoomDetail({
             <div className="flex space-x-4">
               <span className="flex-grow">
                 <Image
-                  src={room.room_type!.image_url}
+                  src={room.room_type.img_public_id != null ? `${cloudinary_path}/${room.room_type.img_public_id}` : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
                   width={400}
                   height={300}
                   alt={room.name}
@@ -34,7 +39,8 @@ export default async function RoomDetail({
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-2xl">{room.name}</span>
                   <span>
-                    <Rate defaultValue={5} disabled></Rate>
+                    {/* <Rate defaultValue={5} disabled></Rate> */}
+                    <Rating defaultValue={5} readOnly></Rating>
                   </span>
                 </div>
                 <div className="text-center px-4 py-4 bg-slate-300 rounded-xl">
@@ -67,25 +73,24 @@ export default async function RoomDetail({
               <div className="w-full space-y-4">
                 <div className="flex space-x-2">
                   <span className="w-1/2 space-y-1">
-                    <div>Họ</div>
                     <div>
                       <Input placeholder="Họ"></Input>
                     </div>
                   </span>
                   <span className="w-1/2 space-y-1">
-                    <div>Tên</div>
                     <Input placeholder="Tên"></Input>
                   </span>
                 </div>
                 <div className="flex space-x-2">
                   <span className="w-1/2 space-y-1">
-                    <div>Email</div>
                     <Input placeholder="Email"></Input>
                   </span>
                   <span className="w-1/2 space-y-1">
-                    <div>Số điện thoại</div>
                     <Input placeholder="Số điện thoại"></Input>
                   </span>
+                </div>
+                <div className="flex justify-center space-x-2">
+                  <Button variant="contained">Booking</Button>
                 </div>
               </div>
             </div>

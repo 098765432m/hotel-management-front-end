@@ -102,8 +102,9 @@ model RoomTypes {
   id                String    @default(cuid()) @id
   name              String    
   price             Int       @default(0)
-  image_url         String
-
+  img_public_id     String?    @default("")
+  img_format        String?    @default("")
+  
   //Hotel
   hotel_id          String
   hotel             Hotel     @relation(fields: [hotel_id], references: [id])

@@ -11,6 +11,9 @@ interface Props {
 }
 
 export default function RoomCard({ Room }: Props) {
+
+  const cloudinary_path = process.env.NEXT_PUBLIC_CLOUDINARY_URL + '/' + process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + '/image/upload/v1';
+
   return (
     <Card>
       <div className="block ">
@@ -18,7 +21,7 @@ export default function RoomCard({ Room }: Props) {
           <div className=" overflow-hidden w-[300px] h-[175px]">
             <Image
               priority
-              src={Room.room_type!.image_url}
+              src={ Room.room_type.img_public_id != null ? `${cloudinary_path}/${Room.room_type.img_public_id}` : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
               width={300}
               height={200}
               alt={Room.name}
@@ -26,7 +29,7 @@ export default function RoomCard({ Room }: Props) {
           </div>
           <div className="flex justify-between absolute bottom-0 left-0 w-full px-6 text-stone-200 text-lg font-bold">
             <div>{Room.hotel.address.province.name}</div>
-            <div>{Room.room_type!.price}đ</div>
+            <div>{Room.room_type.price}đ</div>
           </div>
         </div>
       </div>

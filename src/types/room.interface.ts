@@ -1,5 +1,6 @@
-import { RoomTypes, Status_Room } from "@prisma/client";
+import { Status_Room } from "@prisma/client";
 import { Hotel } from "./hotel.interface";
+import { RoomType } from "./roomTypes.interface";
 
 export interface Room {
   id: string;
@@ -11,5 +12,5 @@ export interface Room {
   hotel: Hotel;
 
   room_type_id: string;
-  room_type?: RoomTypes;
+  room_type: RoomType;
 }
