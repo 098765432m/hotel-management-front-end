@@ -96,6 +96,7 @@ model Booking {
   //Guest with no account
   fullName          String?
   phoneNumber       String?         
+  email             String?         
 }
 
 model RoomTypes {

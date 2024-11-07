@@ -1,24 +1,77 @@
+"use client";
+
 import CardDefault from "@/components/CardDefault";
+import { axiosCustomFetcher } from "@/lib/fetcher";
+import bookingsService from "@/services/bookings.service";
 import roomsServices from "@/services/rooms.services";
 import { Room } from "@/types/room.interface";
-import { Button, Input, Rating } from "@mui/material";
+import { rangeISOToRangeDayJS } from "@/utils/dayjs";
+import { Button, Input, Rating, TextField } from "@mui/material";
+import { DatePicker } from "antd";
 // import { Collapse, Divider, Input, Rate } from "antd";
 
-
 import TextArea from "antd/es/input/TextArea";
+import { Dayjs } from "dayjs";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiOutlineDownCircle } from "react-icons/ai";
 import { AiOutlineRightCircle } from "react-icons/ai";
+import useSWR from "swr";
 
-export default async function RoomDetail({
+export default function RoomDetail({
   params,
 }: {
   params: { room_id: string };
 }) {
+  const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
 
-  const cloudinary_path = process.env.NEXT_PUBLIC_CLOUDINARY_URL + '/' + process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + '/image/upload/v1';
-  const room: Room = await roomsServices.getOneById(params.room_id);
+  const cloudinary_path =
+    process.env.NEXT_PUBLIC_CLOUDINARY_URL +
+    "/" +
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME +
+    "/image/upload/v1";
+  // const room: Room = await roomsServices.getOneById(params.room_id);
+
+  const {
+    data: room,
+    isLoading: isRoomLoading,
+    error: isRoomError,
+  } = useSWR(`/api/rooms/${params.room_id}`, axiosCustomFetcher);
+
+  //OnDateRangePicker
+  const onDateRangePickerChange = (
+    dates: any,
+    dateStrings: [string, string]
+  ) => {
+    setDateRange(dates);
+    console.log(dates);
+    console.log(dateStrings);
+  };
+
+  //HandleSubmit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+    formData.append("roomId", params.room_id);
+    console.log(`fullname: ${formData.get("fullName") as string}`);
+    console.log(`email: ${formData.get("email") as string}`);
+    console.log(`phonenumber: ${formData.get("phoneNumber") as string}`);
+    console.log(dateRange);
+
+    if (dateRange != null) {
+      // const formattedDateRange = `${dateRange[0].toISOString()} - ${dateRange[1].toISOString()}`;
+      formData.append("checkInDate", dateRange[0].toISOString());
+      formData.append("checkOutDate", dateRange[1].toISOString());
+    } else {
+      formData.append("dateBookingRange", "");
+    }
+
+    await bookingsService.CreateOne(formData);
+  };
+
+  //If room unedfine return null
   if (room == undefined) return <div></div>;
   return (
     <div className="border-white border-2 rounded-xl">
@@ -29,7 +82,11 @@ export default async function RoomDetail({
             <div className="flex space-x-4">
               <span className="flex-grow">
                 <Image
-                  src={room.room_type.img_public_id != null ? `${cloudinary_path}/${room.room_type.img_public_id}` : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+                  src={
+                    room.room_type.img_public_id != null
+                      ? `${cloudinary_path}/${room.room_type.img_public_id}`
+                      : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`
+                  }
                   width={400}
                   height={300}
                   alt={room.name}
@@ -60,40 +117,53 @@ export default async function RoomDetail({
           </CardDefault>
           {/* Card Input thông tin khách hàng */}
           <CardDefault>
-            <div className="space-y-5">
-              <div>
-                <div className="font-bold text-xl">Thông tin khách hàng</div>
-                <div className="text-xs text-gray-500">
-                  <i>
-                    Tên khách hàng phải phù hợp với giấy tờ tùy thân để nhận
-                    phòng.
-                  </i>
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-5">
+                <div>
+                  <div className="font-bold text-xl">Thông tin khách hàng</div>
+                  <div className="text-xs text-gray-500">
+                    <i>
+                      Tên khách hàng phải phù hợp với giấy tờ tùy thân để nhận
+                      phòng.
+                    </i>
+                  </div>
+                </div>
+                <div className="w-full space-y-4">
+                  <div className="flex space-x-2">
+                    <span className="w-1/2 space-y-1">
+                      <div>
+                        <TextField
+                          name="fullName"
+                          placeholder="Họ và tên"
+                        ></TextField>
+                      </div>
+                    </span>
+                  </div>
+                  <div className="flex space-x-2">
+                    <span className="w-1/2 space-y-1">
+                      <Input name="email" placeholder="Email"></Input>
+                    </span>
+                    <span className="w-1/2 space-y-1">
+                      <Input
+                        name="phoneNumber"
+                        placeholder="Số điện thoại"
+                      ></Input>
+                    </span>
+                  </div>
+                  <div>
+                    <DatePicker.RangePicker
+                      value={dateRange}
+                      onChange={onDateRangePickerChange}
+                    ></DatePicker.RangePicker>
+                  </div>
+                  <div className="flex justify-center space-x-2">
+                    <Button type="submit" variant="contained">
+                      Booking
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div className="w-full space-y-4">
-                <div className="flex space-x-2">
-                  <span className="w-1/2 space-y-1">
-                    <div>
-                      <Input placeholder="Họ"></Input>
-                    </div>
-                  </span>
-                  <span className="w-1/2 space-y-1">
-                    <Input placeholder="Tên"></Input>
-                  </span>
-                </div>
-                <div className="flex space-x-2">
-                  <span className="w-1/2 space-y-1">
-                    <Input placeholder="Email"></Input>
-                  </span>
-                  <span className="w-1/2 space-y-1">
-                    <Input placeholder="Số điện thoại"></Input>
-                  </span>
-                </div>
-                <div className="flex justify-center space-x-2">
-                  <Button variant="contained">Booking</Button>
-                </div>
-              </div>
-            </div>
+            </form>
           </CardDefault>
 
           {/* Card yêu cầu đặt biệt */}
