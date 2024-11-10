@@ -5,6 +5,8 @@ export interface Hotel {
   id: string;
   name: string;
   address: AddressType;
+  img_public_id: string;
+  img_format: string;
 
   rooms?: Room[];
   room_types?: RoomTypes[];

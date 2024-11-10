@@ -28,15 +28,15 @@ enum Status_Booking {
 }
 
 model User {
-    id                String     @id @unique
-    username          String     @unique
-    password          String
-    fullName          String     
-    email             String     @unique
-    role              Role       @default(GUEST)
-    isActive          Boolean    @default(false)
-    img_public_id     String?    @default("")
-    img_format        String?    @default("")
+  id                String     @id @unique
+  username          String     @unique
+  password          String
+  fullName          String     
+  email             String     @unique
+  role              Role       @default(GUEST)
+  isActive          Boolean    @default(false)
+  img_public_id     String?    @default("")
+  img_format        String?    @default("")
 
   //Booking
   booking     Booking[]
@@ -47,9 +47,11 @@ model User {
 }
 
 model Hotel {
-  id            String    @default(cuid()) @id
-  name          String    @unique
-  address       Json
+  id                String    @default(cuid()) @id
+  name              String    @unique
+  address           Json
+  img_public_id     String?    @default("")
+  img_format        String?    @default("")
 
   //Room
   rooms         Room[]  //One to Many

@@ -28,6 +28,7 @@ export default function Header() {
             </span>
           ) : auth?.role == roleEnum.MANAGER || auth?.role == roleEnum.STAFF ? (
             <span className="space-x-3">
+              <Link href={"/dashboard/roomType"}>Loại phòng</Link>
               <Link href={"/dashboard/room"}>Phòng đặt</Link>
               <Link href={"/dashboard/staff"}>Nhân viên</Link>
             </span>
