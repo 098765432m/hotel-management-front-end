@@ -1,45 +1,30 @@
-"use client";
-
 import CardDefault from "@/components/CardDefault";
-import { Input, InputNumber, Button, Form } from "antd";
-import { CldUploadWidget } from "next-cloudinary";
+import RoomTypeForm from "@/components/dashboard/RoomType/RoomTypeForm";
+import RoomTypeList from "@/components/dashboard/RoomType/RoomTypeList";
+import { Input, InputNumber, Button, Form, Skeleton } from "antd";
+import { decrypt, SessionPayload } from "@/lib/session";
+import roomTypesServices from "@/services/roomTypes.services";
+import { cookies } from "next/headers";
+import { RoomType } from "@/types/roomTypes.interface";
 
-export default function RoomTypePage() {
+export default async function RoomTypePage() {
+  const loginInfoString = cookies().get("login")?.value;
+  const loginInfo = await decrypt(loginInfoString);
+  const { hotelId } = loginInfo as SessionPayload;
+
+  const RoomTypes: RoomType[] = await roomTypesServices.getAllByHotel(hotelId);
   return (
-    <CardDefault>
-      <Form>
-        <div className="flex justify-center my-12">
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <div className="text-2xl font-bold">Loại phòng</div>
-            </div>
-            <div>
-              <Form.Item label="Ten loai">
-                <Input></Input>
-              </Form.Item>
-            </div>
-            <div>
-              <Form.Item label="Gia loai">
-                <InputNumber></InputNumber>
-              </Form.Item>
-            </div>
-            <div className=" flex justify-center">
-              {/* Gui File */}
-              <CldUploadWidget
-                signatureEndpoint={`/api/sign-cloudinary-params`}
-                onSuccess={() => {}}
-              >
-                {({ open }) => {
-                  return <Button onClick={() => open()}>Upload</Button>;
-                }}
-              </CldUploadWidget>
-            </div>
-            <div className="flex justify-center">
-              <Button>Tạo loại phòng</Button>
-            </div>
-          </div>
-        </div>
-      </Form>
-    </CardDefault>
+    <>
+      <CardDefault>
+        <RoomTypeForm></RoomTypeForm>
+      </CardDefault>
+
+      <CardDefault>
+        <RoomTypeList
+          hotelId={hotelId as string}
+          RoomTypes={RoomTypes}
+        ></RoomTypeList>
+      </CardDefault>
+    </>
   );
 }

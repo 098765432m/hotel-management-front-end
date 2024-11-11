@@ -4,7 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { error } from "console";
 
 interface updateRequest {
-  id: string;
+  user_id: string;
   old_img_public_id: string;
   img_public_id: string;
   img_format: string;
@@ -23,18 +23,27 @@ export async function POST(req: Request) {
   console.log(data);
 
   try {
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: data.id,
-      },
+    // const updatedUser = await prisma.user.update({
+    //   where: {
+    //     id: data.user_id,
+    //   },
+    //   data: {
+    //     img_public_id: data.img_public_id,
+    //     img_format: data.img_format,
+    //   },
+    // });
+
+    const updatedImage = await prisma.image.create({
       data: {
-        img_public_id: data.img_public_id,
-        img_format: data.img_format,
+        public_id: data.img_public_id,
+        format: data.img_format,
+
+        user_id: data.user_id,
       },
     });
 
     console.log("Updated User");
-    console.log(updatedUser);
+    console.log(updatedImage);
 
     await cloudinary.uploader.destroy(
       data.old_img_public_id,
@@ -43,7 +52,7 @@ export async function POST(req: Request) {
       }
     );
 
-    return NextResponse.json(updatedUser);
+    return NextResponse.json(updatedImage);
   } catch (error) {
     console.log(error);
   }

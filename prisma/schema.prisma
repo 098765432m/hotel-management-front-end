@@ -35,8 +35,8 @@ model User {
   email             String     @unique
   role              Role       @default(GUEST)
   isActive          Boolean    @default(false)
-  img_public_id     String?    @default("")
-  img_format        String?    @default("")
+  // img_public_id     String?    @default("")
+  // img_format        String?    @default("")
 
   //Booking
   booking     Booking[]
@@ -44,14 +44,17 @@ model User {
   // Only MANAGER and STAFF have this hotel field
   hotel_id    String?
   hotel       Hotel?       @relation(fields: [hotel_id], references: [id])
+
+  //Image relationship one-to-one
+  image       Image?        @relation("UserImage")
 }
 
 model Hotel {
   id                String    @default(cuid()) @id
   name              String    @unique
   address           Json
-  img_public_id     String?    @default("")
-  img_format        String?    @default("")
+  // img_public_id     String?    @default("")
+  // img_format        String?    @default("")
 
   //Room
   rooms         Room[]  //One to Many
@@ -61,6 +64,9 @@ model Hotel {
 
   //List of users who work in this hotel
   users         User[]
+
+  //Image relationship one-to-many
+  images            Image[]       @relation("HotelImages")
 }
 
 model Room {
@@ -105,8 +111,8 @@ model RoomTypes {
   id                String    @default(cuid()) @id
   name              String    
   price             Int       @default(0)
-  img_public_id     String?    @default("")
-  img_format        String?    @default("")
+  // img_public_id     String[]    
+  // img_format        String[]    
   
   //Hotel
   hotel_id          String
@@ -114,4 +120,26 @@ model RoomTypes {
 
   //Room
   rooms             Room[]
+
+  //Image relationship one-to-many
+  images            Image[]        @relation("RoomTypeImages")
+}
+
+
+model Image {
+  id                String        @id @unique @default(cuid())
+  public_id         String
+  format            String
+
+  //one-to-one
+  user_id           String?        @unique
+  user              User?          @relation("UserImage",fields: [user_id], references: [id])
+
+  //one-to-many
+  hotel_id          String?
+  hotel             Hotel?         @relation("HotelImages", fields: [hotel_id], references: [id])
+
+  //one-to-many
+  room_type_id      String?
+  room_type         RoomTypes?   @relation("RoomTypeImages", fields: [room_type_id], references: [id])
 }
