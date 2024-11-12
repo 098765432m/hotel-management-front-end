@@ -1,5 +1,6 @@
 "use client";
 
+import roomTypesServices from "@/services/roomTypes.services";
 import { RoomType } from "@/types/roomTypes.interface";
 import { Button, Card, Form, Input, InputNumber, Modal } from "antd";
 import FormItem from "antd/es/form/FormItem";
@@ -10,8 +11,9 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 
 interface UploadedImage {
-  publicId: string;
+  public_id: string;
   format: string;
+  room_type_id: string;
 }
 
 interface Props {
@@ -31,6 +33,13 @@ export default function RoomTypeCard({ RoomType }: Props) {
     console.log(uploadedImage);
 
     // Cap nhat RoomType va cap nhat hinh
+    await roomTypesServices.updateOne(RoomType.id, {
+      name: name,
+      price: price,
+      images: uploadedImage,
+    });
+
+    setUploadedImage([]);
   };
 
   return (
@@ -128,8 +137,9 @@ export default function RoomTypeCard({ RoomType }: Props) {
                 setUploadedImage((prev) => [
                   ...prev,
                   {
-                    publicId: info.public_id,
+                    public_id: info.public_id,
                     format: info.format,
+                    room_type_id: RoomType.id,
                   },
                 ]);
               }

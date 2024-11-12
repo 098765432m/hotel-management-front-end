@@ -23,16 +23,6 @@ export async function POST(req: Request) {
   console.log(data);
 
   try {
-    // const updatedUser = await prisma.user.update({
-    //   where: {
-    //     id: data.user_id,
-    //   },
-    //   data: {
-    //     img_public_id: data.img_public_id,
-    //     img_format: data.img_format,
-    //   },
-    // });
-
     const updatedImage = await prisma.image.create({
       data: {
         public_id: data.img_public_id,

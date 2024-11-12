@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
+import { RoomTypeUpdateDto } from "@/types/dto/room-types.dto";
 import { RoomTypeDtoCreate } from "@/types/dto/roomTypesCreate.dto";
 
 class RoomTypesService {
@@ -41,6 +42,10 @@ class RoomTypesService {
     // } catch (error: any) {
     //   throw new Error(error.message);
     // }
+  }
+
+  async updateOne(roomTypeId: string, body: RoomTypeUpdateDto) {
+    return (await this.api.put(`/${roomTypeId}`, body)).data;
   }
 }
 
