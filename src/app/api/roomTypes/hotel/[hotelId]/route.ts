@@ -9,6 +9,9 @@ export async function GET(
     where: {
       hotel_id: params.hotelId,
     },
+    include: {
+      images: true,
+    },
   });
 
   return NextResponse.json(roomTypes);

@@ -4,13 +4,15 @@ import { RoomType } from "@/types/roomTypes.interface";
 import { List, Table, TableProps } from "antd";
 
 import RoomTypeCard from "./RoomTypeCard";
+import RoomTypeForm from "./RoomTypeForm";
+import useSWR from "swr";
+import { axiosCustomFetcher } from "@/lib/fetcher";
 
 interface Props {
   hotelId: string;
-  RoomTypes: RoomType[];
 }
 
-export default function RoomTypeList({ hotelId, RoomTypes }: Props) {
+export default function RoomTypeList({ hotelId }: Props) {
   //   const columns: TableProps = [
   //     {
   //         title: 'Tên loại',
@@ -29,16 +31,20 @@ export default function RoomTypeList({ hotelId, RoomTypes }: Props) {
   //     }
   //   ];
 
-  const data = RoomTypes.map((roomType: RoomType, index: number) => {
-    return {
-      key: index,
-      name: roomType.name,
-      price: roomType.price,
-      images: roomType.images,
-    };
-  });
-
-  console.log(data);
+  // const data = RoomTypes.map((roomType: RoomType, index: number) => {
+  //   return {
+  //     key: index,
+  //     name: roomType.name,
+  //     price: roomType.price,
+  //     images: roomType.images,
+  //   };
+  // });
+  const {
+    data: roomTypes,
+    isLoading: isRoomTypesLoading,
+    error: isRoomTypesError,
+    mutate: roomTypeMutate,
+  } = useSWR(`/api/roomTypes/hotel/${hotelId}`, axiosCustomFetcher);
 
   return (
     <>
@@ -46,13 +52,18 @@ export default function RoomTypeList({ hotelId, RoomTypes }: Props) {
         Danh sách phòng
       </div>
       <List>
-        {RoomTypes.map((roomType: RoomType, index: number) => {
-          return (
-            <List.Item key={index}>
-              <RoomTypeCard RoomType={roomType}></RoomTypeCard>
-            </List.Item>
-          );
-        })}
+        {roomTypes
+          ? roomTypes.map((roomType: RoomType, index: number) => {
+              return (
+                <List.Item key={index}>
+                  <RoomTypeCard
+                    RoomType={roomType}
+                    mutate={roomTypeMutate}
+                  ></RoomTypeCard>
+                </List.Item>
+              );
+            })
+          : "Khong co"}
       </List>
     </>
   );

@@ -1,29 +1,36 @@
 import { prisma } from "@/lib/client";
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
-import { Result } from "postcss";
 
-export default async function DELETE(
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export async function DELETE(
   request: Request,
   { params }: { params: { imageId: string } }
 ) {
-  const body = await request.json();
+  const url = new URL(request.url);
+  const publicId = url.searchParams.get("public_id") as string;
 
-  const [deletedImage, destroyImage] = await prisma.$transaction([
-    await prisma.image.delete({
+  await prisma.$transaction(async (tx) => {
+    const result = await tx.image.delete({
       where: { id: params.imageId },
-    }),
+    });
 
-    await cloudinary.uploader.destroy(
-      body.public_id,
+    console.log(result);
+
+    const que = await cloudinary.uploader.destroy(
+      publicId,
       (error: any, result: any) => {
         console.log(result, error);
       }
-    ),
-  ]);
+    );
 
-  return NextResponse.json({
-    deletedImage: deletedImage,
-    destroyImage: destroyImage,
+    console.log(que);
   });
+
+  return NextResponse.json({});
 }

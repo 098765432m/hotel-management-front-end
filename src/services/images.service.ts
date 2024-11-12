@@ -6,8 +6,8 @@ class ImagesService {
     this.api = axiosInstance(baseURL);
   }
 
-  async removeOne(imageId: string, body: { public_id: string }) {
-    return (await this.api.delete(`/${imageId}`, body)).data;
+  async removeOne(imageId: string, public_id: string) {
+    return (await this.api.delete(`/${imageId}?public_id=${public_id}`)).data;
   }
 }
 

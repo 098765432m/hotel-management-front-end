@@ -1,14 +1,22 @@
 "use client";
 
+import imagesService from "@/services/images.service";
 import roomTypesServices from "@/services/roomTypes.services";
 import { RoomType } from "@/types/roomTypes.interface";
-import { Button, Card, Form, Input, InputNumber, Modal } from "antd";
-import FormItem from "antd/es/form/FormItem";
-import axios from "axios";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Popconfirm,
+} from "antd";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
+import { KeyedMutator } from "swr";
 
 interface UploadedImage {
   public_id: string;
@@ -18,20 +26,18 @@ interface UploadedImage {
 
 interface Props {
   RoomType: RoomType;
+  mutate: any;
 }
 
-export default function RoomTypeCard({ RoomType }: Props) {
+export default function RoomTypeCard({ RoomType, mutate }: Props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isConfirmRmOpen, setConfirmRmOpen] = useState(false);
   const [name, setName] = useState(RoomType.name);
   const [price, setPrice] = useState<number>(RoomType.price);
   const [uploadedImage, setUploadedImage] = useState<UploadedImage[]>([]);
 
+  // Handle Update Submit
   const handleOk = async () => {
-    console.log("ok");
-    console.log(name);
-    console.log(price);
-    console.log(uploadedImage);
-
     // Cap nhat RoomType va cap nhat hinh
     await roomTypesServices.updateOne(RoomType.id, {
       name: name,
@@ -39,7 +45,19 @@ export default function RoomTypeCard({ RoomType }: Props) {
       images: uploadedImage,
     });
 
+    mutate();
+    console.log(typeof mutate());
+
     setUploadedImage([]);
+  };
+
+  //Handle Remove a Single Image
+  const handleRemoveImage = async (imageId: string, public_id: string) => {
+    const result = await imagesService.removeOne(imageId, public_id);
+
+    mutate();
+
+    console.log(result);
   };
 
   return (
@@ -52,31 +70,41 @@ export default function RoomTypeCard({ RoomType }: Props) {
         </button>
       </div>
 
-      <div className="relative inline-block">
-        <Button
-          type="primary"
-          danger
-          style={{
-            position: "absolute",
-            top: 10,
-            right: 10,
-            zIndex: 1,
-          }}
-        >
-          <FaRegTrashAlt></FaRegTrashAlt>
-        </Button>{" "}
+      <div>
         {/* this button on top-right image */}
         {RoomType.images && RoomType.images.length > 0 ? (
           RoomType.images.map((image, index) => {
             return (
-              <CldImage
-                key={index}
-                src={`${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${image.public_id}.${image.format}`}
-                alt="123"
-                height={200}
-                width={200}
-                priority //LCP
-              ></CldImage>
+              <div className="relative inline-block" key={index}>
+                <Popconfirm
+                  title="Xac Nhan"
+                  description="Ban co muon xoa hinh anh khong"
+                  onConfirm={() => handleRemoveImage(image.id, image.public_id)}
+                  onCancel={() => setConfirmRmOpen(false)}
+                >
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={() => setConfirmRmOpen(true)}
+                    style={{
+                      position: "absolute",
+                      top: 10,
+                      right: 10,
+                      zIndex: 1,
+                    }}
+                  >
+                    <FaRegTrashAlt></FaRegTrashAlt>
+                  </Button>
+                </Popconfirm>
+                <CldImage
+                  key={index}
+                  src={`${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${image.public_id}.${image.format}`}
+                  alt="123"
+                  height={200}
+                  width={200}
+                  priority //LCP
+                ></CldImage>
+              </div>
             );
           })
         ) : (

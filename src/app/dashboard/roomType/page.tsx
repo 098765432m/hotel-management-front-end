@@ -12,7 +12,7 @@ export default async function RoomTypePage() {
   const loginInfo = await decrypt(loginInfoString);
   const { hotelId } = loginInfo as SessionPayload;
 
-  const RoomTypes: RoomType[] = await roomTypesServices.getAllByHotel(hotelId);
+  // const RoomTypes: RoomType[] = await roomTypesServices.getAllByHotel(hotelId);
   return (
     <>
       <CardDefault>
@@ -20,10 +20,7 @@ export default async function RoomTypePage() {
       </CardDefault>
 
       <CardDefault>
-        <RoomTypeList
-          hotelId={hotelId as string}
-          RoomTypes={RoomTypes}
-        ></RoomTypeList>
+        <RoomTypeList hotelId={hotelId as string}></RoomTypeList>
       </CardDefault>
     </>
   );
