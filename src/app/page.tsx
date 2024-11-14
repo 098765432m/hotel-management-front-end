@@ -4,7 +4,7 @@ import HotelCard from "@/components/HotelCard";
 import { Hotel } from "@/types/hotel.interface";
 
 export default async function Home() {
-  const hotels = await hotelsService.getAll();
+  const hotels: Hotel[] = await hotelsService.getAll();
 
   if (hotels == undefined) return <div></div>;
   return (
