@@ -26,8 +26,7 @@ export default function ProfileInfo() {
     userRef.current = user;
   }, [user]);
 
-  console.log("useSWR: ");
-  console.log(userRef.current);
+  console.log(user);
 
   if (!isUserLoading)
     return (
@@ -39,17 +38,17 @@ export default function ProfileInfo() {
                 src={`${process.env.NEXT_PUBLIC_CLOUDINARY_URL}/${
                   process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
                 }/image/upload/v1/${
-                  user?.img_public_id != "" && user?.img_public_id != undefined
-                    ? `${user.img_public_id}.${user.img_format}`
+                  user!.image
+                    ? `${user.image.public_id}.${user.image.format}`
                     : "wbhblyipju67ukdval6m.png"
                 }`}
                 width={380}
                 height={600}
-                alt="Test Anh"
+                alt="Avatar"
+                priority
               ></CldImage>
             </div>
             <div>
-              {user.img_public_id}
               <CldUploadWidget
                 signatureEndpoint={`/api/sign-cloudinary-params`}
                 onSuccess={(result) => {
@@ -62,8 +61,9 @@ export default function ProfileInfo() {
                       .post(
                         `${process.env.NEXT_PUBLIC_APP_URL}/api/updateAvatar`,
                         {
-                          id: userRef.current?.id,
-                          old_img_public_id: userRef.current?.img_public_id,
+                          user_id: userRef.current?.id,
+                          old_img_public_id:
+                            userRef.current?.image?.public_id ?? null,
                           img_public_id: result.info.public_id,
                           img_format: result.info.format,
                         },
@@ -74,11 +74,9 @@ export default function ProfileInfo() {
                         }
                       )
                       .then((res) => {
-                        userMutate({
-                          ...user,
-                          img_public_id: res.data.img_public_id,
-                          img_format: res.data.img_format,
-                        });
+                        console.log(res);
+
+                        userMutate();
                       })
                       .catch((err) => {
                         console.error("Error saving Image: ", err);

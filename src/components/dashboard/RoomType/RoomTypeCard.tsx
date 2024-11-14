@@ -16,13 +16,7 @@ import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
-import { KeyedMutator } from "swr";
-
-interface UploadedImage {
-  public_id: string;
-  format: string;
-  room_type_id: string;
-}
+import { UploadedRoomTypeImage } from "@/types/dto/image.dto";
 
 interface Props {
   RoomType: RoomType;
@@ -34,7 +28,9 @@ export default function RoomTypeCard({ RoomType, mutate }: Props) {
   const [isConfirmRmOpen, setConfirmRmOpen] = useState(false);
   const [name, setName] = useState(RoomType.name);
   const [price, setPrice] = useState<number>(RoomType.price);
-  const [uploadedImage, setUploadedImage] = useState<UploadedImage[]>([]);
+  const [uploadedImage, setUploadedImage] = useState<UploadedRoomTypeImage[]>(
+    []
+  );
 
   // Handle Update Submit
   const handleOk = async () => {
@@ -148,10 +144,6 @@ export default function RoomTypeCard({ RoomType, mutate }: Props) {
           <CldUploadWidget
             signatureEndpoint={`/api/sign-cloudinary-params`}
             onSuccess={(result) => {
-              console.log("on sucess");
-              console.log(result);
-              console.log(result.info);
-
               if (
                 result &&
                 result.info != undefined &&

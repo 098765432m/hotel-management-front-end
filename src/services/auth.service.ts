@@ -26,12 +26,14 @@ class AuthService {
     const password = formData.get("password");
     const fullName = formData.get("fullName");
     const email = formData.get("email");
+    const phoneNumber = formData.get("phoneNumber");
 
     const result = await this.api.post(`/register`, {
       username: username,
       password: password,
       fullName: fullName,
       email: email,
+      phoneNumber: phoneNumber,
     });
     return result.data;
   }

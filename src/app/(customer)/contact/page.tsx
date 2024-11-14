@@ -97,6 +97,11 @@ export default function ContactPage() {
             label="Email liên hệ"
             variant="outlined"
           ></TextField>
+          <TextField
+            name="user_phoneNumber"
+            label="Số điện thoại"
+            variant="outlined"
+          ></TextField>
           <div className="flex justify-center">
             <FormControl>
               <TextField

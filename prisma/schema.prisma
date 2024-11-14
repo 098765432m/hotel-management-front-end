@@ -33,40 +33,39 @@ model User {
   password          String
   fullName          String     
   email             String     @unique
+  phoneNumber       String     
   role              Role       @default(GUEST)
   isActive          Boolean    @default(false)
-  // img_public_id     String?    @default("")
-  // img_format        String?    @default("")
 
   //Booking
-  booking     Booking[]
+  booking           Booking[]
 
   // Only MANAGER and STAFF have this hotel field
-  hotel_id    String?
-  hotel       Hotel?       @relation(fields: [hotel_id], references: [id])
+  hotel_id          String?
+  hotel             Hotel?       @relation(fields: [hotel_id], references: [id])
 
   //Image relationship one-to-one
-  image       Image?        @relation("UserImage")
+  image             Image?        @relation("UserImage")
 }
 
 model Hotel {
-  id                String    @default(cuid()) @id
-  name              String    @unique
-  address           Json
+  id                    String    @default(cuid()) @id
+  name                  String    @unique
+  address               Json
   // img_public_id     String?    @default("")
   // img_format        String?    @default("")
 
   //Room
-  rooms         Room[]  //One to Many
+  rooms                 Room[]  //One to Many
 
   //Room_Type
-  room_types    RoomTypes[]
+  room_types            RoomTypes[]
 
   //List of users who work in this hotel
-  users         User[]
+  staffs                User[]
 
   //Image relationship one-to-many
-  images            Image[]       @relation("HotelImages")
+  images                Image[]       @relation("HotelImages")
 }
 
 model Room {
@@ -128,7 +127,7 @@ model RoomTypes {
 
 model Image {
   id                String        @id @unique @default(cuid())
-  public_id         String
+  public_id         String        @unique
   format            String
 
   //one-to-one
@@ -141,5 +140,5 @@ model Image {
 
   //one-to-many
   room_type_id      String?
-  room_type         RoomTypes?   @relation("RoomTypeImages", fields: [room_type_id], references: [id])
+  room_type         RoomTypes?     @relation("RoomTypeImages", fields: [room_type_id], references: [id])
 }

@@ -1,12 +1,15 @@
-import FormUser from "@/components/dashboard/FormUser";
+import FormStaff from "@/components/dashboard/Staff/form-staff";
+import ListStaff from "@/components/dashboard/Staff/list-staff";
 
 export default function StaffPage() {
   return (
     <div className="flex my-4">
       <div className=" w-1/2">
-        <FormUser></FormUser>
+        <FormStaff></FormStaff>
       </div>
-      <div className=" w-1/2"> </div>
+      <div className=" w-1/2">
+        <ListStaff></ListStaff>
+      </div>
     </div>
   );
 }

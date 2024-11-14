@@ -9,8 +9,21 @@ interface UserUpdateResponse {
   username: string;
   fullName: string;
   email: string;
+  phoneNumber: string;
   role: string;
   hotelId?: string | null;
 }
 
-export type { UserCookieResponse, UserUpdateResponse };
+interface StaffOfHotelDto {
+  username: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  role: string;
+  image: {
+    public_id: string;
+    format: string;
+  };
+}
+
+export type { UserCookieResponse, UserUpdateResponse, StaffOfHotelDto };

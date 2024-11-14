@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { Address } from "@/types/address.interface";
-import { HotelsDtoCreate } from "@/types/dto/hotelsCreate.dto";
+import { AddressType } from "@/types/address.interface";
+import { HotelCreateDto, HotelPutDto } from "@/types/dto/hotel.dto";
 
 class HotelsService {
   private api: any;
@@ -17,23 +17,23 @@ class HotelsService {
   }
 
   //Create A Hotel
-  async CreateOne(body: HotelsDtoCreate) {
-    const address: Address = {
-      street: body.street,
-      ward: body.ward,
-      district: body.district,
-      province: body.province,
-    };
+  async CreateOne(body: HotelCreateDto) {
+    console.log(body);
+
     try {
-      return (
-        await this.api.post(`/`, {
-          name: body.name,
-          address: address,
-        })
-      ).data;
+      return (await this.api.post(`/`, body)).data;
     } catch (error: any) {
       throw new Error(error.message);
     }
+  }
+
+  //update a Hotel
+  async updateOne(hotelId: string, body: HotelPutDto) {
+    console.log(hotelId);
+
+    console.log(body);
+
+    return await this.api.put(`/${hotelId}`, body);
   }
 }
 

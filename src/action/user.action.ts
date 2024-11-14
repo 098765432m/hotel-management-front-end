@@ -15,6 +15,7 @@ interface contactRequest {
   hotel_name: string;
   user_fullName: string;
   user_email: string;
+  user_phoneNumber: string;
   street: string;
   ward: DetailInfo;
   district: DetailInfo;
@@ -28,6 +29,7 @@ export async function createContact(formData: FormData) {
     hotel_name: formData.get("hotel_name") as string,
     user_fullName: formData.get("user_fullName") as string,
     user_email: formData.get("user_email") as string,
+    user_phoneNumber: formData.get("user_phoneNumber") as string,
     street: formData.get("street") as string,
     ward: JSON.parse(formData.get("ward") as string),
     district: JSON.parse(formData.get("district") as string),
@@ -71,6 +73,7 @@ export async function createContact(formData: FormData) {
           password: await hashedPassword("113446"), //Mật khẩu mặc định
           fullName: newContact.user_fullName,
           email: newContact.user_email,
+          phoneNumber: newContact.user_phoneNumber,
           role: "MANAGER",
 
           hotel_id: newHotel.id,
@@ -81,13 +84,6 @@ export async function createContact(formData: FormData) {
   } catch (error: any) {
     console.log("*Error: " + error.message);
   }
-}
-
-interface DashBoardUser {
-  username: string;
-  fullName: string;
-  email: string;
-  role: string;
 }
 
 // Create new Manager/Staff via Manager user

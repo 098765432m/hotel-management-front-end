@@ -22,6 +22,7 @@ export default function RegisterPage() {
   const passwordRef = useRef<HTMLInputElement>(null);
   const fullNameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
+  const phoneNumberRef = useRef<HTMLInputElement>(null);
 
   // Xử lý submit của form
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,12 +34,14 @@ export default function RegisterPage() {
       usernameRef.current &&
       passwordRef.current &&
       fullNameRef.current &&
-      emailRef.current
+      emailRef.current &&
+      phoneNumberRef.current
     ) {
       formData.append("username", usernameRef.current.value);
       formData.append("password", passwordRef.current.value);
       formData.append("fullName", fullNameRef.current.value);
       formData.append("email", emailRef.current.value);
+      formData.append("phoneNumber", phoneNumberRef.current.value);
     } else {
       throw new Error("Lỗi input");
     }
@@ -106,6 +109,13 @@ export default function RegisterPage() {
               label="Địa chỉ email"
               variant="outlined"
               inputRef={emailRef}
+            ></TextField>
+          </div>
+          <div>
+            <TextField
+              label="Số điện thoại"
+              variant="outlined"
+              inputRef={phoneNumberRef}
             ></TextField>
           </div>
           <div className="flex justify-end">

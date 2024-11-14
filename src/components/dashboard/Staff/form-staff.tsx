@@ -15,7 +15,7 @@ type FieldType = {
   role: Role;
 };
 
-export default function FormUser() {
+export default function FormStaff() {
   const { auth } = useContext(AuthContext);
 
   const onFinish: FormProps<FieldType>["onFinish"] = (value) => {

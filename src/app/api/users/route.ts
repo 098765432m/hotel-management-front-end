@@ -28,6 +28,7 @@ export async function POST(req: Request) {
       password: await hashedPassword(data.password ?? "113446"),
       fullName: data.fullName,
       email: data.email,
+      phoneNumber: data.phoneNumber,
       role: data.role,
       hotel_id: data.hotel_id,
     },

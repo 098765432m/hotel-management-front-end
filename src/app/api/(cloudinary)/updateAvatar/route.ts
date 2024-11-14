@@ -23,26 +23,40 @@ export async function POST(req: Request) {
   console.log(data);
 
   try {
-    const updatedImage = await prisma.image.create({
-      data: {
-        public_id: data.img_public_id,
-        format: data.img_format,
-
-        user_id: data.user_id,
+    const existingImage = await prisma.image.findUnique({
+      where: {
+        public_id: data.old_img_public_id ?? "",
       },
     });
 
-    console.log("Updated User");
-    console.log(updatedImage);
+    await prisma.$transaction([
+      ...(existingImage
+        ? [
+            prisma.image.delete({
+              where: {
+                public_id: data.old_img_public_id,
+              },
+            }),
+          ]
+        : []),
 
-    await cloudinary.uploader.destroy(
-      data.old_img_public_id,
-      (error, result) => {
+      prisma.image.create({
+        data: {
+          public_id: data.img_public_id,
+          format: data.img_format,
+
+          user_id: data.user_id,
+        },
+      }),
+    ]);
+
+    if (data.old_img_public_id != undefined) {
+      cloudinary.uploader.destroy(data.old_img_public_id, (error, result) => {
         console.log(result, error);
-      }
-    );
+      });
+    }
 
-    return NextResponse.json(updatedImage);
+    return NextResponse.json({});
   } catch (error) {
     console.log(error);
   }

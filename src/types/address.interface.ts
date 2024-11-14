@@ -1,9 +1,9 @@
-export interface Address {
-  street: string;
-  ward: string;
-  district: string;
-  province: string;
-}
+// export interface Address {
+//   street: string;
+//   ward: string;
+//   district: string;
+//   province: string;
+// }
 
 interface info {
   id: string;

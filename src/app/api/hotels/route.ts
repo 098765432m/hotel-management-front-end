@@ -6,7 +6,7 @@ export async function GET() {
     include: {
       rooms: true,
       room_types: true,
-      users: true,
+      staffs: true,
     },
   });
 
@@ -15,6 +15,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   const body = await request.json();
+  console.log(body);
 
   const result = await prisma.hotel.create({
     data: body,

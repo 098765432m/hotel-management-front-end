@@ -5,20 +5,32 @@ import CardDefault from "@/components/CardDefault";
 import { Form, Input } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher, axiosFetcher } from "@/lib/fetcher";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { District, Province } from "@/types/vietnamese-location-api/address";
 import { FormProps, useForm } from "antd/es/form/Form";
 import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 import usersService from "@/services/users.service";
 import hotelsService from "@/services/hotels.service";
 import { HotelsDtoCreate } from "@/types/dto/hotelsCreate.dto";
+import { HotelFormCreateProps } from "@/types/dto/hotel.dto";
+
+//type of address
+interface info {
+  name: string;
+  id: string;
+}
+
+const null_address = {
+  name: "0",
+  id: "0",
+};
 
 export default function AdminHome() {
   const [messageApi, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
-  const [selectedProvince, setSelectedProvince] = useState<string>("0");
-  const [selectedDistrict, setSelectedDistrict] = useState<string>("0");
-  const [selectedWard, setSelectedWard] = useState<string>("0");
+  const [selectedProvince, setSelectedProvince] = useState<info>(null_address);
+  const [selectedDistrict, setSelectedDistrict] = useState<info>(null_address);
+  const [selectedWard, setSelectedWard] = useState<info>(null_address);
 
   //Antd
   const success = (str: string) => {
@@ -40,13 +52,16 @@ export default function AdminHome() {
     data: provinces,
     error: provinces_error,
     isLoading: provinces_loading,
-  } = useSWR("https://vapi.vnappmob.com/api/province/", axiosCustomFetcher);
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/`,
+    axiosCustomFetcher
+  );
   const {
     data: districts,
     error: districts_error,
     isLoading: districts_loading,
   } = useSWR(
-    `https://vapi.vnappmob.com/api/province/district/${selectedProvince}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/district/${selectedProvince.id}`,
     axiosCustomFetcher
   );
   const {
@@ -54,68 +69,81 @@ export default function AdminHome() {
     error: wards_error,
     isLoading: wards_loading,
   } = useSWR(
-    `https://vapi.vnappmob.com/api/province/ward/${selectedDistrict}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/ward/${selectedDistrict.id}`,
     axiosCustomFetcher
   );
 
-  // if (provinces_error) return <div>error...</div>;
-  // if (provinces_loading) return <div>Loading ...</div>;
+  const province_options = useMemo(() => {
+    return provinces?.results
+      .sort((a: Province, b: Province) =>
+        a.province_name.localeCompare(b.province_name)
+      )
+      .map((province: Province) => ({
+        name: province.province_name,
+        value: province.province_id,
+      }));
+  }, [provinces]);
 
-  const province_options = provinces?.results
-    .sort((a: Province, b: Province) =>
-      a.province_name.localeCompare(b.province_name)
-    )
-    .map((province: Province) => ({
-      label: province.province_name,
-      value: province.province_id,
-    }));
+  const district_options = useMemo(() => {
+    return districts?.results
+      .sort((a: District, b: District) =>
+        a.district_name.localeCompare(b.district_name)
+      )
+      .map((district: District) => ({
+        name: district.district_name,
+        value: district.district_id,
+      }));
+  }, [districts]);
 
-  // if (districts_error) return <div>error...</div>;
-  // if (districts_loading) return <div>Loading ...</div>;
-
-  const district_options = districts?.results
-    .sort((a: District, b: District) =>
-      a.district_name.localeCompare(b.district_name)
-    )
-    .map((district: District) => ({
-      label: district.district_name,
-      value: district.district_id,
-    }));
-
-  const ward_options = districts?.results
-    .sort((a: District, b: District) =>
-      a.district_name.localeCompare(b.district_name)
-    )
-    .map((district: District) => ({
-      label: district.district_name,
-      value: district.district_id,
-    }));
+  const ward_options = useMemo(() => {
+    return districts?.results
+      .sort((a: District, b: District) =>
+        a.district_name.localeCompare(b.district_name)
+      )
+      .map((district: District) => ({
+        name: district.district_name,
+        value: district.district_id,
+      }));
+  }, [wards]);
 
   // Handle Province Change
   const handleProvinceChange = (value: any) => {
-    setSelectedProvince(value);
+    const [name, id] = JSON.parse(value);
+
+    setSelectedProvince({
+      name: name,
+      id: id,
+    });
 
     //set lại giá trị District và select
-    setSelectedDistrict("0");
-    form.setFieldsValue({ district: "0" });
+    setSelectedDistrict(null_address);
+    form.setFieldsValue({ district: null_address });
 
     //set lại giá trị Ward và select
-    setSelectedWard("0");
-    form.setFieldsValue({ ward: "0" });
+    setSelectedWard(null_address);
+    form.setFieldsValue({ ward: null_address });
   };
 
   // Handle District Change
   const handleDistrictChange = (value: any) => {
-    setSelectedDistrict(value);
+    const [name, id] = JSON.parse(value);
+    setSelectedDistrict({
+      name: name,
+      id: id,
+    });
 
     //set lại giá trị Ward và select
-    setSelectedWard("0");
-    form.setFieldsValue({ ward: "0" });
+    setSelectedWard(null_address);
+    form.setFieldsValue({ ward: null_address });
   };
 
   // Handle Ward Change
   const handleWardChange = (value: any) => {
-    setSelectedWard(value);
+    const [name, id] = JSON.parse(value);
+    setSelectedWard({
+      name: name,
+      id: id,
+    });
   };
 
   // Handle Create User
@@ -137,25 +165,32 @@ export default function AdminHome() {
   // Handle Create User end
 
   //Handle Create Hotel
-  const onCreateHotelFinish: FormProps<HotelsDtoCreate>["onFinish"] = async (
-    values
-  ) => {
-    try {
-      if (
-        values.street != undefined &&
-        values.ward != undefined &&
-        values.district != undefined &&
-        values.province != undefined
-      ) {
-        await hotelsService.CreateOne(values);
-        success("Khách sạn");
-      } else {
-        error("Khách sạn");
+  const onCreateHotelFinish: FormProps<HotelFormCreateProps>["onFinish"] =
+    async (values) => {
+      try {
+        if (
+          values.street != undefined &&
+          values.ward != undefined &&
+          values.district != undefined &&
+          values.province != undefined
+        ) {
+          await hotelsService.CreateOne({
+            name: values.name,
+            address: {
+              street: values.street,
+              ward: selectedWard,
+              district: selectedDistrict,
+              province: selectedProvince,
+            },
+          });
+          success("Khách sạn");
+        } else {
+          error("Khách sạn");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      error("Khách sạn");
-    }
-  };
+    };
 
   const onCreateHotelFinishFailed: FormProps["onFinishFailed"] = (
     errorInfo
@@ -171,7 +206,7 @@ export default function AdminHome() {
       <CardDefault>
         <div className="space-y-6">
           <div className="flex justify-between items-center px-8">
-            <div className="text-2xl font-semibold">Booking</div>
+            <div className="text-2xl font-semibold">Admin Page</div>
           </div>
           <div className="flex">
             <div className="w-1/2">
@@ -193,6 +228,9 @@ export default function AdminHome() {
                   <Input></Input>
                 </Form.Item>
                 <Form.Item label="Địa chỉ Email" name="email">
+                  <Input></Input>
+                </Form.Item>
+                <Form.Item label="So dien thoai" name="phoneNumber">
                   <Input></Input>
                 </Form.Item>
                 <Form.Item label="Vai trò" name="role" initialValue={"GUEST"}>
@@ -283,8 +321,11 @@ export default function AdminHome() {
                     <Select.Option value={"0"}>Chọn Xã/Phường</Select.Option>
                     {ward_options &&
                       ward_options.map((option: any) => (
-                        <Select.Option key={option.value} value={option.value}>
-                          {option.label}
+                        <Select.Option
+                          key={option.value}
+                          value={JSON.stringify([option.name, option.value])}
+                        >
+                          {option.name}
                         </Select.Option>
                       ))}
                   </Select>
@@ -298,8 +339,11 @@ export default function AdminHome() {
                     <Select.Option value={"0"}>Chọn Quận/Huyện</Select.Option>
                     {district_options &&
                       district_options.map((option: any) => (
-                        <Select.Option key={option.value} value={option.value}>
-                          {option.label}
+                        <Select.Option
+                          key={option.value}
+                          value={JSON.stringify([option.name, option.value])}
+                        >
+                          {option.name}
                         </Select.Option>
                       ))}
                   </Select>
@@ -309,8 +353,21 @@ export default function AdminHome() {
                     placeholder="Chọn Tỉnh/Thành phố"
                     onChange={handleProvinceChange}
                     value={selectedProvince}
-                    options={province_options}
-                  ></Select>
+                    // options={province_options}
+                  >
+                    <Select.Option value={["0", "0"]}>
+                      Chọn Tỉnh/Thành phố
+                    </Select.Option>
+                    {province_options &&
+                      province_options.map((option: any) => (
+                        <Select.Option
+                          key={option.value}
+                          value={JSON.stringify([option.name, option.value])}
+                        >
+                          {option.name}
+                        </Select.Option>
+                      ))}
+                  </Select>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                   <Button type="primary" htmlType="submit">
@@ -322,7 +379,6 @@ export default function AdminHome() {
           </div>
         </div>
       </CardDefault>
-      {selectedProvince + " - " + selectedDistrict + " - " + selectedWard}
     </div>
   );
 }
