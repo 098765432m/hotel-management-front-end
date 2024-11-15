@@ -44,12 +44,28 @@ model User {
   hotel_id          String?
   hotel             Hotel?       @relation(fields: [hotel_id], references: [id])
 
+  // Rating one-to-many
+  ratings           Rating[]      @relation("UserRatings")
+
   //Image relationship one-to-one
   image             Image?        @relation("UserImage")
 }
 
+// Rating for Hotel
+model Rating {
+  id                    String    @id @unique @default(cuid())
+  score                 Int       
+  comment               String    @db.VarChar(300)
+
+  hotel_id              String
+  hotel                 Hotel     @relation("HotelRatings",fields: [hotel_id], references: [id], onDelete: Cascade) // Delete Rating on Hotel has been removed
+
+  guest_id              String
+  guest                 User      @relation("UserRatings", fields: [guest_id], references: [id], onDelete: Cascade) // Delete Rating on Geust account has been deleted
+}
+
 model Hotel {
-  id                    String    @default(cuid()) @id
+  id                    String    @default(cuid()) @id @unique
   name                  String    @unique
   address               Json
   // img_public_id     String?    @default("")
@@ -66,17 +82,19 @@ model Hotel {
 
   //Image relationship one-to-many
   images                Image[]       @relation("HotelImages")
+
+  ratings               Rating[]      @relation("HotelRatings")
 }
 
 model Room {
-  id              String        @default(cuid()) @id
+  id              String        @default(cuid()) @id @unique
   name            String
   description     String?
   status_room     Status_Room   @default(AVAILABLE)
 
   //Hotel
   hotel_id        String
-  hotel           Hotel         @relation(fields: [hotel_id], references: [id])
+  hotel           Hotel         @relation(fields: [hotel_id], references: [id], onDelete: Cascade)
 
   //Room Type
   room_type_id    String
@@ -87,7 +105,7 @@ model Room {
 }
 
 model Booking {
-  id                String          @default(cuid()) @id
+  id                String          @default(cuid()) @id @unique
   check_in_date     DateTime        @default(now())
   check_out_date    DateTime        
   status            Status_Booking  @default(BOOKED)
@@ -107,7 +125,7 @@ model Booking {
 }
 
 model RoomTypes {
-  id                String    @default(cuid()) @id
+  id                String    @default(cuid()) @id @unique
   name              String    
   price             Int       @default(0)
   // img_public_id     String[]    
@@ -115,7 +133,7 @@ model RoomTypes {
   
   //Hotel
   hotel_id          String
-  hotel             Hotel     @relation(fields: [hotel_id], references: [id])
+  hotel             Hotel     @relation(fields: [hotel_id], references: [id], onDelete: Cascade)
 
   //Room
   rooms             Room[]
@@ -132,13 +150,13 @@ model Image {
 
   //one-to-one
   user_id           String?        @unique
-  user              User?          @relation("UserImage",fields: [user_id], references: [id])
+  user              User?          @relation("UserImage",fields: [user_id], references: [id], onDelete: Restrict) 
 
   //one-to-many
   hotel_id          String?
-  hotel             Hotel?         @relation("HotelImages", fields: [hotel_id], references: [id])
+  hotel             Hotel?         @relation("HotelImages", fields: [hotel_id], references: [id], onDelete: Restrict)
 
   //one-to-many
   room_type_id      String?
-  room_type         RoomTypes?     @relation("RoomTypeImages", fields: [room_type_id], references: [id])
+  room_type         RoomTypes?     @relation("RoomTypeImages", fields: [room_type_id], references: [id], onDelete: Restrict)
 }

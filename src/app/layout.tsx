@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConfigProvider } from "antd";
+
+// Require for Mantine core
+
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import "@mantine/core/styles.css";
+
+// Require for Mantine core
+
 import Header from "@/components/header/Header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import AuthProvider from "@/context/AuthContext";
@@ -28,25 +36,30 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <ColorSchemeScript></ColorSchemeScript>
+      </head>
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ConfigProvider
-            theme={{
-              components: {
-                Collapse: {
-                  headerBg: "#ffffff",
-                  contentBg: "#ffffff",
+          <MantineProvider>
+            <ConfigProvider
+              theme={{
+                components: {
+                  Collapse: {
+                    headerBg: "#ffffff",
+                    contentBg: "#ffffff",
+                  },
                 },
-              },
-            }}
-          >
-            <AuthProvider authInfo={authInfo}>
-              <main className="py-6 px-12 bg-stone-100">
-                <Header></Header>
-                {children}
-              </main>
-            </AuthProvider>
-          </ConfigProvider>
+              }}
+            >
+              <AuthProvider authInfo={authInfo}>
+                <main className="py-6 px-12 bg-stone-100">
+                  <Header></Header>
+                  {children}
+                </main>
+              </AuthProvider>
+            </ConfigProvider>
+          </MantineProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

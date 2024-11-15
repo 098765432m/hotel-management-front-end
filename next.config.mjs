@@ -24,6 +24,10 @@ const nextConfig = {
       },
     ],
   },
+
+  experimental: {
+    optimizePackageImports: ["@mantine/core", "@mantine/hooks"], //Enables tree shaking
+  },
 };
 
 export default nextConfig;
