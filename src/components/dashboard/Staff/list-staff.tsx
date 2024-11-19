@@ -1,10 +1,12 @@
 "use client";
 
 import CardDefault from "@/components/CardDefault";
-import { AuthContext } from "@/context/AuthContext";
+// import { AuthContext } from "@/context/AuthContext";
 import { axiosCustomFetcher } from "@/lib/fetcher";
+import { RootState } from "@/state/store";
 import { StaffOfHotelDto } from "@/types/dto/user.dto";
 import { useContext } from "react";
+import { useSelector } from "react-redux";
 import useSWR from "swr";
 
 interface Props {
@@ -12,14 +14,17 @@ interface Props {
 }
 
 export default function ListStaff() {
-  const { auth } = useContext(AuthContext);
-  console.log(auth);
+  // const { auth } = useContext(AuthContext);
+  const authStore = useSelector((state: RootState) => state.auth);
 
   const {
     data: staffs,
     isLoading: isStaffsLoading,
     error: isStaffsError,
-  } = useSWR(`/api/users/hotel/${auth?.hotelId}`, axiosCustomFetcher);
+  } = useSWR(
+    `/api/users/hotel/${authStore.authInfo?.hotelId}`,
+    axiosCustomFetcher
+  );
   console.log(staffs);
 
   if (isStaffsLoading) return <>Loading...</>;

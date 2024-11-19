@@ -9,9 +9,19 @@ import React from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { roleEnum } from "@/types/enum/role.enum";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/state/store";
+import { logIn } from "@/state/user/authSlice";
 
 export default function LoginPage() {
-  const { setIsLogin, setAuth } = useContext(AuthContext);
+  // const { setIsLogin, setAuth } = useContext(AuthContext);
+
+  // Global Dispatch START
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Global Dispatch END
+
   const router = useRouter();
 
   // Giá trị của form input
@@ -32,8 +42,7 @@ export default function LoginPage() {
     const user: UserCookieResponse | null = await authService.login(formData); //Get user info
 
     if (user != null) {
-      setAuth(user);
-      setIsLogin(true);
+      dispatch(logIn(user));
 
       // Redirect User by Role
       switch (user.role) {

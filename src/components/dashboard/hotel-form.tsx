@@ -5,13 +5,15 @@ import CardDefault from "../CardDefault";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { AuthContext } from "@/context/AuthContext";
+// import { AuthContext } from "@/context/AuthContext";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { UploadedHotelImage, UploadedImageDto } from "@/types/dto/image.dto";
 import hotelsService from "@/services/hotels.service";
 import { District, Province } from "@/types/vietnamese-location-api/address";
 import { FaRegTrashAlt } from "react-icons/fa";
 import imagesService from "@/services/images.service";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
 
 //type of address
 interface info {
@@ -26,14 +28,15 @@ const null_address = {
 
 export default function HotelForm() {
   const [form] = Form.useForm();
-  const { auth } = useContext(AuthContext); // Get auth info of user
+  // const { auth } = useContext(AuthContext); // Get auth info of user
+  const authStore = useSelector((state: RootState) => state.auth);
 
   const {
     data: hotel,
     isLoading: isHotelLoading,
     error: isHotelError,
     mutate: hotelMutate,
-  } = useSWR(`/api/hotels/${auth!.hotelId}`, axiosCustomFetcher); //Get Hotel via Id
+  } = useSWR(`/api/hotels/${authStore.authInfo?.hotelId}`, axiosCustomFetcher); //Get Hotel via Id
 
   //State Start
   const [isConfirmRmOpen, setConfirmRmOpen] = useState<boolean>(false);
@@ -169,7 +172,7 @@ export default function HotelForm() {
       values.district != undefined &&
       values.province != undefined
     ) {
-      await hotelsService.updateOne(auth!.hotelId, {
+      await hotelsService.updateOne(authStore.authInfo?.hotelId as string, {
         name: values.name,
         address: {
           street: values.street,

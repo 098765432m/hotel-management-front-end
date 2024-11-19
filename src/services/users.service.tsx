@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { UserCreateDto } from "@/types/dto/usersCreate.dto";
+import { StaffCreateDto, UserCreateDto } from "@/types/dto/usersCreate.dto";
 
 class UsersService {
   api: any;
@@ -16,7 +16,7 @@ class UsersService {
   }
 
   //Create A User
-  async CreateOne(body: UserCreateDto) {
+  async CreateOne(body: StaffCreateDto) {
     console.log(body);
 
     try {

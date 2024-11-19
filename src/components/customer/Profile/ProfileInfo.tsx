@@ -1,23 +1,26 @@
 "use client";
 
 import { updateAccount } from "@/action/user.action";
-import { AuthContext } from "@/context/AuthContext";
+// import { AuthContext } from "@/context/AuthContext";
 import { axiosCustomFetcher } from "@/lib/fetcher";
+import { RootState } from "@/state/store";
 import { Button, TextField } from "@mui/material";
 import axios from "axios";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import useSWR from "swr";
 
 export default function ProfileInfo() {
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
+  const authStore = useSelector((state: RootState) => state.auth);
   const {
     data: user,
     isLoading: isUserLoading,
     error: isUserError,
     mutate: userMutate,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/users/${auth.id}`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/users/${authStore.authInfo?.id}`,
     axiosCustomFetcher
   );
   const userRef = useRef(user);

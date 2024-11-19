@@ -10,6 +10,12 @@ import "@mantine/core/styles.css";
 
 // Require for Mantine core
 
+//import Redux
+
+import ReduxProvider from "@/components/redux/ReduxProvider";
+
+//import Redux
+
 import Header from "@/components/header/Header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import AuthProvider from "@/context/AuthContext";
@@ -41,25 +47,27 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <MantineProvider>
-            <ConfigProvider
-              theme={{
-                components: {
-                  Collapse: {
-                    headerBg: "#ffffff",
-                    contentBg: "#ffffff",
+          <ReduxProvider authInfo={authInfo}>
+            <MantineProvider>
+              <ConfigProvider
+                theme={{
+                  components: {
+                    Collapse: {
+                      headerBg: "#ffffff",
+                      contentBg: "#ffffff",
+                    },
                   },
-                },
-              }}
-            >
-              <AuthProvider authInfo={authInfo}>
-                <main className="py-6 px-12 bg-stone-100">
-                  <Header></Header>
-                  {children}
-                </main>
-              </AuthProvider>
-            </ConfigProvider>
-          </MantineProvider>
+                }}
+              >
+                <AuthProvider authInfo={authInfo}>
+                  <main className="py-6 px-12 bg-stone-100">
+                    <Header></Header>
+                    {children}
+                  </main>
+                </AuthProvider>
+              </ConfigProvider>
+            </MantineProvider>
+          </ReduxProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

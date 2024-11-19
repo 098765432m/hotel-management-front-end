@@ -1,10 +1,12 @@
 "use client";
-import { AuthContext } from "@/context/AuthContext";
+// import { AuthContext } from "@/context/AuthContext";
 import roomTypesServices from "@/services/roomTypes.services";
+import { RootState } from "@/state/store";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { Input, InputNumber, Button, Form, Skeleton } from "antd";
 
 import { useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface RoomTypeFormValues {
   name: string;
@@ -13,7 +15,8 @@ interface RoomTypeFormValues {
 
 export default function RoomTypeForm() {
   const [isPageLoading, setPageLoading] = useState(true);
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
+  const authStore = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     setPageLoading(false);
@@ -23,7 +26,7 @@ export default function RoomTypeForm() {
     const body = {
       name: values.name,
       price: values.price,
-      hotel_id: auth!.hotelId!,
+      hotel_id: authStore.authInfo?.hotelId!,
     };
     console.log(body);
 
