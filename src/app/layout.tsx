@@ -18,7 +18,6 @@ import ReduxProvider from "@/components/redux/ReduxProvider";
 
 import Header from "@/components/header/Header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import AuthProvider from "@/context/AuthContext";
 import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
@@ -47,27 +46,27 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ReduxProvider authInfo={authInfo}>
-            <MantineProvider>
-              <ConfigProvider
-                theme={{
-                  components: {
-                    Collapse: {
-                      headerBg: "#ffffff",
-                      contentBg: "#ffffff",
-                    },
-                  },
-                }}
-              >
-                <AuthProvider authInfo={authInfo}>
-                  <main className="py-6 px-12 bg-stone-100">
-                    <Header></Header>
-                    {children}
-                  </main>
-                </AuthProvider>
-              </ConfigProvider>
-            </MantineProvider>
-          </ReduxProvider>
+          <ConfigProvider
+            theme={{
+              components: {
+                Collapse: {
+                  // headerBg: "#ffffff",
+                  // contentBg: "#ffffff",
+                },
+              },
+            }}
+          >
+            <ReduxProvider authInfo={authInfo}>
+              <MantineProvider>
+                {/* <AuthProvider authInfo={authInfo}> */}
+                <main className="py-6 px-12 bg-stone-100">
+                  <Header></Header>
+                  {children}
+                </main>
+              </MantineProvider>
+            </ReduxProvider>
+            {/* </AuthProvider> */}
+          </ConfigProvider>
         </AppRouterCacheProvider>
       </body>
     </html>

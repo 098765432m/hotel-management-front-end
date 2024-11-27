@@ -20,4 +20,16 @@ interface HotelCreateDto {
   address: AddressType;
 }
 
-export type { HotelPutDto, HotelFormCreateProps, HotelCreateDto };
+interface HotelContactCreateDto extends AddressType {
+  hotelName: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+}
+
+export type {
+  HotelPutDto,
+  HotelFormCreateProps,
+  HotelCreateDto,
+  HotelContactCreateDto,
+};

@@ -1,6 +1,10 @@
 import axiosInstance from "@/lib/axiosConfig";
 import { AddressType } from "@/types/address.interface";
-import { HotelCreateDto, HotelPutDto } from "@/types/dto/hotel.dto";
+import {
+  HotelContactCreateDto,
+  HotelCreateDto,
+  HotelPutDto,
+} from "@/types/dto/hotel.dto";
 
 class HotelsService {
   private api: any;
@@ -25,6 +29,10 @@ class HotelsService {
     } catch (error: any) {
       throw new Error(error.message);
     }
+  }
+
+  async createContact(body: HotelContactCreateDto) {
+    return (await this.api.post("/contact", body)).data;
   }
 
   //update a Hotel

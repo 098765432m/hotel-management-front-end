@@ -16,7 +16,7 @@ class UsersService {
   }
 
   //Create A User
-  async CreateOne(body: StaffCreateDto) {
+  async CreateOne(body: UserCreateDto) {
     console.log(body);
 
     try {

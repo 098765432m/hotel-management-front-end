@@ -1,11 +1,14 @@
 "use client";
 
 import CardDefault from "@/components/CardDefault";
+import MantineButton from "@/components/custom-component/MantineButton";
+import AvailableRooms from "@/components/customer/hotel-page/AvailableRooms";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import bookingsService from "@/services/bookings.service";
 import { UploadedHotelImage } from "@/types/dto/image.dto";
 import { rangeISOToRangeDayJS } from "@/utils/dayjs";
-import { Button, Input, Rating, TextField } from "@mui/material";
+import { Button } from "@mantine/core";
+import { Input, Rating, TextField } from "@mui/material";
 import { DatePicker } from "antd";
 import { Dayjs } from "dayjs";
 import { CldImage } from "next-cloudinary";
@@ -50,10 +53,6 @@ export default function HotelDetail({
     const formData = new FormData(e.currentTarget as HTMLFormElement);
 
     formData.append("hotelId", params.hotel_id);
-    console.log(`fullname: ${formData.get("fullName") as string}`);
-    console.log(`email: ${formData.get("email") as string}`);
-    console.log(`phonenumber: ${formData.get("phoneNumber") as string}`);
-    console.log(dateRange);
 
     if (dateRange != null) {
       // const formattedDateRange = `${dateRange[0].toISOString()} - ${dateRange[1].toISOString()}`;
@@ -163,51 +162,15 @@ export default function HotelDetail({
                     ></DatePicker.RangePicker>
                   </div>
                   <div className="flex justify-center space-x-2">
-                    <Button type="submit" variant="contained">
-                      Booking
-                    </Button>
+                    <MantineButton type="submit">Đặt phòng</MantineButton>
                   </div>
                 </div>
               </div>
             </form>
           </CardDefault>
-
-          {/* Card yêu cầu đặt biệt */}
-          {/* <Collapse
-            size="large"
-            expandIconPosition="end"
-            expandIcon={({ isActive }) => (
-              <div className="flex items-center h-full">
-                {isActive ? (
-                  <AiOutlineDownCircle size={24}></AiOutlineDownCircle>
-                ) : (
-                  <AiOutlineRightCircle size={24}></AiOutlineRightCircle>
-                )}
-              </div>
-            )}
-            items={[
-              {
-                key: 1,
-                label: (
-                  <div>
-                    <span className="font-bold text-xl space-x-2">
-                      <span>Yêu cầu đặc biệt</span>
-                      <span className="text-gray-500 text-xs">
-                        <i>(Không bắt buộc)</i>
-                      </span>
-                    </span>
-                  </div>
-                ),
-                children: (
-                  <div className="space-y-1">
-                    <div className="w-full">
-                      <TextArea placeholder="Nhập yêu cầu tại đây"></TextArea>
-                    </div>
-                  </div>
-                ),
-              },
-            ]}
-          ></Collapse> */}
+          <div>
+            <AvailableRooms hotel={hotel}></AvailableRooms>
+          </div>
         </div>
 
         {/* Card giá phòng */}

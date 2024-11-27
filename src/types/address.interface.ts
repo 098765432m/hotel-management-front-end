@@ -1,14 +1,7 @@
-// export interface Address {
-//   street: string;
-//   ward: string;
-//   district: string;
-//   province: string;
-// }
-
-interface info {
+export type info = {
   id: string;
   name: string;
-}
+};
 
 export interface AddressType {
   street: string;
