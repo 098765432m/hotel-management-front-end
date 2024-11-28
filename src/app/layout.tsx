@@ -61,15 +61,15 @@ export default async function RootLayout({
             <ReduxProvider authInfo={authInfo}>
               <MantineProvider>
                 {/* <AuthProvider authInfo={authInfo}> */}
-                <header>
-                  <Header></Header>
-                </header>
-                <main className="">
-                  <div id={styles.body_container}>{children}</div>
-                </main>
-                <footer>
-                  <Footer></Footer>
-                </footer>
+                <div id={styles.layout}>
+                  <header>
+                    <Header></Header>
+                  </header>
+                  <main id={styles.main_layout}>{children}</main>
+                  <footer>
+                    <Footer></Footer>
+                  </footer>
+                </div>
               </MantineProvider>
             </ReduxProvider>
             {/* </AuthProvider> */}

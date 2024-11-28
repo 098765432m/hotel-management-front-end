@@ -6,24 +6,13 @@ import { addressToString } from "@/utils/helpers";
 import axios from "axios";
 import { cookies } from "next/headers";
 
-async function getData(hotelId: string | null) {
-  const hotel = (
-    await axios.get(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/hotels/${hotelId ?? ""}`
-    )
-  ).data;
-
-  return hotel;
-}
-
 export default async function DashBoardPage() {
   const loginInfoString = cookies().get("login")?.value;
   const loginInfo = await decrypt(loginInfoString);
 
-  const { userId, role, hotelId } = loginInfo as SessionPayload;
-  console.log("info");
-
-  // const hotel: Hotel = await getData(hotelId);
+  if (loginInfo != undefined) {
+    const { userId, role, hotelId } = loginInfo as SessionPayload;
+  }
 
   return (
     <>

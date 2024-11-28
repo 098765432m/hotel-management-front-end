@@ -28,42 +28,71 @@ export async function PUT(
   const body: HotelPutDto = await request.json();
 
   console.log(params.hotelId);
+  console.log("images");
+  console.log(body.images);
 
-  const [updatedHotel, addedImages] = await prisma.$transaction([
-    prisma.hotel.update({
-      where: {
-        id: params.hotelId,
-      },
-      data: {
-        name: body.name,
-        address: {
-          street: body.address.street,
-          ward: { id: body.address.ward.id, name: body.address.ward.name },
-          district: {
-            id: body.address.district.id,
-            name: body.address.district.name,
-          },
-          province: {
-            id: body.address.province.id,
-            name: body.address.province.name,
-          },
+  // const [updatedHotel, addedImages] = await prisma.$transaction([
+  //   prisma.hotel.update({
+  //     where: {
+  //       id: params.hotelId,
+  //     },
+  //     data: {
+  //       name: body.name,
+  //       address: {
+  //         street: body.address.street,
+  //         ward: { id: body.address.ward.id, name: body.address.ward.name },
+  //         district: {
+  //           id: body.address.district.id,
+  //           name: body.address.district.name,
+  //         },
+  //         province: {
+  //           id: body.address.province.id,
+  //           name: body.address.province.name,
+  //         },
+  //       },
+  //     },
+  //   }),
+
+  //   prisma.image.createMany({
+  //     data: body.images.map((image) => ({
+  //       public_id: image.public_id,
+  //       format: image.format,
+  //       hotel_id: params.hotelId,
+  //     })),
+  //   }),
+  // ]);
+
+  const newHotel = await prisma.hotel.update({
+    where: {
+      id: params.hotelId,
+    },
+    data: {
+      name: body.name,
+      address: {
+        street: body.address.street,
+        ward: { id: body.address.ward.id, name: body.address.ward.name },
+        district: {
+          id: body.address.district.id,
+          name: body.address.district.name,
+        },
+        province: {
+          id: body.address.province.id,
+          name: body.address.province.name,
         },
       },
-    }),
-
-    prisma.image.createMany({
-      data: body.images.map((image) => ({
-        public_id: image.public_id,
-        format: image.format,
-        hotel_id: params.hotelId,
-      })),
-    }),
-  ]);
-
-  return NextResponse.json({
-    updatedHotel: updatedHotel,
-    addedImages: addedImages,
+    },
   });
 
-  // return NextResponse.json({});
+  const newImages =
+    body.images.length > 0
+      ? await prisma.image.createMany({
+          data: body.images.map((image) => ({
+            public_id: image.public_id,
+            format: image.format,
+            hotel_id: params.hotelId,
+          })),
+        })
+      : null;
+
+  return NextResponse.json([newHotel, newImages]);
 }

@@ -186,6 +186,8 @@ export default function HotelForm() {
       });
 
       hotelMutate();
+
+      setUploadedHotelImages([]);
     }
   };
 
@@ -210,7 +212,13 @@ export default function HotelForm() {
     }
   }, [hotel]);
 
-  if (isHotelLoading || wards_loading || districts_loading || provinces_loading)
+  if (
+    hotel == null ||
+    isHotelLoading ||
+    wards_loading ||
+    districts_loading ||
+    provinces_loading
+  )
     return <>Loading ...</>;
 
   return (
