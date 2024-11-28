@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import styles from "@/styles/global.module.scss";
 import { ConfigProvider } from "antd";
 
 // Require for Mantine core
@@ -21,6 +22,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
+import Footer from "@/components/footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -59,10 +61,15 @@ export default async function RootLayout({
             <ReduxProvider authInfo={authInfo}>
               <MantineProvider>
                 {/* <AuthProvider authInfo={authInfo}> */}
-                <main className="py-6 px-12 bg-stone-100">
+                <header>
                   <Header></Header>
-                  {children}
+                </header>
+                <main className="">
+                  <div id={styles.body_container}>{children}</div>
                 </main>
+                <footer>
+                  <Footer></Footer>
+                </footer>
               </MantineProvider>
             </ReduxProvider>
             {/* </AuthProvider> */}

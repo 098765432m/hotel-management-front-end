@@ -9,7 +9,7 @@ export default async function Home() {
   if (hotels == undefined) return <div></div>;
   return (
     <div>
-      <SearchBar></SearchBar>
+      {/* <SearchBar></SearchBar> */}
       <div className="flex space-x-4 py-3">
         {hotels.length > 0 ? (
           hotels.map((hotel: Hotel, index: number) => (

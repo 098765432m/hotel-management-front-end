@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, notification, Select } from "antd";
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import { Form, Input } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher, axiosFetcher } from "@/lib/fetcher";

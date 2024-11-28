@@ -2,7 +2,7 @@
 import { Room } from "@/types/room.interface";
 import { addressToString } from "@/utils/helpers";
 import Image from "next/image";
-import Card from "./CardDefault";
+import Card from "./custom-component/CardDefault";
 import Link from "next/link";
 import Button from "./Button";
 
@@ -11,8 +11,11 @@ interface Props {
 }
 
 export default function RoomCard({ Room }: Props) {
-
-  const cloudinary_path = process.env.NEXT_PUBLIC_CLOUDINARY_URL + '/' + process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME + '/image/upload/v1';
+  const cloudinary_path =
+    process.env.NEXT_PUBLIC_CLOUDINARY_URL +
+    "/" +
+    process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME +
+    "/image/upload/v1";
 
   return (
     <Card>
@@ -21,7 +24,11 @@ export default function RoomCard({ Room }: Props) {
           <div className=" overflow-hidden w-[300px] h-[175px]">
             <Image
               priority
-              src={ Room.room_type.img_public_id != null ? `${cloudinary_path}/${Room.room_type.img_public_id}` : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+              src={
+                Room.room_type.img_public_id != null
+                  ? `${cloudinary_path}/${Room.room_type.img_public_id}`
+                  : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`
+              }
               width={300}
               height={200}
               alt={Room.name}

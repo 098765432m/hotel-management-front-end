@@ -1,19 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import Card from "../CardDefault";
+import styles from "@/styles/header/Header.module.scss";
+import NextLink from "../custom-component/NextLink";
+import Card from "../custom-component/CardDefault";
 import HeaderLoginButton from "./HeaderLoginButton";
-import { useContext } from "react";
-// import { AuthContext } from "@/context/AuthContext";
 import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 
 export default function Header() {
-  // const { auth } = useContext(AuthContext);
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
-  let pathname = "/"; //Url for redirect home
+  let pathname = "/";
   if (authInfo?.role == roleEnum.ADMIN) pathname = "/admin";
   else if (
     authInfo?.role == roleEnum.MANAGER ||
@@ -23,32 +21,58 @@ export default function Header() {
 
   return (
     <Card>
-      <div className="flex justify-between">
-        <span className="text-2xl font-bold">
-          <Link href={pathname}>Trip.com</Link>
+      <div className={styles.navbar}>
+        <span id={styles.logo}>
+          <NextLink href={pathname}>Trip.com</NextLink>
         </span>
-        <span className="flex space-x-8 items-center">
+        <span id={styles.nav_link_container}>
           {authInfo?.role == roleEnum.ADMIN ? (
             <span>
-              <Link href={"/admin"}>Something</Link>
+              <NextLink href={"/admin"}>Something</NextLink>
             </span>
           ) : authInfo?.role == roleEnum.MANAGER ||
             authInfo?.role == roleEnum.STAFF ? (
-            <span className="space-x-3">
-              <Link href={"/dashboard/roomType"}>Loại phòng</Link>
-              <Link href={"/dashboard/room"}>Phòng đặt</Link>
-              <Link href={"/dashboard/staff"}>Nhân viên</Link>
+            <span className="">
+              <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
+              <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
+              <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
             </span>
           ) : (
             <span>
-              <Link href={"/contact"}>Liên hệ</Link>
+              <NextLink href={"/contact"}>Liên hệ</NextLink>
             </span>
           )}
-          <span>
-            <HeaderLoginButton></HeaderLoginButton>
-          </span>
+          <HeaderLoginButton></HeaderLoginButton>
         </span>
       </div>
     </Card>
+    // <Card>
+    //   <div className="flex justify-between">
+    //     <span className="text-2xl font-bold">
+    //       <NextLink href={pathname}>Trip.com</NextLink>
+    //     </span>
+    //     <span className="flex space-x-8 items-center">
+    //       {authInfo?.role == roleEnum.ADMIN ? (
+    //         <span>
+    //           <NextLink href={"/admin"}>Something</NextLink>
+    //         </span>
+    //       ) : authInfo?.role == roleEnum.MANAGER ||
+    //         authInfo?.role == roleEnum.STAFF ? (
+    //         <span className="space-x-3">
+    //           <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
+    //           <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
+    //           <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
+    //         </span>
+    //       ) : (
+    //         <span>
+    //           <NextLink href={"/contact"}>Liên hệ</NextLink>
+    //         </span>
+    //       )}
+    //       <span>
+    //         <HeaderLoginButton></HeaderLoginButton>
+    //       </span>
+    //     </span>
+    //   </div>
+    // </Card>
   );
 }

@@ -37,6 +37,7 @@ export enum DispatchType {
   SET_DISTRICT = "SET_DISTRICT",
   SET_WARD = "SET_WARD",
   SET_STREET = "SET_STREET",
+  SET_EXISTED = "SET_EXISTED",
 }
 
 export const initialAddress = {
@@ -56,4 +57,8 @@ export type ActionAddress =
       payload: { district: Info; ward?: Info };
     }
   | { type: DispatchType.SET_WARD; payload: { ward: Info } }
-  | { type: DispatchType.SET_STREET; payload: { street: string } };
+  | { type: DispatchType.SET_STREET; payload: { street: string } }
+  | {
+      type: DispatchType.SET_EXISTED;
+      payload: { street: string; district: Info; ward: Info; province: Info };
+    };

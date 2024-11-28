@@ -1,6 +1,6 @@
 "use client";
 
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import { Hotel } from "@/types/hotel.interface";

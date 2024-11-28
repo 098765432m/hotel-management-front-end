@@ -1,10 +1,9 @@
 "use client";
 
 import { FaCircleUser } from "react-icons/fa6";
-import Link from "next/link";
-import React, { useContext, useState } from "react";
+import NextLink from "../custom-component/NextLink";
+import React, { useState } from "react";
 import { logOut as logOutFromLib } from "@/lib/auth";
-// import { AuthContext } from "@/context/AuthContext";
 import { Button, Menu, MenuItem } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +11,6 @@ import { AppDispatch, RootState } from "@/state/store";
 import { logOut as logOutFromStore } from "@/state/user/authSlice";
 
 export default function HeaderLoginButton() {
-  // const { isLogin, setIsLogin, auth } = useContext(AuthContext);
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
   const isLogin = useSelector((state: RootState) => state.auth.isLogin);
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +54,7 @@ export default function HeaderLoginButton() {
             }}
           >
             <MenuItem>
-              <Link href={"/profile"}>Trang cá nhân</Link>
+              <NextLink href={"/profile"}>Trang cá nhân</NextLink>
             </MenuItem>
             <MenuItem>
               <span
@@ -74,9 +72,7 @@ export default function HeaderLoginButton() {
         </>
       ) : (
         <span>
-          <Link href={"/login"}>
-            <button>Login</button>
-          </Link>
+          <NextLink href={"/login"}>Login</NextLink>
         </span>
       )}
     </>

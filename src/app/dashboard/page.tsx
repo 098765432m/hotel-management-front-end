@@ -1,4 +1,4 @@
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import HotelForm from "@/components/dashboard/hotel-form";
 import { decrypt, SessionPayload } from "@/lib/session";
 import { Hotel } from "@/types/hotel.interface";
@@ -23,11 +23,11 @@ export default async function DashBoardPage() {
   const { userId, role, hotelId } = loginInfo as SessionPayload;
   console.log("info");
 
-  const hotel: Hotel = await getData(hotelId);
+  // const hotel: Hotel = await getData(hotelId);
 
   return (
     <>
-      <div className="flex justify-around">
+      {/* <div className="flex justify-around">
         <div className="">
           <h1>Thông tin khách sạn</h1>
           <div>
@@ -50,7 +50,7 @@ export default async function DashBoardPage() {
             <h2>Số tài khoản quản lý</h2>
           </div>
         </div>
-      </div>
+      </div> */}
       <HotelForm></HotelForm>
     </>
   );

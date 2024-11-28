@@ -1,0 +1,17 @@
+@use "../global.module.scss" as global-scss;
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem global-scss.$main-padding;
+  #logo {
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  #nav_link_container {
+    display: inline-flex;
+    gap: 30px;
+  }
+}

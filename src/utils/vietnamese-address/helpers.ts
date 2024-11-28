@@ -24,6 +24,15 @@ export function reducerAddress(state: AddressType, action: ActionAddress) {
     case "SET_STREET":
       return { ...state, street: action.payload.street };
 
+    case "SET_EXISTED":
+      return {
+        ...state,
+        province: action.payload.province,
+        district: action.payload.district,
+        ward: action.payload.ward,
+        street: action.payload.street,
+      };
+
     default:
       return state;
   }

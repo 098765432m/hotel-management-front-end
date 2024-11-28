@@ -1,0 +1,25 @@
+.footer {
+  .footer_content_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 360px;
+    padding: 40px 0px;
+    background-color: blanchedalmond;
+
+    .footer_content_column {
+      display: grid;
+      gap: 10px;
+    }
+  }
+
+  .footer_signature_container {
+    display: flex;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    padding: 20px 0px;
+    justify-content: center;
+    background-color: burlywood;
+  }
+}

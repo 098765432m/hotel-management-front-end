@@ -1,7 +1,7 @@
 "use client";
 
 import { roomCreate } from "@/action/room.action";
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import { axiosFetcher } from "@/lib/fetcher";
 import {
   Button,

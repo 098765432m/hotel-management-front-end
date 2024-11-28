@@ -1,34 +1,39 @@
 "use client";
 
 import { Button, Form, Input, Popconfirm, Select } from "antd";
-import CardDefault from "../CardDefault";
+import CardDefault from "../custom-component/CardDefault";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useReducer, useState } from "react";
 // import { AuthContext } from "@/context/AuthContext";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { UploadedHotelImage, UploadedImageDto } from "@/types/dto/image.dto";
 import hotelsService from "@/services/hotels.service";
-import { District, Province } from "@/types/vietnamese-location-api/address";
+import {
+  DispatchType,
+  District,
+  null_address,
+  Province,
+} from "@/types/vietnamese-location-api/address";
 import { FaRegTrashAlt } from "react-icons/fa";
 import imagesService from "@/services/images.service";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
+import { AddressType } from "@/types/address.interface";
+import { reducerAddress } from "@/utils/vietnamese-address/helpers";
+import { transformAddressEntity } from "@/utils/helpers";
 
-//type of address
-interface info {
-  name: string;
-  id: string;
-}
+const initialInfo = { id: "", name: "" };
 
-const null_address = {
-  name: "0",
-  id: "0",
+const initialAddress: AddressType = {
+  province: initialInfo,
+  district: initialInfo,
+  ward: initialInfo,
+  street: "",
 };
 
 export default function HotelForm() {
   const [form] = Form.useForm();
-  // const { auth } = useContext(AuthContext); // Get auth info of user
   const authStore = useSelector((state: RootState) => state.auth);
 
   const {
@@ -38,6 +43,8 @@ export default function HotelForm() {
     mutate: hotelMutate,
   } = useSWR(`/api/hotels/${authStore.authInfo?.hotelId}`, axiosCustomFetcher); //Get Hotel via Id
 
+  console.log(hotel);
+
   //State Start
   const [isConfirmRmOpen, setConfirmRmOpen] = useState<boolean>(false);
 
@@ -45,9 +52,7 @@ export default function HotelForm() {
     UploadedImageDto[]
   >([]); //Get info of uploaded images
 
-  const [selectedProvince, setSelectedProvince] = useState<info>(null_address); // Province
-  const [selectedDistrict, setSelectedDistrict] = useState<info>(null_address); // District
-  const [selectedWard, setSelectedWard] = useState<info>(null_address); // Ward
+  const [address, addressDispatch] = useReducer(reducerAddress, initialAddress);
 
   //State End
 
@@ -58,16 +63,18 @@ export default function HotelForm() {
     error: provinces_error,
     isLoading: provinces_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
-  ); //Get list Provinces
+  );
 
   const {
     data: districts,
     error: districts_error,
     isLoading: districts_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/district/${selectedProvince.id}`, //Get list Districts
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
+      address.province.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
@@ -76,7 +83,9 @@ export default function HotelForm() {
     error: wards_error,
     isLoading: wards_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/ward/${selectedDistrict.id}`, //Get list Wards
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
+      address.district.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
@@ -84,76 +93,66 @@ export default function HotelForm() {
 
   // Sort province, district, ward Start
   const province_options = useMemo(() => {
-    return provinces?.results
-      .sort((a: Province, b: Province) =>
-        a.province_name.localeCompare(b.province_name)
-      )
-      .map((province: Province) => ({
-        name: province.province_name,
-        value: province.province_id,
-      }));
+    return transformAddressEntity(provinces);
   }, [provinces]);
-
   const district_options = useMemo(() => {
-    return districts?.results
-      .sort((a: District, b: District) =>
-        a.district_name.localeCompare(b.district_name)
-      )
-      .map((district: District) => ({
-        name: district.district_name,
-        value: district.district_id,
-      }));
+    return transformAddressEntity(districts);
   }, [districts]);
 
   const ward_options = useMemo(() => {
-    return districts?.results
-      .sort((a: District, b: District) =>
-        a.district_name.localeCompare(b.district_name)
-      )
-      .map((district: District) => ({
-        name: district.district_name,
-        value: district.district_id,
-      }));
+    return transformAddressEntity(wards);
   }, [wards]);
 
   // Sort province, district, ward End
 
   const handleProvinceChange = (value: any) => {
-    const [name, id] = JSON.parse(value);
+    const { id, name } = JSON.parse(value);
 
-    setSelectedProvince({
-      name: name,
-      id: id,
+    addressDispatch({
+      type: DispatchType.SET_PROVINCE,
+      payload: {
+        province: {
+          id,
+          name,
+        },
+      },
     });
 
     //set lại giá trị District và select
-    setSelectedDistrict(null_address);
     form.setFieldsValue({ district: null_address });
 
     //set lại giá trị Ward và select
-    setSelectedWard(null_address);
     form.setFieldsValue({ ward: null_address });
   };
 
   // Handle District Change
   const handleDistrictChange = (value: any) => {
-    const [name, id] = JSON.parse(value);
-    setSelectedDistrict({
-      name: name,
-      id: id,
+    const { id, name } = JSON.parse(value);
+    addressDispatch({
+      type: DispatchType.SET_DISTRICT,
+      payload: {
+        district: {
+          id,
+          name,
+        },
+      },
     });
 
     //set lại giá trị Ward và select
-    setSelectedWard(null_address);
     form.setFieldsValue({ ward: null_address });
   };
 
   // Handle Ward Change
   const handleWardChange = (value: any) => {
-    const [name, id] = JSON.parse(value);
-    setSelectedWard({
-      name: name,
-      id: id,
+    const { id, name } = JSON.parse(value);
+    addressDispatch({
+      type: DispatchType.SET_WARD,
+      payload: {
+        ward: {
+          id,
+          name,
+        },
+      },
     });
   };
 
@@ -176,9 +175,9 @@ export default function HotelForm() {
         name: values.name,
         address: {
           street: values.street,
-          ward: selectedWard,
-          district: selectedDistrict,
-          province: selectedProvince,
+          ward: address.ward,
+          district: address.district,
+          province: address.province,
         },
         images: uploadedHotelImages.map((uploadedImage) => ({
           public_id: uploadedImage.public_id,
@@ -199,9 +198,15 @@ export default function HotelForm() {
   useEffect(() => {
     //Bỏ qua nếu chưa fetch xong giá trị hotel
     if (hotel && hotel.address) {
-      setSelectedWard(hotel.address.ward);
-      setSelectedDistrict(hotel.address.district);
-      setSelectedProvince(hotel.address.province);
+      addressDispatch({
+        type: DispatchType.SET_EXISTED,
+        payload: {
+          street: hotel.address.street,
+          ward: hotel.address.ward,
+          district: hotel.address.district,
+          province: hotel.address.province,
+        },
+      });
     }
   }, [hotel]);
 
@@ -236,36 +241,29 @@ export default function HotelForm() {
           name="ward"
           initialValue={
             hotel && hotel.address
-              ? JSON.stringify([hotel.address.ward.name, hotel.address.ward.id])
-              : ["0", "0"]
+              ? JSON.stringify({
+                  id: hotel.address.ward.id,
+                  name: hotel.address.ward.name,
+                })
+              : JSON.stringify({ id: null, name: null })
           }
-          rules={[
-            {
-              required: true,
-              message: "Vui lòng chọn Xã/Phường",
-            },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (value != "0") {
-                  return Promise.resolve();
-                } else {
-                  return Promise.reject(new Error("Vui lòng chọn Xã/Phường"));
-                }
-              },
-            }),
-          ]}
         >
           <Select
             placeholder="Chọn Xã/Phường"
             onChange={handleWardChange}
-            value={selectedWard}
+            value={JSON.stringify(address.ward)}
           >
-            <Select.Option value={["0", "0"]}>Chọn Xã/Phường</Select.Option>
+            <Select.Option value={JSON.stringify({ id: null, name: null })}>
+              Chọn Xã/Phường
+            </Select.Option>
             {ward_options &&
-              ward_options.map((option: any) => (
+              ward_options.map((option: { name: string; value: string }) => (
                 <Select.Option
                   key={option.value}
-                  value={JSON.stringify([option.name, option.value])}
+                  value={JSON.stringify({
+                    id: option.value,
+                    name: option.name,
+                  })}
                 >
                   {option.name}
                 </Select.Option>
@@ -277,28 +275,35 @@ export default function HotelForm() {
           name="district"
           initialValue={
             hotel && hotel.address
-              ? JSON.stringify([
-                  hotel.address.district.name,
-                  hotel.address.district.id,
-                ])
-              : ["0", "0"]
+              ? JSON.stringify({
+                  id: hotel.address.district.id,
+                  name: hotel.address.district.name,
+                })
+              : JSON.stringify({ id: null, name: null })
           }
         >
           <Select
             placeholder="Chọn Quận/Huyện"
             onChange={handleDistrictChange}
-            value={selectedDistrict}
+            value={JSON.stringify(address.district)}
           >
-            <Select.Option value={["0", "0"]}>Chọn Quận/Huyện</Select.Option>
+            <Select.Option value={JSON.stringify({ id: null, name: null })}>
+              Chọn Quận/Huyện
+            </Select.Option>
             {district_options &&
-              district_options.map((option: any) => (
-                <Select.Option
-                  key={option.value}
-                  value={JSON.stringify([option.name, option.value])}
-                >
-                  {option.name}
-                </Select.Option>
-              ))}
+              district_options.map(
+                (option: { name: string; value: string }) => (
+                  <Select.Option
+                    key={option.value}
+                    value={JSON.stringify({
+                      id: option.value,
+                      name: option.name,
+                    })}
+                  >
+                    {option.name}
+                  </Select.Option>
+                )
+              )}
           </Select>
         </Form.Item>
         <Form.Item
@@ -306,26 +311,29 @@ export default function HotelForm() {
           name="province"
           initialValue={
             hotel && hotel.address
-              ? JSON.stringify([
-                  hotel.address.province.name,
-                  hotel.address.province.id,
-                ])
-              : ["0", "0"]
+              ? JSON.stringify({
+                  id: hotel.address.province.id,
+                  name: hotel.address.province.name,
+                })
+              : JSON.stringify({ id: null, name: null })
           }
         >
           <Select
             placeholder="Chọn Tỉnh/Thành phố"
             onChange={handleProvinceChange}
-            value={selectedProvince}
+            value={JSON.stringify(address.province)}
           >
-            <Select.Option value={["0", "0"]}>
+            <Select.Option value={JSON.stringify({ id: null, name: null })}>
               Chọn Tỉnh/Thành phố
             </Select.Option>
             {province_options &&
               province_options.map((option: any) => (
                 <Select.Option
                   key={option.value}
-                  value={JSON.stringify([option.name, option.value])}
+                  value={JSON.stringify({
+                    id: option.value,
+                    name: option.name,
+                  })}
                 >
                   {option.name}
                 </Select.Option>

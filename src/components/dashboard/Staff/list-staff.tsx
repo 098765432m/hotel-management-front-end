@@ -1,6 +1,6 @@
 "use client";
 
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 // import { AuthContext } from "@/context/AuthContext";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import { RootState } from "@/state/store";

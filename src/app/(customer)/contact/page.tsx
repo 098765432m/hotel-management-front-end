@@ -70,10 +70,6 @@ export default function ContactPage() {
     },
   });
 
-  const [submittedValue, setSubmittedValue] = useState<
-    typeof form.values | null
-  >(null);
-
   const {
     data: provinces,
     error: provinces_error,

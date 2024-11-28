@@ -1,4 +1,4 @@
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import RoomTypeForm from "@/components/dashboard/RoomType/RoomTypeForm";
 import RoomTypeList from "@/components/dashboard/RoomType/RoomTypeList";
 import { Input, InputNumber, Button, Form, Skeleton } from "antd";
