@@ -16,8 +16,12 @@ $table-border: 2px solid black;
     tr {
       border: $table-border;
 
-      th {
+      td {
         border: $table-border;
+        text-align: center;
+
+        .booking_control {
+        }
       }
     }
   }

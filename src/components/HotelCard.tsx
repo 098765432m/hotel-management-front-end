@@ -1,12 +1,10 @@
 "use client";
 
+import styles from "@/styles/customer/hotel-card/HotelCard.module.scss";
+import { FaMapLocationDot as MapLocation } from "react-icons/fa6";
 import { Hotel } from "@/types/hotel.interface";
 import { addressToString } from "@/utils/helpers";
-import Image from "next/image";
 import CardDefault from "./custom-component/CardDefault";
-import Link from "next/link";
-import Button from "./Button";
-import { CldImage } from "next-cloudinary";
 import NextLink from "./custom-component/NextLink";
 import MantineButton from "./custom-component/MantineButton";
 import NextImage from "./custom-component/NextImage";
@@ -24,82 +22,46 @@ export default function HotelCard({ hotel }: Props) {
 
   return (
     <CardDefault>
-      <div className=" ">
-        <div className=" ">
-          <div className=" ">
-            {hotel.images.length > 0 ? (
-              <NextImage
-                priority
-                src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
-                width={300}
-                height={200}
-                alt={hotel.name}
-              ></NextImage>
-            ) : (
-              <NextImage
-                priority
-                src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-                width={300}
-                height={200}
-                alt={hotel.name}
-              ></NextImage>
-            )}
-          </div>
-          <div className="">
-            <div>{hotel.address.province.name}</div>
-            {/* <div>{hotel.room_types ? hotel.room_types![0].price : 0}đ</div> */}
-          </div>
+      <div className={styles.hotel_card}>
+        <div className={styles.card_image_container}>
+          {hotel.images.length > 0 ? (
+            <NextImage
+              priority
+              src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
+              fill
+              alt={hotel.name}
+            ></NextImage>
+          ) : (
+            <NextImage
+              priority
+              src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+              width={300}
+              height={200}
+              alt={hotel.name}
+            ></NextImage>
+          )}
         </div>
-      </div>
-      <div className=" ">
-        <div className="">{hotel.name}</div>
-        <div className="">{addressToString(hotel.address)}</div>
-        <div className="">
-          <NextLink href={`/hotel/${hotel.id}`}>
-            <MantineButton>Xem chi tiết</MantineButton>
-          </NextLink>
+        <div className={styles.info}>
+          <div className={styles.card_info_heading}>
+            <div className={styles.card_info_hotel_name}>{hotel.name}</div>
+            <div
+              className={styles.card_info_address}
+            >{`${hotel.address.district.name}, ${hotel.address.province.name}`}</div>
+          </div>
+          <div className={styles.card_info_main}>
+            {/* {hotel.description != null && (
+              <div className={styles.card_info_description}>
+                {hotel.description}
+              </div>
+            )} */}
+          </div>
+          <div className={styles.navigation_button}>
+            <NextLink href={`/hotel/${hotel.id}`}>
+              <MantineButton>Xem chi tiết</MantineButton>
+            </NextLink>
+          </div>
         </div>
       </div>
     </CardDefault>
-    // <CardDefault>
-    //   <div className=" ">
-    //     <div className=" ">
-    //       <div className=" overflow-hidden w-[300px] h-[175px]">
-    //         {hotel.images.length > 0 ? (
-    //           <NextImage
-    //             priority
-    //             src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
-    //             width={300}
-    //             height={200}
-    //             alt={hotel.name}
-    //           ></NextImage>
-    //         ) : (
-    //           <NextImage
-    //             priority
-    //             src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-    //             width={300}
-    //             height={200}
-    //             alt={hotel.name}
-    //           ></NextImage>
-    //         )}
-    //       </div>
-    //       <div className="flex justify-between absolute bottom-0 left-0 w-full px-6 text-stone-200 text-lg font-bold">
-    //         <div>{hotel.address.province.name}</div>
-    //         {/* <div>{hotel.room_types ? hotel.room_types![0].price : 0}đ</div> */}
-    //       </div>
-    //     </div>
-    //   </div>
-    //   <div className="mt-3 px-4 w-[300px] overflow-hidden ">
-    //     <div className="text-xl text-ellipsis overflow-hidden text-nowrap mb-1">
-    //       {hotel.name}
-    //     </div>
-    //     <div className="text-sm">{addressToString(hotel.address)}</div>
-    //     <div className="flex justify-center mt-4">
-    //       <NextLink href={`/hotel/${hotel.id}`}>
-    //         <MantineButton>Xem chi tiết</MantineButton>
-    //       </NextLink>
-    //     </div>
-    //   </div>
-    // </CardDefault>
   );
 }

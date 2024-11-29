@@ -1,0 +1,40 @@
+.hotel_card {
+  width: 20vw;
+
+  .card_image_container {
+    aspect-ratio: 3/2;
+    display: flex;
+    position: relative;
+    border: 2px dashed red;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .info {
+    display: flex;
+    row-gap: 16px;
+    flex-direction: column;
+
+    .card_info_heading {
+      .card_info_hotel_name {
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .card_info_address {
+        font-size: 14px;
+        opacity: 40%;
+      }
+    }
+    .card_info_main {
+      .card_info_description {
+      }
+    }
+
+    .navigation_button {
+      display: flex;
+      align-self: center;
+      justify-content: center;
+    }
+  }
+}

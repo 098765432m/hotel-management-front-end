@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <div>
       {/* <SearchBar></SearchBar> */}
-      <div className="flex space-x-4 py-3">
+      <div className="flex flex-wrap gap-4">
         {hotels.length > 0 ? (
           hotels.map((hotel: Hotel, index: number) => (
             <HotelCard key={index} hotel={hotel}></HotelCard>

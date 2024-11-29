@@ -7,7 +7,8 @@ import { ConfigProvider } from "antd";
 // Require for Mantine core
 
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
-import "@mantine/core/styles.css";
+import "@mantine/core/styles.css"; // mantine core
+import "@mantine/carousel/styles.css"; // mantine carousel
 
 // Require for Mantine core
 

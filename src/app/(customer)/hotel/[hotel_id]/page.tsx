@@ -16,8 +16,15 @@ import { CldImage } from "next-cloudinary";
 import { useEffect, useState } from "react";
 import { AiOutlineDownCircle } from "react-icons/ai";
 import { AiOutlineRightCircle } from "react-icons/ai";
+import {
+  RiHeart3Line as FavoriteOutline,
+  RiHeart3Fill as FavoriteFill,
+} from "react-icons/ri";
+
 import useSWR from "swr";
 import { Carousel } from "@mantine/carousel";
+import NextImage from "@/components/custom-component/NextImage";
+import { useToggle } from "@mantine/hooks";
 
 export default function HotelDetail({
   params,
@@ -25,7 +32,8 @@ export default function HotelDetail({
   params: { hotel_id: string };
 }) {
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
-
+  // const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
   const cloudinary_path =
     process.env.NEXT_PUBLIC_CLOUDINARY_URL +
     "/" +
@@ -70,57 +78,99 @@ export default function HotelDetail({
   //If hotel unedfine return null
   if (hotel == undefined) return <div></div>;
   return (
-    <div className={styles.hotel_detail_content}>
+    <div className={styles.hotel}>
       {/* Card thông tin phòng*/}
       <div>
         <CardDefault>
-          <div className="">
-            <span className="">
+          <div className={styles.hotel_detail}>
+            <span className={styles.hotel_detail_images_container}>
               {hotel.images.length > 0 ? (
-                <Carousel withIndicators loop>
+                <Carousel withIndicators height={"100%"}>
                   {hotel.images.map((image: UploadedHotelImage) => {
                     return (
-                      <Carousel.Slide>
-                        <CldImage
-                          key={image.public_id}
-                          src={`${cloudinary_path}/${image.public_id}.${image.format}`}
-                          width={400}
-                          height={300}
-                          alt={hotel.name}
-                          priority
-                        ></CldImage>
+                      <Carousel.Slide key={image.public_id}>
+                        <div
+                          style={{
+                            aspectRatio: "3/2",
+                            overflow: "hidden",
+                          }}
+                        >
+                          <NextImage
+                            key={image.public_id}
+                            src={`${cloudinary_path}/${image.public_id}.${image.format}`}
+                            width={400}
+                            height={300}
+                            alt={hotel.name}
+                            priority
+                            style={{
+                              objectFit: "cover",
+                              width: "100%",
+                              height: "100%",
+                            }}
+                          ></NextImage>
+                        </div>
                       </Carousel.Slide>
                     );
                   })}
                 </Carousel>
               ) : (
-                <CldImage
-                  src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-                  width={400}
-                  height={300}
-                  alt={hotel.name}
-                  priority
-                ></CldImage>
+                <>
+                  <NextImage
+                    src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+                    width={400}
+                    height={300}
+                    alt={hotel.name}
+                    priority
+                  ></NextImage>
+                </>
               )}
             </span>
-            <span className="">
-              <div className="">
-                <span className="">{hotel.name}</span>
-                <span>
-                  <Rating defaultValue={5} readOnly></Rating>
-                </span>
-              </div>
-              <div className="">
-                {hotel.description != undefined ? (
-                  <p>{hotel.description}</p>
-                ) : (
-                  <p>
-                    Trang chưa có miêu tảTrang chưa có miêu tảTrang chưa có miêu
-                    tảTrang chưa có miêu tảTrang chưa có miêu tảTrang chưa có
-                    miêu tảTrang chưa có miêu tảTrang chưa có miêu tảTrang chưa
-                    có miêu tả
+            <span className={styles.hotel_detail_heading_container}>
+              <div>
+                <div className={styles.hotel_detail_heading}>
+                  <span className={styles.hotel_name}>{hotel.name}</span>
+                  <span className={styles.button_control}>
+                    <span className={styles.hotel_heading_rating_container}>
+                      <span className={styles.rating_number}>4.6</span>
+                      <span className={styles.rating_icon_container}>
+                        <Rating defaultValue={5} readOnly></Rating>
+                      </span>
+                    </span>
+                    <span className={styles.favorite_button_container}>
+                      {isFavorite ? (
+                        <FavoriteFill
+                          onClick={() => toggleFavorite()}
+                          size={28}
+                          color="#f28482"
+                        ></FavoriteFill>
+                      ) : (
+                        <FavoriteOutline
+                          size={28}
+                          color="f28482"
+                          onClick={() => toggleFavorite()}
+                        ></FavoriteOutline>
+                      )}
+                    </span>
+                  </span>
+                </div>
+                <div className={styles.hotel_detail_heading_description}>
+                  {hotel.description != undefined ? (
+                    <p>{hotel.description}</p>
+                  ) : (
+                    // prettier-ignore
+                    <p>
+                    Bạn có thể đủ điều kiện hưởng giảm giá Genius tại Peaceful Hill Homestay. Để biết giảm giá Genius có áp dụng cho ngày bạn đã chọn hay không, hãy đăng nhập.<br></br>
+                    Giảm giá Genius tại chỗ nghỉ này tùy thuộc vào ngày đặt phòng, ngày lưu trú và các ưu đãi có sẵn khác. <br></br>
+                    Cách Bãi biển Kê Gà 3 phút đi bộ, Peaceful Hill Homestay có khu vườn, sân hiên, điều hòa, sân trong và Wi-Fi miễn phí. <br></br>
+                    Nơi đây còn có phòng tắm chung với vòi xịt/chậu rửa vệ sinh ở tất cả các căn, cùng đồ vệ sinh cá nhân miễn phí, máy sấy tóc và dép đi trong phòng.
+                    Lodge có phục vụ bữa sáng kiểu Á mỗi sáng.
+                    Peaceful Hill Homestay cách Hải đăng Mũi Kê Gà 1.7 km và Núi Tà Cú 25 km.
                   </p>
-                )}
+                  )}
+                </div>
+              </div>
+              <div className={styles.heading_button}>
+                <MantineButton>Đặt ngay</MantineButton>
               </div>
             </span>
           </div>
@@ -128,7 +178,7 @@ export default function HotelDetail({
       </div>
       {/* Card Input thông tin khách hàng */}
       <div>
-        <CardDefault>
+        {/* <CardDefault>
           <form onSubmit={handleSubmit}>
             <div className="">
               <div>
@@ -174,118 +224,11 @@ export default function HotelDetail({
               </div>
             </div>
           </form>
-        </CardDefault>
+        </CardDefault> */}
       </div>
-      <div className="space-y-1"></div>
       <div>
         <AvailableRooms hotel={hotel}></AvailableRooms>
       </div>
     </div>
-    // <div className="border-white border-2 rounded-xl">
-    //   <div className="flex justify-center space-x-2">
-    //     <div className="w-[65%] space-y-4">
-    //       {/* Card thông tin phòng*/}
-    //       <CardDefault>
-    //         <div className="flex space-x-4">
-    //           <span className="flex-grow">
-    //             {hotel.images.length > 0 ? (
-    //               hotel.images.map((image: UploadedHotelImage) => {
-    //                 return (
-    //                   <CldImage
-    //                     key={image.public_id}
-    //                     src={`${cloudinary_path}/${image.public_id}.${image.format}`}
-    //                     width={400}
-    //                     height={300}
-    //                     alt={hotel.name}
-    //                     priority
-    //                   ></CldImage>
-    //                 );
-    //               })
-    //             ) : (
-    //               <CldImage
-    //                 src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-    //                 width={400}
-    //                 height={300}
-    //                 alt={hotel.name}
-    //                 priority
-    //               ></CldImage>
-    //             )}
-    //           </span>
-    //           <span className="space-y-4 w-[50%]">
-    //             <div className="flex justify-between items-center">
-    //               <span className="font-bold text-2xl">{hotel.name}</span>
-    //               <span>
-    //                 <Rating defaultValue={5} readOnly></Rating>
-    //               </span>
-    //             </div>
-    //             <div className="text-center px-4 py-4 bg-slate-300 rounded-xl">
-    //               {hotel.description != undefined ? (
-    //                 <p>{hotel.description}</p>
-    //               ) : (
-    //                 <p>
-    //                   Trang chưa có miêu tảTrang chưa có miêu tảTrang chưa có
-    //                   miêu tảTrang chưa có miêu tảTrang chưa có miêu tảTrang
-    //                   chưa có miêu tảTrang chưa có miêu tảTrang chưa có miêu
-    //                   tảTrang chưa có miêu tả
-    //                 </p>
-    //               )}
-    //             </div>
-    //           </span>
-    //         </div>
-    //       </CardDefault>
-    //       {/* Card Input thông tin khách hàng */}
-    //       <CardDefault>
-    //         <form onSubmit={handleSubmit}>
-    //           <div className="space-y-5">
-    //             <div>
-    //               <div className="font-bold text-xl">Thông tin khách hàng</div>
-    //               <div className="text-xs text-gray-500">
-    //                 <i>
-    //                   Tên khách hàng phải phù hợp với giấy tờ tùy thân để nhận
-    //                   phòng.
-    //                 </i>
-    //               </div>
-    //             </div>
-    //             <div className="w-full space-y-4">
-    //               <div className="flex space-x-2">
-    //                 <span className="w-1/2 space-y-1">
-    //                   <div>
-    //                     <TextField
-    //                       name="fullName"
-    //                       placeholder="Họ và tên"
-    //                     ></TextField>
-    //                   </div>
-    //                 </span>
-    //               </div>
-    //               <div className="flex space-x-2">
-    //                 <span className="w-1/2 space-y-1">
-    //                   <Input name="email" placeholder="Email"></Input>
-    //                 </span>
-    //                 <span className="w-1/2 space-y-1">
-    //                   <Input
-    //                     name="phoneNumber"
-    //                     placeholder="Số điện thoại"
-    //                   ></Input>
-    //                 </span>
-    //               </div>
-    //               <div>
-    //                 <DatePicker.RangePicker
-    //                   value={dateRange}
-    //                   onChange={onDateRangePickerChange}
-    //                 ></DatePicker.RangePicker>
-    //               </div>
-    //               <div className="flex justify-center space-x-2">
-    //                 <MantineButton type="submit">Đặt phòng</MantineButton>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </form>
-    //       </CardDefault>
-    //       <div>
-    //         <AvailableRooms hotel={hotel}></AvailableRooms>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
   );
 }

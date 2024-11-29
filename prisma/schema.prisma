@@ -68,6 +68,7 @@ model Hotel {
   id                    String    @default(cuid()) @id @unique
   name                  String    @unique
   address               Json
+  description           String?
   // img_public_id     String?    @default("")
   // img_format        String?    @default("")
 

@@ -1,18 +1,19 @@
 "use client";
 
+import styles from "@/styles/customer/hotel-detail/AvailableCard.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
-import { axiosCustomFetcher } from "@/lib/fetcher";
 import { Hotel } from "@/types/hotel.interface";
-import { Table } from "@mantine/core";
-import useSWR from "swr";
 import EmptyData from "@/components/custom-component/EmptyData";
+import MantineButton from "@/components/custom-component/MantineButton";
 
 interface Props {
   hotel: Hotel;
 }
 
 export default function AvailableRooms({ hotel }: Props) {
+  console.log(hotel);
+
   return (
     <CardDefault>
       <CustomTable>
@@ -27,32 +28,29 @@ export default function AvailableRooms({ hotel }: Props) {
         </thead>
         {hotel.room_types != null && hotel.room_types.length > 0 ? (
           <tbody>
-            <tr>
-              <th>Phong don</th>
-              <th>2</th>
-              <th>20.000.000d</th>
-              <th>2</th>
-              <th rowSpan={0}>40.000.000d</th>
-            </tr>
-            <tr>
-              <th>Phong don</th>
-              <th>2</th>
-              <th>20.000.000d</th>
-              <th>2</th>
-            </tr>
-            <tr>
-              <th>Phong don</th>
-              <th>2</th>
-              <th>20.000.000d</th>
-              <th>2</th>
-            </tr>
+            {hotel.room_types.map((roomType, index: number) => (
+              <tr key={index}>
+                <td>{roomType.name}</td>
+                <td>2</td>
+                <td>{roomType.price}d</td>
+                <td>2</td>
+                {index === 0 && (
+                  <td rowSpan={0}>
+                    <div className={styles.booking_control}>
+                      40.000.000d
+                      <MantineButton>Đặt ngay</MantineButton>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))}
           </tbody>
         ) : (
           <tbody>
             <tr>
-              <th rowSpan={3} colSpan={5}>
+              <td rowSpan={3} colSpan={5}>
                 <EmptyData></EmptyData>
-              </th>
+              </td>
             </tr>
             <tr></tr>
             <tr></tr>

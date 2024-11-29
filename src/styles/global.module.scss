@@ -1,4 +1,9 @@
 $main-padding: 15rem;
+$primary-color: "";
+$secondary-color: "";
+$neutral-color: ""; //for text, border, dividers
+$back-ground: ""; // For background of cards, modals
+$text-color: ""; // Main text color
 
 @mixin heading-text() {
 }

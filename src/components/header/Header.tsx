@@ -32,11 +32,11 @@ export default function Header() {
             </span>
           ) : authInfo?.role == roleEnum.MANAGER ||
             authInfo?.role == roleEnum.STAFF ? (
-            <span className="">
+            <>
               <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
               <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
               <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
-            </span>
+            </>
           ) : (
             <span>
               <NextLink href={"/contact"}>Liên hệ</NextLink>
