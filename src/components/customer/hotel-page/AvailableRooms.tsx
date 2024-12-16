@@ -6,13 +6,81 @@ import CustomTable from "@/components/custom-component/CustomTable";
 import { Hotel } from "@/types/hotel.interface";
 import EmptyData from "@/components/custom-component/EmptyData";
 import MantineButton from "@/components/custom-component/MantineButton";
-
+import {
+  Modal,
+  Notification,
+  NumberInput,
+  RemoveScroll,
+  TextInput,
+} from "@mantine/core";
+import { useMemo, useReducer, useState } from "react";
+import { NumberToMoneyFormat } from "@/utils/helpers";
+import { useDisclosure } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
+import UserInfoBookingForm from "./UserInfoBookingForm";
 interface Props {
   hotel: Hotel;
 }
 
+type BookingState = {
+  [roomTypeId: string]: number;
+};
+
+type BookingAction =
+  | {
+      type: "SET_ROOM_COUNT";
+      payload: {
+        roomTypeName: string;
+        count: number;
+      };
+    }
+  | {
+      type: "RESET_ROOM_COUNT";
+    };
+
+function bookingReducer(
+  state: BookingState | null,
+  action: BookingAction
+): BookingState | null {
+  switch (action.type) {
+    case "SET_ROOM_COUNT":
+      return {
+        ...state,
+        [action.payload.roomTypeName]: action.payload.count,
+      };
+
+    default:
+      return state;
+  }
+}
+
 export default function AvailableRooms({ hotel }: Props) {
-  console.log(hotel);
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const initialBookingState: BookingState | null = hotel.room_types
+    ? hotel.room_types.reduce(
+        (state, roomType) => ({
+          ...state,
+          [roomType.name]: 0,
+        }),
+        {}
+      )
+    : null;
+  const [bookingRooms, dispatchBookingRooms] = useReducer(
+    bookingReducer,
+    initialBookingState
+  );
+
+  const totalValue = useMemo(
+    () =>
+      NumberToMoneyFormat(
+        hotel.room_types?.reduce((sum, roomType) => {
+          const count = bookingRooms != null ? bookingRooms[roomType.name] : 0;
+          return sum + count * roomType.price;
+        }, 0)
+      ),
+    [bookingRooms]
+  );
 
   return (
     <CardDefault>
@@ -32,13 +100,37 @@ export default function AvailableRooms({ hotel }: Props) {
               <tr key={index}>
                 <td>{roomType.name}</td>
                 <td>2</td>
-                <td>{roomType.price}d</td>
-                <td>2</td>
+                <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
+                <td>
+                  <NumberInput
+                    placeholder="Nhập số"
+                    step={1}
+                    defaultValue={0}
+                    min={0}
+                    max={10}
+                    suffix=" Phòng"
+                    clampBehavior="strict"
+                    onChange={(value: number | string) =>
+                      dispatchBookingRooms({
+                        type: "SET_ROOM_COUNT",
+                        payload: {
+                          roomTypeName: roomType.name,
+                          count:
+                            typeof value == "string" ? parseInt(value) : value,
+                        },
+                      })
+                    }
+                  ></NumberInput>
+                </td>
                 {index === 0 && (
                   <td rowSpan={0}>
                     <div className={styles.booking_control}>
-                      40.000.000d
-                      <MantineButton>Đặt ngay</MantineButton>
+                      {totalValue} Đ
+                      <MantineButton
+                        onClick={parseInt(totalValue) > 0 ? open : () => {}}
+                      >
+                        Đặt ngay
+                      </MantineButton>
                     </div>
                   </td>
                 )}
@@ -57,6 +149,14 @@ export default function AvailableRooms({ hotel }: Props) {
           </tbody>
         )}
       </CustomTable>
+      <Modal
+        opened={opened}
+        onClose={close}
+        title="Đặt phòng"
+        lockScroll={true}
+      >
+        <UserInfoBookingForm room_id="123"></UserInfoBookingForm>
+      </Modal>
     </CardDefault>
   );
 }

@@ -25,6 +25,7 @@ import { useForm } from "@mantine/form";
 import hotelsService from "@/services/hotels.service";
 import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
 import { string } from "zod";
+import CardDefault from "@/components/custom-component/CardDefault";
 
 const initialInfo = { id: "", name: "" };
 
@@ -179,7 +180,7 @@ export default function ContactPage() {
     hotelsService.createContact(body);
   };
   return (
-    <>
+    <CardDefault>
       <form
         onSubmit={form.onSubmit(handleSubmit)}
         className="flex justify-center my-8"
@@ -283,6 +284,6 @@ export default function ContactPage() {
           </Button>
         </div>
       </form>
-    </>
+    </CardDefault>
   );
 }

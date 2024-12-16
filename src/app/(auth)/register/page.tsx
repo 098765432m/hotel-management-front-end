@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Link from "next/link";
+import CardDefault from "@/components/custom-component/CardDefault";
 
 export default function RegisterPage() {
   const [isSuccess, setIsSuccess] = useState(false); // Trạng thái đăng ký thành công
@@ -76,76 +77,82 @@ export default function RegisterPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex justify-center my-24">
-        <div className="space-y-4">
-          <div className="flex justify-center">
-            <div className="text-2xl font-bold">Đăng ký</div>
-          </div>
-          <div>
-            <TextField
-              label="Tên đăng nhập"
-              variant="outlined"
-              inputRef={usernameRef}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              type="password"
-              label="Mật khẩu"
-              variant="outlined"
-              inputRef={passwordRef}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              label="Họ và tên"
-              variant="outlined"
-              inputRef={fullNameRef}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              label="Địa chỉ email"
-              variant="outlined"
-              inputRef={emailRef}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              label="Số điện thoại"
-              variant="outlined"
-              inputRef={phoneNumberRef}
-            ></TextField>
-          </div>
-          <div className="flex justify-end">
-            <span className="text-xs">
-              <Link href={"/login"}>
-                <i>Đã có tài khoản ?</i>
-              </Link>
-            </span>
-          </div>
-          <div className="flex justify-center">
-            <Button variant="contained" type="submit" onClick={handleSubmit}>
-              Đăng ký
-            </Button>
+    <CardDefault>
+      <form onSubmit={handleSubmit}>
+        <div className="flex justify-center my-24">
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <div className="text-2xl font-bold">Đăng ký</div>
+            </div>
+            <div>
+              <TextField
+                label="Tên đăng nhập"
+                variant="outlined"
+                inputRef={usernameRef}
+              ></TextField>
+            </div>
+            <div>
+              <TextField
+                type="password"
+                label="Mật khẩu"
+                variant="outlined"
+                inputRef={passwordRef}
+              ></TextField>
+            </div>
+            <div>
+              <TextField
+                label="Họ và tên"
+                variant="outlined"
+                inputRef={fullNameRef}
+              ></TextField>
+            </div>
+            <div>
+              <TextField
+                label="Địa chỉ email"
+                variant="outlined"
+                inputRef={emailRef}
+              ></TextField>
+            </div>
+            <div>
+              <TextField
+                label="Số điện thoại"
+                variant="outlined"
+                inputRef={phoneNumberRef}
+              ></TextField>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs">
+                <Link href={"/login"}>
+                  <i>Đã có tài khoản ?</i>
+                </Link>
+              </span>
+            </div>
+            <div className="flex justify-center">
+              <Button variant="contained" type="submit" onClick={handleSubmit}>
+                Đăng ký
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-      <Snackbar open={isSuccess} autoHideDuration={6000} onClose={handleClose}>
-        <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-          Đăng ký thành công!
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={isFailed}
-        autoHideDuration={6000}
-        onClose={handleCloseFailed}
-      >
-        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-          Tài khoản đã tồn tại!
-        </Alert>
-      </Snackbar>
-    </form>
+        <Snackbar
+          open={isSuccess}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
+          <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+            Đăng ký thành công!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={isFailed}
+          autoHideDuration={6000}
+          onClose={handleCloseFailed}
+        >
+          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
+            Tài khoản đã tồn tại!
+          </Alert>
+        </Snackbar>
+      </form>
+    </CardDefault>
   );
 }

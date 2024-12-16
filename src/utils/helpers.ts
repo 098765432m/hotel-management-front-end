@@ -22,3 +22,30 @@ export function transformAddressEntity<T extends Entity>(entities: T | null) {
         }))
     : null;
 }
+
+export function NumberToMoneyFormat(number?: number): string {
+  let resultString = "",
+    mod;
+
+  if (!number) return "0";
+
+  while (true) {
+    if (number > 1000) {
+      mod = ToModString(number, 1000);
+      number = Math.trunc(number / 1000);
+      resultString = `.${mod}` + resultString;
+    } else {
+      return `${number}${resultString}`;
+    }
+  }
+}
+
+export function ToModString(number: number, modNumber: number): string {
+  const modResult = number % modNumber;
+  let resultString = modResult.toString();
+  for (let i = resultString.length; i < modNumber.toString().length - 1; i++) {
+    resultString = `0${resultString}`;
+  }
+
+  return resultString;
+}

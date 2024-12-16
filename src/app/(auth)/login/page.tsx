@@ -12,6 +12,7 @@ import { roleEnum } from "@/types/enum/role.enum";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/state/store";
 import { logIn } from "@/state/user/authSlice";
+import CardDefault from "@/components/custom-component/CardDefault";
 
 export default function LoginPage() {
   // const { setIsLogin, setAuth } = useContext(AuthContext);
@@ -63,41 +64,43 @@ export default function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div className="flex justify-center  my-24">
-        <div className="space-y-4">
-          <div className="flex justify-center">
-            <div className="text-2xl font-bold">Đăng nhập</div>
-          </div>
-          <div>
-            <TextField
-              label="Tên đăng nhập"
-              variant="outlined"
-              inputRef={usernameRef}
-            ></TextField>
-          </div>
-          <div>
-            <TextField
-              type="password"
-              label="Mật khẩu"
-              variant="outlined"
-              inputRef={passwordRef}
-            ></TextField>
-          </div>
-          <div className="flex justify-end">
-            <span className="text-xs">
-              <Link href={"/register"}>
-                <i>Chưa có tài khoản ?</i>
-              </Link>
-            </span>
-          </div>
-          <div className="flex justify-center">
-            <Button variant="contained" type="submit" onClick={handleSubmit}>
-              Đăng nhập
-            </Button>
+    <CardDefault>
+      <form onSubmit={handleSubmit}>
+        <div className="flex justify-center  my-24">
+          <div className="space-y-4">
+            <div className="flex justify-center">
+              <div className="text-2xl font-bold">Đăng nhập</div>
+            </div>
+            <div>
+              <TextField
+                label="Tên đăng nhập"
+                variant="outlined"
+                inputRef={usernameRef}
+              ></TextField>
+            </div>
+            <div>
+              <TextField
+                type="password"
+                label="Mật khẩu"
+                variant="outlined"
+                inputRef={passwordRef}
+              ></TextField>
+            </div>
+            <div className="flex justify-end">
+              <span className="text-xs">
+                <Link href={"/register"}>
+                  <i>Chưa có tài khoản ?</i>
+                </Link>
+              </span>
+            </div>
+            <div className="flex justify-center">
+              <Button variant="contained" type="submit" onClick={handleSubmit}>
+                Đăng nhập
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </CardDefault>
   );
 }
