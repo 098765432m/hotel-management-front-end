@@ -12,3 +12,15 @@ export interface BookingsDtoCreate {
   email?: string | null;
   phoneNumber?: string | null;
 }
+
+export interface GetBookingsByUserDtoResponse {
+  id: string;
+  check_in_date: string;
+  check_out_date: string;
+  hotel_name: string;
+  room_type_name: string;
+  room_id: string;
+  room_name: string;
+  price: number;
+  status: Status_Booking;
+}

@@ -16,6 +16,7 @@ export async function GET() {
   return NextResponse.json(bookings);
 }
 
+// Customer Booking in Hotel Page
 export async function POST(request: Request) {
   try {
     // Get body
@@ -109,70 +110,6 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(result);
-
-    // const promises = data.booking_type_list.map(
-    //   async (booking_type: (string | number)[]) => {
-    //     const roomType = await prisma.roomTypes.findUnique({
-    //       where: {
-    //         hotel_id_name: {
-    //           hotel_id: data.hotel_id,
-    //           name: booking_type[0] as string,
-    //         },
-    //       },
-    //     });
-
-    //     console.log(`roomType: ${roomType?.name}`);
-
-    //     if (!roomType) {
-    //       throw new Error("Không tồn tại loại phòng!");
-    //     }
-
-    //     for (
-    //       let index = 0;
-    //       index < parseInt(booking_type[1] as string);
-    //       index++
-    //     ) {
-    //       const room = await prisma.room.findFirst({
-    //         where: {
-    //           room_type_id: roomType.id,
-    //           status_room: "AVAILABLE",
-    //         },
-    //       });
-
-    //       return room;
-    //     }
-    //   }
-    // );
-
-    // const resultFoundRooms = await Promise.all(promises);
-
-    //Check if it has id or fullName, phoneNumber, email
-    // if (data.user_id != undefined) {
-    //   data.user_id = data.user_id;
-    // } else if (data.fullName != undefined && data.phoneNumber != undefined) {
-    //   data.fullName = data.fullName;
-    //   data.phoneNumber = data.phoneNumber;
-    //   data.email = data.email;
-    // } else {
-    //   throw new Error("Lỗi thiếu thông tin người dùng");
-    // }
-
-    // const result = await prisma.booking.createManyAndReturn({
-    //   data: [{}]
-    // })
-
-    // //Luu y check thoi gian truoc khi booking
-
-    // const result = await prisma.booking.create({
-    //   data: {
-    //     ...data,
-    //     check_in_date: dayjs(data.check_in_date, "DD-MM-YYYY").toISOString(),
-    //     check_out_date: dayjs(data.check_out_date, "DD-MM-YYYY").toISOString(),
-    //   },
-    // });
-
-    // return NextResponse.json(result);
-    // return NextResponse.json("");
   } catch (error) {
     console.log(error);
     throw new Error();

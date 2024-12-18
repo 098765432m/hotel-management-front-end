@@ -36,6 +36,11 @@ class BookingsService {
     //   throw new Error(error.message);
     // }
   }
+
+  // Remove One Booking from User
+  async unBookingOne(bookingId: string, roomId: string) {
+    return (await this.api.delete(`/${bookingId}?roomId=${roomId}`)).data;
+  }
 }
 
 const bookingsService = new BookingsService();
