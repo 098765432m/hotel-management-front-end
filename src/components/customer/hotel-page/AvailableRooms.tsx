@@ -18,11 +18,14 @@ import { NumberToMoneyFormat } from "@/utils/helpers";
 import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import UserInfoBookingForm from "./UserInfoBookingForm";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 interface Props {
   hotel: Hotel;
+  // check_in_date: string;
+  // check_out_date: string;
 }
 
-type BookingState = {
+export type BookingState = {
   [roomTypeId: string]: number;
 };
 
@@ -55,6 +58,7 @@ function bookingReducer(
 }
 
 export default function AvailableRooms({ hotel }: Props) {
+  const router = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
 
   const initialBookingState: BookingState | null = hotel.room_types
@@ -81,6 +85,10 @@ export default function AvailableRooms({ hotel }: Props) {
       ),
     [bookingRooms]
   );
+
+  // get query params
+  const check_in_date = useSearchParams().get("check_in_date") ?? null;
+  const check_out_date = useSearchParams().get("check_out_date") ?? null;
 
   return (
     <CardDefault>
@@ -127,7 +135,11 @@ export default function AvailableRooms({ hotel }: Props) {
                     <div className={styles.booking_control}>
                       {totalValue} Đ
                       <MantineButton
-                        onClick={parseInt(totalValue) > 0 ? open : () => {}}
+                        onClick={
+                          parseInt(totalValue) > 0
+                            ? open
+                            : () => router.push("/")
+                        }
                       >
                         Đặt ngay
                       </MantineButton>
@@ -155,7 +167,14 @@ export default function AvailableRooms({ hotel }: Props) {
         title="Đặt phòng"
         lockScroll={true}
       >
-        <UserInfoBookingForm room_id="123"></UserInfoBookingForm>
+        {check_in_date && check_out_date && bookingRooms && (
+          <UserInfoBookingForm
+            hotel_id={hotel.id}
+            booking_rooms={bookingRooms}
+            check_in_date={check_in_date}
+            check_out_date={check_out_date}
+          ></UserInfoBookingForm>
+        )}
       </Modal>
     </CardDefault>
   );

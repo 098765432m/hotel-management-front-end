@@ -6,12 +6,24 @@ import { TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import bookingsService from "@/services/bookings.service";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
+import { number, string } from "zod";
+import { log } from "node:console";
 
 interface Props {
-  room_id: string;
+  hotel_id: string;
+  booking_rooms: {
+    [roomTypeId: string]: number;
+  };
+  check_in_date: string;
+  check_out_date: string;
 }
 
 export default function UserInfoBookingForm(props: Props) {
+  const authStore = useSelector((state: RootState) => state.auth);
+  console.log(authStore.authInfo?.id);
+
   const form = useForm<{
     fullName: string;
     phoneNumber: string;
@@ -21,19 +33,26 @@ export default function UserInfoBookingForm(props: Props) {
   });
 
   const handleSubmit = async (values: any) => {
-    console.log(form.getValues());
+    const formData = form.getValues();
 
-    // const body: BookingsDtoCreate = {
-    //   room_id: ,
-    //   check_in_date: ,
-    //   check_out_date: ,
-    //   user_id: ,
-    //   fullName: ,
-    //   phoneNumber: ,
-    //   email: ,
-    // }
+    const filtered_booking_rooms = Object.entries(props.booking_rooms)
+      .filter(([roomName, roomCount]) => roomCount > 0)
+      .map(([roomName, roomCount]) => [roomName, roomCount]);
 
-    // await bookingsService.CreateOne(form.getValues());
+    console.log(filtered_booking_rooms);
+
+    const body: BookingsDtoCreate = {
+      hotel_id: props.hotel_id,
+      booking_type_list: filtered_booking_rooms,
+      check_in_date: props.check_in_date,
+      check_out_date: props.check_out_date,
+      user_id: authStore.authInfo?.id ?? undefined,
+      fullName: formData.fullName,
+      phoneNumber: formData.phoneNumber,
+      email: formData.email,
+    };
+
+    await bookingsService.CreateOne(body);
   };
   return (
     <form className={styles.modal_form} onSubmit={form.onSubmit(handleSubmit)}>

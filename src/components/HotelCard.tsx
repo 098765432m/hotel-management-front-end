@@ -56,7 +56,9 @@ export default function HotelCard({ hotel }: Props) {
             )} */}
           </div>
           <div className={styles.navigation_button}>
-            <NextLink href={`/hotel/${hotel.id}`}>
+            <NextLink
+              href={`/hotel/${hotel.id}?check_in_date=12-24-2024&check_out_date=12-26-2024`}
+            >
               <MantineButton>Xem chi tiết</MantineButton>
             </NextLink>
           </div>

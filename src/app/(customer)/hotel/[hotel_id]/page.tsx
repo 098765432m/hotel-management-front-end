@@ -57,23 +57,22 @@ export default function HotelDetail({
   };
 
   //HandleSubmit
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    const formData = new FormData(e.currentTarget as HTMLFormElement);
+  //   const formData = new FormData(e.currentTarget as HTMLFormElement);
 
-    formData.append("hotelId", params.hotel_id);
+  //   formData.append("hotelId", params.hotel_id);
 
-    if (dateRange != null) {
-      // const formattedDateRange = `${dateRange[0].toISOString()} - ${dateRange[1].toISOString()}`;
-      formData.append("checkInDate", dateRange[0].toISOString());
-      formData.append("checkOutDate", dateRange[1].toISOString());
-    } else {
-      formData.append("dateBookingRange", "");
-    }
+  //   if (dateRange != null) {
+  //     formData.append("checkInDate", dateRange[0].toISOString());
+  //     formData.append("checkOutDate", dateRange[1].toISOString());
+  //   } else {
+  //     formData.append("dateBookingRange", "");
+  //   }
 
-    await bookingsService.CreateOne(formData);
-  };
+  //   await bookingsService.CreateOne(formData);
+  // };
 
   //If hotel unedfine return null
   if (hotel == undefined) return <div></div>;

@@ -15,9 +15,12 @@ export async function GET() {
 export async function POST(request: Request) {
   const body = await request.json();
 
-  const result = await prisma.room.create({
-    data: body,
-  });
+  console.log(body);
 
-  return NextResponse.json(result);
+  // const result = await prisma.room.create({
+  //   data: body,
+  // });
+
+  return NextResponse.json("");
+  // return NextResponse.json(result);
 }

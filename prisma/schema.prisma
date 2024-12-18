@@ -103,6 +103,8 @@ model Room {
 
   //Booking
   booking         Booking[]
+
+  @@unique([name, room_type_id])
 }
 
 model Booking {
@@ -129,8 +131,6 @@ model RoomTypes {
   id                String    @default(cuid()) @id @unique
   name              String    
   price             Int       @default(0)
-  // img_public_id     String[]    
-  // img_format        String[]    
   
   //Hotel
   hotel_id          String
@@ -141,6 +141,8 @@ model RoomTypes {
 
   //Image relationship one-to-many
   images            Image[]        @relation("RoomTypeImages")
+
+  @@unique([hotel_id, name])
 }
 
 

@@ -1,10 +1,12 @@
 "use client";
 import { Button, Center, Skeleton } from "@mantine/core";
 import { useFullscreen, useHotkeys, useHover, useToggle } from "@mantine/hooks";
+import dayjs from "dayjs";
 import { useState } from "react";
 
 export default function Demo() {
   const [value, toggle] = useToggle(["loading", "done"]);
+  console.log(dayjs("2024-12-24T00:00:00+07:00").toISOString());
 
   return (
     <>

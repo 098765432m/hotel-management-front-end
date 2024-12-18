@@ -1,8 +1,8 @@
 "use client";
-
 import { roomCreate } from "@/action/room.action";
 import CardDefault from "@/components/custom-component/CardDefault";
 import { axiosFetcher } from "@/lib/fetcher";
+import { RootState } from "@/state/store";
 import {
   Button,
   FormControl,
@@ -13,9 +13,11 @@ import {
 } from "@mui/material";
 import { RoomTypes } from "@prisma/client";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import useSWR from "swr";
 
 export default function RoomPage() {
+  const authStore = useSelector((state: RootState) => state.auth.authInfo);
   const [selectedRoomType, setSelectedRoomType] = useState<String>("");
   const {
     data: roomType,
@@ -70,7 +72,7 @@ export default function RoomPage() {
             </div>
             <input
               type="hidden"
-              value={"cm0p7ecfe000484noke8n4yp4"}
+              value={authStore?.hotelId as string}
               name="hotelId"
             ></input>
             <div className="flex justify-center">
