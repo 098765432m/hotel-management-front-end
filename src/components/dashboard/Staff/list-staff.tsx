@@ -5,7 +5,7 @@ import CardDefault from "@/components/custom-component/CardDefault";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import { RootState } from "@/state/store";
 import { StaffOfHotelDto } from "@/types/dto/user.dto";
-import { useContext } from "react";
+
 import { useSelector } from "react-redux";
 import useSWR from "swr";
 
@@ -14,7 +14,6 @@ interface Props {
 }
 
 export default function ListStaff() {
-  // const { auth } = useContext(AuthContext);
   const authStore = useSelector((state: RootState) => state.auth);
 
   const {

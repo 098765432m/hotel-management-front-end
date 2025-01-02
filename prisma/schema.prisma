@@ -69,8 +69,7 @@ model Hotel {
   name                  String    @unique
   address               Json
   description           String?
-  // img_public_id     String?    @default("")
-  // img_format        String?    @default("")
+  average_rating        Float     @default(0)
 
   //Room
   rooms                 Room[]  //One to Many
@@ -123,11 +122,11 @@ model Booking {
 
   //Guest with no account
   fullName          String?
-  phoneNumber       String?         
+  phoneNumber       String?  // Sửa thành snake_case       
   email             String?         
 }
 
-model RoomTypes {
+model RoomTypes { // Bỏ số nhiều
   id                String    @default(cuid()) @id @unique
   name              String    
   price             Int       @default(0)

@@ -32,7 +32,6 @@ export default function HotelDetail({
   params: { hotel_id: string };
 }) {
   const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
-  // const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
   const cloudinary_path =
     process.env.NEXT_PUBLIC_CLOUDINARY_URL +

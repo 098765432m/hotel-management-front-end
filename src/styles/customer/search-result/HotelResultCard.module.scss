@@ -1,0 +1,19 @@
+.result_card {
+  border: 2px dashed burlywood;
+  padding: 6px 10px;
+  display: flex;
+  column-gap: 4px;
+
+  .left_part {
+  }
+
+  .right_part {
+    .header {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+    .content {
+    }
+  }
+}

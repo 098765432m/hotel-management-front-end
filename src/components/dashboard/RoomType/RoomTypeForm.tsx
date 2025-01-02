@@ -5,7 +5,7 @@ import { RootState } from "@/state/store";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { Input, InputNumber, Button, Form, Skeleton } from "antd";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 interface RoomTypeFormValues {
@@ -15,7 +15,6 @@ interface RoomTypeFormValues {
 
 export default function RoomTypeForm() {
   const [isPageLoading, setPageLoading] = useState(true);
-  // const { auth } = useContext(AuthContext);
   const authStore = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {

@@ -23,6 +23,19 @@ export function transformAddressEntity<T extends Entity>(entities: T | null) {
     : null;
 }
 
+export function transformAddressSelectInput<T extends Entity>(
+  entities: T | null
+) {
+  return entities != null && entities.code === "success"
+    ? entities.data
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((entity) => ({
+          label: entity.name,
+          value: entity.id,
+        }))
+    : null;
+}
+
 export function NumberToMoneyFormat(number?: number): string {
   let resultString = "",
     mod;

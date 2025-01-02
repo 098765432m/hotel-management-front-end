@@ -7,7 +7,6 @@ import { RootState } from "@/state/store";
 import { roleEnum } from "@/types/enum/role.enum";
 import { Role } from "@prisma/client";
 import { Button, Form, FormProps, Input, Radio } from "antd";
-import { useContext } from "react";
 import { useSelector } from "react-redux";
 
 type FieldType = {
@@ -19,7 +18,6 @@ type FieldType = {
 };
 
 export default function FormStaff() {
-  // const { auth } = useContext(AuthContext);
   const authStore = useSelector((state: RootState) => state.auth);
 
   const onFinish: FormProps<FieldType>["onFinish"] = (value) => {

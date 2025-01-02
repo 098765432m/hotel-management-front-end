@@ -1,0 +1,24 @@
+.search_panel {
+  .upper_panel {
+    display: flex;
+    column-gap: 20px;
+    justify-content: space-around;
+
+    .province_select_container {
+      width: 100%;
+    }
+
+    .range_slider_container {
+      width: 100%;
+    }
+  }
+
+  .bottom_panel {
+    display: flex;
+    column-gap: 20px;
+
+    .search_bar_container {
+      width: 100%;
+    }
+  }
+}

@@ -3,7 +3,7 @@
 import authService from "@/services/auth.service";
 import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import React from "react";
 import { AuthContext } from "@/context/AuthContext";
@@ -15,8 +15,6 @@ import { logIn } from "@/state/user/authSlice";
 import CardDefault from "@/components/custom-component/CardDefault";
 
 export default function LoginPage() {
-  // const { setIsLogin, setAuth } = useContext(AuthContext);
-
   // Global Dispatch START
 
   const dispatch = useDispatch<AppDispatch>();

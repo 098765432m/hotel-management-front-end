@@ -27,9 +27,20 @@ interface HotelContactCreateDto extends AddressType {
   phoneNumber: string;
 }
 
+interface HotelResultCardDto {
+  hotelId: string;
+  hotelName: string;
+  hotelDescription: string;
+  hotelAddress: AddressType;
+  hotelRating: number;
+  hotelPrice: number[];
+  hotelImages: UploadedImageDto[];
+}
+
 export type {
   HotelPutDto,
   HotelFormCreateProps,
   HotelCreateDto,
   HotelContactCreateDto,
+  HotelResultCardDto,
 };

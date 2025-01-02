@@ -47,6 +47,13 @@ export const initialAddress = {
   province: null_address,
 };
 
+export type AddressType = {
+  street: string;
+  ward: Info;
+  district: Info;
+  province: Info;
+};
+
 export type ActionAddress =
   | {
       type: DispatchType.SET_PROVINCE;

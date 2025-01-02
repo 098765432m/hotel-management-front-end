@@ -4,6 +4,7 @@ import {
   HotelContactCreateDto,
   HotelCreateDto,
   HotelPutDto,
+  HotelResultCardDto,
 } from "@/types/dto/hotel.dto";
 
 class HotelsService {
@@ -42,6 +43,30 @@ class HotelsService {
     console.log(body);
 
     return await this.api.put(`/${hotelId}`, body);
+  }
+
+  async searchHotel(
+    hotelName: string,
+    priceRange: number[] | null,
+    ratingRange: number[] | null,
+    provinceId: string | null
+  ): Promise<HotelResultCardDto[]> {
+    console.log("ProvinceId service");
+    console.log(provinceId);
+
+    return (
+      await this.api.get(
+        `/search?hotelName=${hotelName}&priceRange=${
+          priceRange && priceRange.length == 2
+            ? `${priceRange[0]}-${priceRange[1]}`
+            : ""
+        }&ratingRange=${
+          ratingRange && ratingRange.length == 2
+            ? `${ratingRange[0]}-${ratingRange[1]}`
+            : ""
+        }&provinceId=${provinceId}`
+      )
+    ).data;
   }
 }
 
