@@ -51,17 +51,11 @@ export default async function RootLayout({
         <AppRouterCacheProvider>
           <ConfigProvider
             theme={{
-              components: {
-                Collapse: {
-                  // headerBg: "#ffffff",
-                  // contentBg: "#ffffff",
-                },
-              },
+              components: {},
             }}
           >
             <ReduxProvider authInfo={authInfo}>
               <MantineProvider>
-                {/* <AuthProvider authInfo={authInfo}> */}
                 <div id={styles.layout}>
                   <header>
                     <Header></Header>
@@ -73,7 +67,6 @@ export default async function RootLayout({
                 </div>
               </MantineProvider>
             </ReduxProvider>
-            {/* </AuthProvider> */}
           </ConfigProvider>
         </AppRouterCacheProvider>
       </body>

@@ -34,31 +34,27 @@ export default function RoomTypeForm() {
 
   return (
     <Skeleton loading={isPageLoading} active>
-      <Form onFinish={handleFinish} className={styles.room_type_add_form}>
-        <div className="flex justify-center my-12">
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <div className="text-2xl font-bold">Loại phòng</div>
-            </div>
-            <div>
-              <Form.Item name="name" label="Ten loai">
-                <Input></Input>
-              </Form.Item>
-            </div>
-            <div>
-              <Form.Item name="price" label="Gia loai" initialValue={0}>
-                <InputNumber step={1000}></InputNumber>
-              </Form.Item>
-            </div>
-            <Form.Item>
-              <div className="flex justify-center">
-                <Button type="primary" htmlType="submit">
-                  Tạo loại phòng
-                </Button>
-              </div>
-            </Form.Item>
-          </div>
+      <Form
+        onFinish={handleFinish}
+        className={styles.room_type_add_form}
+        labelCol={{ span: 10 }}
+        labelAlign="left"
+      >
+        <div className={styles.room_type_add_form_heading}>Loại phòng</div>
+
+        <div className={styles.room_type_add_form_input}>
+          <Form.Item name="name" label="Tên loại phòng">
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name="price" label="Giá (đ/đêm)" initialValue={0}>
+            <InputNumber step={1000}></InputNumber>
+          </Form.Item>
         </div>
+        <Form.Item className={styles.room_type_add_form_submit_button}>
+          <Button type="primary" htmlType="submit">
+            Tạo loại phòng
+          </Button>
+        </Form.Item>
       </Form>
     </Skeleton>
   );

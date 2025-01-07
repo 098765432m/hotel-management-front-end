@@ -1,11 +1,24 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .staff_page_container {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 
   & > div {
     flex: 1;
+
+    flex-basis: 430px;
   }
   .staff_form_container {
+    .staff_form_heading {
+      @include global-scss.heading-text;
+    }
+
+    .staff_form_submit_button {
+      display: flex;
+      justify-content: center;
+    }
   }
   .staff_list_container {
   }

@@ -27,7 +27,7 @@ export default async function DashBoardPage() {
               <span className={styles.hotel_brief_hotel_name}>
                 {hotel.name}
               </span>
-              <HotelForm></HotelForm>
+              <HotelForm></HotelForm> {/* Chỉ hiển thị với MANAGER */}
             </div>
             <div className={styles.hotel_brief}>
               <div>{hotel.description}</div>

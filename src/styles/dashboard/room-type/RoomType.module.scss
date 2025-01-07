@@ -4,15 +4,27 @@
   display: grid;
   row-gap: global-scss.$section-spacing;
   .room_type_add_form {
+    display: grid;
+    justify-items: center;
+
+    .room_type_add_form_heading {
+      @include global-scss.heading-text;
+    }
+
+    .room_type_add_form_input {
+      min-width: 200px;
+    }
+    .room_type_add_form_submit_button {
+      display: flex;
+      justify-content: center;
+    }
   }
 
   .room_type_list_container {
     .list_header {
+      @include global-scss.heading-text;
       display: flex;
       justify-content: center;
-      font-size: 1.5rem;
-      line-height: 4rem;
-      font-weight: bold;
     }
 
     .room_type_list {
