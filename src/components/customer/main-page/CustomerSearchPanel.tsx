@@ -18,7 +18,7 @@ interface Props {
 
 export default function CustomerSearchPanel({ listProvince }: Props) {
   const router = useRouter();
-  const [rangePrice, setRangePrice] = useState<[number, number]>([20, 80]);
+  const [rangePrice, setRangePrice] = useState<[number, number]>([0, 8000000]);
   const [hotelName, setHotelName] = useState("");
   const [selectedProvince, setSelectedProvince] = useState<string | null>("");
   console.log(selectedProvince as string);
@@ -30,15 +30,22 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
           <Select
             value={selectedProvince}
             onChange={setSelectedProvince}
-            data={listProvince}
+            data={[{ label: "Tất cả", value: "" }, ...(listProvince ?? [])]}
+            placeholder="Chọn tỉnh thành"
           ></Select>
         </div>
         <div className={styles.range_slider_container}>
           <RangeSlider
+            min={0}
+            max={8000000}
+            minRange={500000}
+            step={500000}
             value={rangePrice}
             onChange={setRangePrice}
           ></RangeSlider>
-          ({rangePrice[0]} - {rangePrice[1]})
+          <div className={styles.price_range_value}>
+            {rangePrice[0]} - {rangePrice[1]}
+          </div>
         </div>
       </div>
       <span className={styles.bottom_panel}>

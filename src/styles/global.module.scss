@@ -4,11 +4,17 @@ $secondary-color: "";
 $neutral-color: ""; //for text, border, dividers
 $back-ground: ""; // For background of cards, modals
 $text-color: ""; // Main text color
+$section-spacing: 1.5rem;
 
 @mixin heading-text() {
 }
 
 @mixin description-text() {
+}
+
+@mixin label-text() {
+  color: black;
+  font-weight: 700;
 }
 
 @mixin test-layout() {
@@ -24,4 +30,8 @@ $text-color: ""; // Main text color
     padding: 1.5rem $main-padding;
     background-color: #f5f5f4;
   }
+}
+
+.label_text {
+  font-weight: 700;
 }

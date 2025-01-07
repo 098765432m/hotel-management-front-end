@@ -13,6 +13,10 @@ class HotelsService {
     this.api = axiosInstance(baseUrl);
   }
 
+  async getOne(id: string) {
+    return (await this.api.get(`/${id}`)).data;
+  }
+
   async getAll() {
     try {
       return (await this.api.get("/")).data;

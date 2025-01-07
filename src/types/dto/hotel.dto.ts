@@ -4,7 +4,7 @@ import { UploadedImageDto } from "./image.dto";
 interface HotelPutDto {
   name: string;
   address: AddressType;
-  images: UploadedImageDto[];
+  // images: UploadedImageDto[];
 }
 
 interface HotelFormCreateProps {

@@ -1,8 +1,8 @@
 "use client";
-// import { AuthContext } from "@/context/AuthContext";
+
+import styles from "@/styles/dashboard/room-type/RoomType.module.scss";
 import roomTypesServices from "@/services/roomTypes.services";
 import { RootState } from "@/state/store";
-import { UserCookieResponse } from "@/types/dto/user.dto";
 import { Input, InputNumber, Button, Form, Skeleton } from "antd";
 
 import { useEffect, useState } from "react";
@@ -34,7 +34,7 @@ export default function RoomTypeForm() {
 
   return (
     <Skeleton loading={isPageLoading} active>
-      <Form onFinish={handleFinish}>
+      <Form onFinish={handleFinish} className={styles.room_type_add_form}>
         <div className="flex justify-center my-12">
           <div className="space-y-4">
             <div className="flex justify-center">

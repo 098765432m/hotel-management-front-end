@@ -72,7 +72,7 @@ export default function HeaderLoginButton() {
         </>
       ) : (
         <span>
-          <NextLink href={"/login"}>Login</NextLink>
+          <NextLink href={"/login"}>Đăng nhập</NextLink>
         </span>
       )}
     </>

@@ -1,0 +1,12 @@
+.staff_page_container {
+  display: flex;
+  gap: 1rem;
+
+  & > div {
+    flex: 1;
+  }
+  .staff_form_container {
+  }
+  .staff_list_container {
+  }
+}

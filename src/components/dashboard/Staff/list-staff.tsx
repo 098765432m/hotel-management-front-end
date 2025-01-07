@@ -33,11 +33,11 @@ export default function ListStaff() {
         {staffs &&
           staffs.map((staff: StaffOfHotelDto, index: number) => {
             return (
-              <div className="flex justify-around">
-                <span>Ten tai khoan{staff.username}</span>{" "}
-                <span>Ho ten: {staff.fullName}</span>
-                <span>So dien thoai: {staff.phoneNumber}</span>
-                <span>email: {staff.email}</span>
+              <div className="flex justify-around" key={index}>
+                <span>Tên tài khoản{staff.username}</span>{" "}
+                <span>Họ tên: {staff.fullName}</span>
+                <span>Số điện thoại: {staff.phoneNumber}</span>
+                <span>Địa chỉ Email: {staff.email}</span>
               </div>
             );
           })}

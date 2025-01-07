@@ -1,0 +1,18 @@
+.main_page_container {
+  display: grid;
+  row-gap: 1rem;
+  .province_card_container {
+    .province_card_header {
+      display: flex;
+      justify-content: center;
+    }
+
+    .province_card_body {
+      display: flex;
+      row-gap: 1rem;
+      column-gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import { createDashboardUser } from "@/action/user.action";
+import CardDefault from "@/components/custom-component/CardDefault";
 // import { AuthContext } from "@/context/AuthContext";
 import usersService from "@/services/users.service";
 import { RootState } from "@/state/store";
@@ -28,56 +29,58 @@ export default function FormStaff() {
   };
 
   return (
-    <Form action={createDashboardUser} onFinish={onFinish}>
-      <Form.Item
-        name={"username"}
-        label="username"
-        rules={[{ required: true }]}
-      >
-        <Input></Input>
-      </Form.Item>
-      <Form.Item
-        name={"fullName"}
-        label="Họ và tên"
-        rules={[{ required: true }]}
-      >
-        <Input></Input>
-      </Form.Item>
-      <Form.Item
-        name={"email"}
-        label="Địa chỉ email"
-        rules={[{ required: true }]}
-      >
-        <Input></Input>
-      </Form.Item>
-      <Form.Item
-        name={"phoneNumber"}
-        label="Sô điện thoại"
-        rules={[{ required: true }]}
-      >
-        <Input></Input>
-      </Form.Item>
-      <Form.Item name={"role"} label="Vai trò" initialValue={roleEnum.STAFF}>
-        <Radio.Group
-          // defaultValue={roleEnum.STAFF}
-          options={[
-            {
-              label: "Nhân viên",
-              value: roleEnum.STAFF,
-            },
-            {
-              label: "Quản lý",
-              value: roleEnum.MANAGER,
-            },
-          ]}
-          optionType="button"
-        ></Radio.Group>
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" shape="round" htmlType="submit">
-          Tạo tài khoản
-        </Button>
-      </Form.Item>
-    </Form>
+    <CardDefault>
+      <Form action={createDashboardUser} onFinish={onFinish}>
+        <Form.Item
+          name={"username"}
+          label="username"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"fullName"}
+          label="Họ và tên"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"email"}
+          label="Địa chỉ email"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"phoneNumber"}
+          label="Sô điện thoại"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item name={"role"} label="Vai trò" initialValue={roleEnum.STAFF}>
+          <Radio.Group
+            // defaultValue={roleEnum.STAFF}
+            options={[
+              {
+                label: "Nhân viên",
+                value: roleEnum.STAFF,
+              },
+              {
+                label: "Quản lý",
+                value: roleEnum.MANAGER,
+              },
+            ]}
+            optionType="button"
+          ></Radio.Group>
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" shape="round" htmlType="submit">
+            Tạo tài khoản
+          </Button>
+        </Form.Item>
+      </Form>
+    </CardDefault>
   );
 }

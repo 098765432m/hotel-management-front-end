@@ -1,14 +1,11 @@
-"use state";
+"use client";
 
+import styles from "@/styles/customer/search-result/HotelResultCard.module.scss";
 import NextImage from "@/components/custom-component/NextImage";
 import NextLink from "@/components/custom-component/NextLink";
-import hotelsService from "@/services/hotels.service";
-import styles from "@/styles/customer/search-result/HotelResultCard.module.scss";
 import { UploadedImageDto } from "@/types/dto/image.dto";
 import { AddressType } from "@/types/vietnamese-location-api/address";
 import { useToggle } from "@mantine/hooks";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
 import {
   RiHeart3Line as FavoriteOutline,
   RiHeart3Fill as FavoriteFill,
@@ -53,20 +50,24 @@ export default function HotelResultCard({
       </div>
       <div className={styles.right_part}>
         <div className={styles.header}>
-          <NextLink href={"/"}>{hotelName}</NextLink>
-          {isFavorite ? (
-            <FavoriteFill
-              onClick={() => toggleFavorite()}
-              size={28}
-              color="#f28482"
-            ></FavoriteFill>
-          ) : (
-            <FavoriteOutline
-              size={28}
-              color="f28482"
-              onClick={() => toggleFavorite()}
-            ></FavoriteOutline>
-          )}
+          <div>
+            <NextLink href={"/"}>{hotelName}</NextLink>
+          </div>
+          <div>
+            {isFavorite ? (
+              <FavoriteFill
+                onClick={() => toggleFavorite()}
+                size={28}
+                color="#f28482"
+              ></FavoriteFill>
+            ) : (
+              <FavoriteOutline
+                size={28}
+                color="f28482"
+                onClick={() => toggleFavorite()}
+              ></FavoriteOutline>
+            )}
+          </div>
         </div>
         <div className={styles.content}>
           {description ? description : "Content here"}

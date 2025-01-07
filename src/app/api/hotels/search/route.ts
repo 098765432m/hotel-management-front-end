@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
   const provinceId = searchParams.get("provinceId") as string;
 
-  const params: any[] = [`%${hotelName}%`, `${provinceId}`];
+  const params: any[] = [`%${hotelName}%`];
   let query = `
     SELECT 
       h.id as hotel_id, 
@@ -43,17 +43,24 @@ export async function GET(request: NextRequest) {
       "Image" i ON h.id = i.hotel_id
     WHERE 
       h.name LIKE $1
-      AND h.address -> 'province' ->> 'id' = $2
-
     `;
 
+  if (provinceId) {
+    query += `AND h.address -> 'province' ->> 'id' = $${params.length + 1} `;
+    params.push(provinceId);
+  }
+
   if (priceRange && priceRange.length === 2) {
-    query += `AND rt.price BETWEEN $3 AND $4 `;
+    query += `AND rt.price BETWEEN $${params.length + 1} AND $${
+      params.length + 2
+    } `;
     params.push(priceRange[0], priceRange[1]);
   }
 
   if (ratingRange && ratingRange.length === 2) {
-    query += `AND h.average_rating BETWEEN $5 AND $6 `;
+    query += `AND h.average_rating BETWEEN $${params.length + 1} AND $${
+      params.length + 2
+    } `;
     params.push(ratingRange[0], ratingRange[1]);
   }
 
@@ -61,6 +68,8 @@ export async function GET(request: NextRequest) {
   GROUP BY h.id, h.name, h.address, h.average_rating, i.public_id, i.format
   HAVING COUNT(r.status_room) FILTER (WHERE r.status_room = 'AVAILABLE') > 0
   ORDER BY h.name`;
+
+  console.log(query);
 
   const hotels: any[] = await prisma.$queryRawUnsafe(query, ...params);
 

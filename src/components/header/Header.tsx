@@ -46,33 +46,5 @@ export default function Header() {
         </span>
       </div>
     </Card>
-    // <Card>
-    //   <div className="flex justify-between">
-    //     <span className="text-2xl font-bold">
-    //       <NextLink href={pathname}>Trip.com</NextLink>
-    //     </span>
-    //     <span className="flex space-x-8 items-center">
-    //       {authInfo?.role == roleEnum.ADMIN ? (
-    //         <span>
-    //           <NextLink href={"/admin"}>Something</NextLink>
-    //         </span>
-    //       ) : authInfo?.role == roleEnum.MANAGER ||
-    //         authInfo?.role == roleEnum.STAFF ? (
-    //         <span className="space-x-3">
-    //           <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
-    //           <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
-    //           <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
-    //         </span>
-    //       ) : (
-    //         <span>
-    //           <NextLink href={"/contact"}>Liên hệ</NextLink>
-    //         </span>
-    //       )}
-    //       <span>
-    //         <HeaderLoginButton></HeaderLoginButton>
-    //       </span>
-    //     </span>
-    //   </div>
-    // </Card>
   );
 }

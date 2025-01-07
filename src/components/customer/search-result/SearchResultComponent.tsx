@@ -6,7 +6,7 @@ import { RangeSlider, Select, Slider, TextInput } from "@mantine/core";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import HotelResultCard from "@/components/customer/search-result/HotelResultCard";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import hotelsService from "@/services/hotels.service";
 import { HotelResultCardDto } from "@/types/dto/hotel.dto";
 import { useSearchParams } from "next/navigation";
@@ -74,6 +74,10 @@ export default function SearchResultComponent({ listProvince }: Props) {
     setIsSearching(false);
   }, [hotelName, priceRange, ratingRange]);
 
+  useEffect(() => {
+    performSearch();
+  }, []);
+
   return (
     <div className={styles.search_result}>
       <CardDefault>
@@ -85,10 +89,8 @@ export default function SearchResultComponent({ listProvince }: Props) {
               placeholder="Tên khách sạn"
             ></TextInput>
           </div>
-          <MantineButton>
-            <FaMagnifyingGlass
-              onClick={() => performSearch()}
-            ></FaMagnifyingGlass>
+          <MantineButton onClick={() => performSearch()}>
+            <FaMagnifyingGlass></FaMagnifyingGlass>
           </MantineButton>
         </div>
       </CardDefault>
@@ -125,9 +127,9 @@ export default function SearchResultComponent({ listProvince }: Props) {
             </div>
             {/* <div>Number of guests</div> */}
             <div>
-              Address <br />
+              Tỉnh <br />
               <Select
-                data={listProvince}
+                data={[{ label: "Tất cả", value: "" }, ...(listProvince ?? [])]}
                 onChange={(value: string | null) => {
                   setProvinceId(value as string);
                   console.log(value);

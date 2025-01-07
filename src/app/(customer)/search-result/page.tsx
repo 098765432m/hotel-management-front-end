@@ -9,8 +9,6 @@ export default async function SearchResultLayout() {
   const listProvince =
     transformAddressSelectInput(listProvinceResponse.data) ?? undefined;
 
-  // console.log(listProvince);
-
   return (
     <div>
       <SearchResultComponent
