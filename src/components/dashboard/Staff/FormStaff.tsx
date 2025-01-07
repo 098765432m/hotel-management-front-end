@@ -69,7 +69,6 @@ export default function FormStaff() {
             <Input></Input>
           </Form.Item>
           <Form.Item
-            wrapperCol={{ offset: 3 }}
             name={"role"}
             label="Vai trò"
             initialValue={roleEnum.STAFF}

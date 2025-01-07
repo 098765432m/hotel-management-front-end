@@ -82,8 +82,9 @@ export default function SearchResultComponent({ listProvince }: Props) {
     <div className={styles.search_result}>
       <CardDefault>
         <div className={styles.search_input_container}>
-          <div className={styles.text_input_container}>
+          <div>
             <TextInput
+              className={styles.text_input_container}
               value={hotelName}
               onChange={(event) => setHotelName(event.currentTarget.value)}
               placeholder="Tên khách sạn"

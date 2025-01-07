@@ -1,15 +1,8 @@
 @use "@/styles/global.module.scss" as global-scss;
 
 .staff_page_container {
-  display: flex;
+  display: grid;
   gap: 1rem;
-  flex-wrap: wrap;
-
-  & > div {
-    flex: 1;
-
-    flex-basis: 430px;
-  }
   .staff_form_container {
     .staff_form_heading {
       @include global-scss.heading-text;
@@ -21,5 +14,45 @@
     }
   }
   .staff_list_container {
+    .staff_list_heading {
+      @include global-scss.heading-text;
+    }
+
+    .staff_list_search_bar {
+      display: flex;
+      margin-bottom: 20px;
+
+      .staff_list_search_bar_input {
+        flex-grow: 1;
+      }
+    }
+    .staff_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      .staff_card_container {
+        .staff_avatar_container {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 30px;
+          position: relative;
+
+          .round_border {
+            border-radius: 50%;
+            overflow: hidden;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .staff_edit_button {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+          }
+        }
+      }
+    }
   }
 }

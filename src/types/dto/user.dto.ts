@@ -15,6 +15,7 @@ interface UserUpdateResponse {
 }
 
 interface StaffOfHotelDto {
+  id: string;
   username: string;
   fullName: string;
   email: string;

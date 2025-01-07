@@ -1,6 +1,6 @@
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
-import FormStaff from "@/components/dashboard/Staff/form-staff";
-import ListStaff from "@/components/dashboard/Staff/list-staff";
+import FormStaff from "@/components/dashboard/Staff/FormStaff";
+import ListStaff from "@/components/dashboard/Staff/ListStaff";
 
 export default function StaffPage() {
   return (
