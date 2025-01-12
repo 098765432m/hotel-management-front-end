@@ -45,58 +45,7 @@ export default function ListStaff() {
         <div className={styles.staff_list}>
           {staffs &&
             staffs.map((staff: StaffOfHotelDto, index: number) => {
-              return (
-                <>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                  <StaffCard
-                    id={staff.id}
-                    username={staff.username}
-                    fullName={staff.fullName}
-                    phoneNumber={staff.phoneNumber}
-                    email={staff.phoneNumber}
-                    key={index}
-                  ></StaffCard>
-                </>
-              );
+              return <StaffCard id={staff.id} key={index}></StaffCard>;
             })}
         </div>
       </div>

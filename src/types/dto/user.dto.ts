@@ -1,3 +1,5 @@
+import { Role } from "@prisma/client";
+
 interface UserCookieResponse {
   id: string;
   username: string;
@@ -14,6 +16,16 @@ interface UserUpdateResponse {
   hotelId?: string | null;
 }
 
+interface StaffDashboardUpdateDto {
+  username: string;
+  password?: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  role: Role;
+  isActive: boolean;
+}
+
 interface StaffOfHotelDto {
   id: string;
   username: string;
@@ -27,4 +39,9 @@ interface StaffOfHotelDto {
   };
 }
 
-export type { UserCookieResponse, UserUpdateResponse, StaffOfHotelDto };
+export type {
+  UserCookieResponse,
+  UserUpdateResponse,
+  StaffDashboardUpdateDto,
+  StaffOfHotelDto,
+};

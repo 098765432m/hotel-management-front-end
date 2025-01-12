@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
+import { StaffDashboardUpdateDto } from "@/types/dto/user.dto";
 import { StaffCreateDto, UserCreateDto } from "@/types/dto/usersCreate.dto";
 
 class UsersService {
@@ -26,6 +27,16 @@ class UsersService {
 
       throw new Error();
     }
+  }
+
+  // Update A User
+  async UpdateOne(id: string, body: StaffDashboardUpdateDto) {
+    return (await this.api.put(`/${id}`, body)).data;
+  }
+
+  // Delete A User
+  async DeleteOne(id: string) {
+    return (await this.api.delete(`/${id}`)).data;
   }
 }
 

@@ -55,7 +55,7 @@ export default function ProfileInfo() {
     await bookingsService.unBookingOne(bookingId, roomId);
   }
 
-  if (!isUserLoading)
+  if (user)
     return (
       <>
         <CardDefault>

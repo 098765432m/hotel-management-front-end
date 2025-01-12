@@ -10,23 +10,30 @@ import { roleEnum } from "@/types/enum/role.enum";
 import { Role } from "@prisma/client";
 import { Button, Form, FormProps, Input, Radio } from "antd";
 import { useSelector } from "react-redux";
+import { mutate } from "swr";
 
 type FieldType = {
-  username: string;
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  role: Role;
+  username_add: string;
+  fullName_add: string;
+  email_add: string;
+  phoneNumber_add: string;
+  role_add: Role;
 };
 
 export default function FormStaff() {
   const authStore = useSelector((state: RootState) => state.auth);
 
-  const onFinish: FormProps<FieldType>["onFinish"] = (value) => {
-    usersService.CreateOne({
-      ...value,
+  const onFinish: FormProps<FieldType>["onFinish"] = async (value) => {
+    await usersService.CreateOne({
+      username: value.username_add,
+      fullName: value.fullName_add,
+      email: value.email_add,
+      phoneNumber: value.phoneNumber_add,
+      role: value.role_add,
       hotel_id: authStore.authInfo?.hotelId as string,
     });
+
+    mutate(`/api/users/hotel/${authStore.authInfo?.hotelId}`);
   };
 
   return (
@@ -34,42 +41,42 @@ export default function FormStaff() {
       <div className={styles.staff_form_container}>
         <div className={styles.staff_form_heading}>Thêm tài khoản</div>
         <Form
-          action={createDashboardUser}
+          // action={createDashboardUser}
           onFinish={onFinish}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           labelAlign="left"
         >
           <Form.Item
-            name={"username"}
+            name={"username_add"}
             label="Tên tài khoản"
             rules={[{ required: true }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            name={"fullName"}
+            name={"fullName_add"}
             label="Họ và tên"
             rules={[{ required: true }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            name={"email"}
+            name={"email_add"}
             label="Địa chỉ email"
             rules={[{ required: true }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            name={"phoneNumber"}
+            name={"phoneNumber_add"}
             label="Số điện thoại"
             rules={[{ required: true }]}
           >
             <Input></Input>
           </Form.Item>
           <Form.Item
-            name={"role"}
+            name={"role_add"}
             label="Vai trò"
             initialValue={roleEnum.STAFF}
             rules={[{ required: true }]}
