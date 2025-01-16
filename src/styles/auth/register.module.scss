@@ -1,0 +1,35 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.register_form_container {
+  display: flex;
+  justify-content: center;
+
+  & > div {
+    width: 500px;
+    padding: 70px 50px;
+  }
+
+  .register_form_heading {
+    @include global-scss.heading-text;
+  }
+
+  .register_form {
+    display: grid;
+    row-gap: 20px;
+
+    .login_link {
+      margin-top: 3px;
+      font-size: 10px;
+      font-style: italic;
+      text-decoration: underline;
+      font-weight: 700;
+      opacity: 40%;
+      float: right;
+    }
+
+    .register_form_control {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { RoomsDtoCreate } from "@/types/dto/roomsCreate.dto";
+import { RoomDtoCreate, RoomDtoUpdateRequest } from "@/types/dto/room.dto";
 
 class RoomsService {
   api: any;
@@ -24,12 +24,17 @@ class RoomsService {
   }
 
   //Create A Room
-  async CreateOne(body: RoomsDtoCreate) {
-    try {
-      return (await this.api.post(`/`, body)).data;
-    } catch (error: any) {
-      throw new Error(error.message);
-    }
+  async CreateOne(body: RoomDtoCreate) {
+    return (await this.api.post(`/`, body)).data;
+  }
+
+  // Update A Room
+  async UpdateOne(id: string, body: RoomDtoUpdateRequest) {
+    return (await this.api.put(`/${id}`, body)).data;
+  }
+
+  async DeleteOne(id: string) {
+    return (await this.api.delete(`${id}`)).data;
   }
 }
 

@@ -1,0 +1,43 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.room_container {
+  display: grid;
+  gap: global-scss.$section-spacing;
+  .room_form_container {
+    .room_form_heading {
+      @include global-scss.heading-text;
+    }
+
+    .room_form_submit_button {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .room_list_container {
+    .room_list_heading {
+      @include global-scss.heading-text;
+    }
+
+    .room_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      .room_card {
+        .room_card_header {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+}
+
+.edit_form_container {
+  .edit_form {
+    .edit_form_control {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+}

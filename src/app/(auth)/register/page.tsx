@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "@/styles/auth/register.module.scss";
 import authService from "@/services/auth.service";
 import {
   Button,
@@ -12,147 +13,109 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import CardDefault from "@/components/custom-component/CardDefault";
+import { PasswordInput, TextInput } from "@mantine/core";
+import NextLink from "@/components/custom-component/NextLink";
+import MantineButton from "@/components/custom-component/MantineButton";
+import { useForm } from "@mantine/form";
+
+interface RegisterForm {
+  username: string;
+  password: string;
+  checkedPassword: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+}
 
 export default function RegisterPage() {
-  const [isSuccess, setIsSuccess] = useState(false); // Trạng thái đăng ký thành công
-  const [isFailed, setIsFailed] = useState(false); // Trạng thái đăng ký thất bại
+  const form = useForm<RegisterForm>({
+    mode: "uncontrolled",
+  });
   const router = useRouter();
 
-  // Giá trị của form input
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const fullNameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const phoneNumberRef = useRef<HTMLInputElement>(null);
-
   // Xử lý submit của form
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Chuyển set dữ liệu form data để gửi tới service
-    const formData = new FormData();
-    if (
-      usernameRef.current &&
-      passwordRef.current &&
-      fullNameRef.current &&
-      emailRef.current &&
-      phoneNumberRef.current
-    ) {
-      formData.append("username", usernameRef.current.value);
-      formData.append("password", passwordRef.current.value);
-      formData.append("fullName", fullNameRef.current.value);
-      formData.append("email", emailRef.current.value);
-      formData.append("phoneNumber", phoneNumberRef.current.value);
-    } else {
-      throw new Error("Lỗi input");
-    }
-
+  const handleSubmit = async (body: RegisterForm) => {
     // Đăng ký tài khoản GUEST mới và chuyển trang
-    try {
-      await authService.register(formData);
-      setIsSuccess(true);
+
+    if (body.password === body.checkedPassword) {
+      await authService.register(
+        body.username,
+        body.password,
+        body.fullName,
+        body.email,
+        body.phoneNumber
+      );
       router.push("/login");
-    } catch (error) {
-      setIsFailed(true);
-      // throw new Error("Tài khoản đã tồn tại");
+    } else {
+      alert("Mật khẩu không đúng");
     }
-  };
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") return;
-
-    setIsSuccess(false);
-  };
-
-  const handleCloseFailed = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason
-  ) => {
-    if (reason === "clickaway") return;
-
-    setIsFailed(false);
   };
 
   return (
-    <CardDefault>
-      <form onSubmit={handleSubmit}>
-        <div className="flex justify-center my-24">
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <div className="text-2xl font-bold">Đăng ký</div>
-            </div>
+    <>
+      <div className={styles.register_form_container}>
+        <CardDefault>
+          <div className={styles.register_form_heading}>Đăng ký</div>
+          <form
+            className={styles.register_form}
+            onSubmit={form.onSubmit((values: RegisterForm) =>
+              handleSubmit(values)
+            )}
+          >
+            <TextInput
+              withAsterisk
+              label="Tên đăng nhập"
+              placeholder="Tên đăng nhập"
+              key={form.key("username")}
+              {...form.getInputProps("username")}
+            ></TextInput>
+
+            <PasswordInput
+              withAsterisk
+              label="Mật khẩu"
+              placeholder="Mật khẩu"
+              key={form.key("password")}
+              {...form.getInputProps("password")}
+            ></PasswordInput>
+            <PasswordInput
+              withAsterisk
+              label="Xác minh mật khẩu"
+              placeholder="Xác minh lại mật khẩu"
+              key={form.key("checkedPassword")}
+              {...form.getInputProps("checkedPassword")}
+            ></PasswordInput>
+            <TextInput
+              withAsterisk
+              label="Họ và tên"
+              placeholder="Họ và tên"
+              key={form.key("fullName")}
+              {...form.getInputProps("fullName")}
+            ></TextInput>
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="Địa chỉ email"
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            ></TextInput>
             <div>
-              <TextField
-                label="Tên đăng nhập"
-                variant="outlined"
-                inputRef={usernameRef}
-              ></TextField>
-            </div>
-            <div>
-              <TextField
-                type="password"
-                label="Mật khẩu"
-                variant="outlined"
-                inputRef={passwordRef}
-              ></TextField>
-            </div>
-            <div>
-              <TextField
-                label="Họ và tên"
-                variant="outlined"
-                inputRef={fullNameRef}
-              ></TextField>
-            </div>
-            <div>
-              <TextField
-                label="Địa chỉ email"
-                variant="outlined"
-                inputRef={emailRef}
-              ></TextField>
-            </div>
-            <div>
-              <TextField
+              <TextInput
+                withAsterisk
                 label="Số điện thoại"
-                variant="outlined"
-                inputRef={phoneNumberRef}
-              ></TextField>
+                placeholder="Số điện thoại"
+                key={form.key("phoneNumber")}
+                {...form.getInputProps("phoneNumber")}
+              ></TextInput>
+              <div className={styles.login_link}>
+                <NextLink href={`/login`}>Đã có tài khoản?</NextLink>
+              </div>
             </div>
-            <div className="flex justify-end">
-              <span className="text-xs">
-                <Link href={"/login"}>
-                  <i>Đã có tài khoản ?</i>
-                </Link>
-              </span>
+            <div className={styles.register_form_control}>
+              <MantineButton type="submit">Đăng ký</MantineButton>
             </div>
-            <div className="flex justify-center">
-              <Button variant="contained" type="submit" onClick={handleSubmit}>
-                Đăng ký
-              </Button>
-            </div>
-          </div>
-        </div>
-        <Snackbar
-          open={isSuccess}
-          autoHideDuration={6000}
-          onClose={handleClose}
-        >
-          <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-            Đăng ký thành công!
-          </Alert>
-        </Snackbar>
-        <Snackbar
-          open={isFailed}
-          autoHideDuration={6000}
-          onClose={handleCloseFailed}
-        >
-          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-            Tài khoản đã tồn tại!
-          </Alert>
-        </Snackbar>
-      </form>
-    </CardDefault>
+          </form>
+        </CardDefault>
+      </div>
+    </>
   );
 }

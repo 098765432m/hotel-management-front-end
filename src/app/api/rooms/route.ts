@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/client";
+import { RoomDtoCreate } from "@/types/dto/room.dto";
 
 export async function GET() {
   const rooms = await prisma.room.findMany({
@@ -13,14 +14,10 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
+  const body: RoomDtoCreate = await request.json();
 
-  console.log(body);
-
-  // const result = await prisma.room.create({
-  //   data: body,
-  // });
-
-  return NextResponse.json("");
-  // return NextResponse.json(result);
+  const result = await prisma.room.create({
+    data: body,
+  });
+  return NextResponse.json(result);
 }
