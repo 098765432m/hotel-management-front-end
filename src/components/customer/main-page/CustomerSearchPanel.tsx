@@ -43,9 +43,6 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
             value={rangePrice}
             onChange={setRangePrice}
           ></RangeSlider>
-          <div className={styles.price_range_value}>
-            {rangePrice[0]} - {rangePrice[1]}
-          </div>
         </div>
       </div>
       <span className={styles.bottom_panel}>

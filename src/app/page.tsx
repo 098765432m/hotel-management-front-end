@@ -22,13 +22,9 @@ export default async function Home() {
   return (
     <div className={styles.main_page_container}>
       <CardDefault>
-        <div>
-          <CustomerSearchPanel
-            listProvince={listProvince}
-          ></CustomerSearchPanel>
-        </div>
+        <CustomerSearchPanel listProvince={listProvince}></CustomerSearchPanel>
       </CardDefault>
-      <div className="flex flex-wrap gap-4">
+      <div className={styles.hotel_list_container}>
         {hotels.length > 0 ? (
           hotels.map((hotel: Hotel, index: number) => (
             <HotelCard key={index} hotel={hotel}></HotelCard>

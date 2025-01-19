@@ -4,7 +4,7 @@ $secondary-color: "";
 $neutral-color: ""; //for text, border, dividers
 $back-ground: ""; // For background of cards, modals
 $text-color: ""; // Main text color
-$section-spacing: 1.5rem;
+$section-spacing: 20px;
 
 @mixin heading-text() {
   display: flex;

@@ -1,6 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
-import { rangeISOToRangeDayJS } from "@/utils/dayjs";
 
 class BookingsService {
   private api: any;

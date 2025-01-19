@@ -29,7 +29,7 @@ export default function HeaderLoginButton() {
   return (
     <>
       {isLogin != false ? (
-        <>
+        <div className="flex justify-center align-middle">
           <Button
             onClick={handleClick}
             id="avatar-button"
@@ -69,7 +69,7 @@ export default function HeaderLoginButton() {
               </span>
             </MenuItem>
           </Menu>
-        </>
+        </div>
       ) : (
         <span>
           <NextLink href={"/login"}>Đăng nhập</NextLink>

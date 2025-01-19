@@ -1,11 +1,10 @@
-.hotel_card {
-  width: 20vw;
+@use "@/styles/global.module.scss" as global-scss;
 
+.hotel_card {
   .card_image_container {
     aspect-ratio: 3/2;
     display: flex;
     position: relative;
-    border: 2px dashed red;
     align-items: center;
     justify-content: center;
     overflow: hidden;

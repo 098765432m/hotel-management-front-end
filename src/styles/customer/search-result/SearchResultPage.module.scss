@@ -1,0 +1,67 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.search_result_container {
+  display: grid;
+  row-gap: 10px;
+
+  .search_panel_container {
+    display: grid;
+    gap: 10px;
+
+    .search_result_heading {
+      @include global-scss.heading_text;
+    }
+
+    .search_text_container {
+      display: flex;
+
+      .search_input {
+        flex-grow: 1;
+      }
+    }
+
+    .filter_panel_container {
+      display: grid;
+      gap: 40px;
+
+      .filter_slider_flex_container {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        .filter_slider_container {
+          display: flexbox;
+          gap: 20px;
+          align-items: center;
+        }
+      }
+    }
+  }
+
+  .search_result_bottom {
+    display: flex;
+    column-gap: 10px;
+
+    .result_container_layout {
+      flex-grow: 1;
+
+      .layout_control {
+      }
+
+      .result_container {
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+
+        @media (max-width: 1000px) {
+          grid-template-columns: repeat(1, 1fr);
+        }
+
+        .empty_data_container {
+          grid-area: 1 / span 2;
+        }
+      }
+    }
+  }
+}

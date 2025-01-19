@@ -25,6 +25,7 @@ interface HotelContactCreateDto extends AddressType {
   fullName: string;
   email: string;
   phoneNumber: string;
+  note?: string;
 }
 
 interface HotelResultCardDto {

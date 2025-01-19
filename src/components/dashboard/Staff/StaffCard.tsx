@@ -6,13 +6,12 @@ import NextImage from "@/components/custom-component/NextImage";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import usersService from "@/services/users.service";
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
-import { StaffDashboardUpdateDto } from "@/types/dto/user.dto";
+import { UserUpdateDto } from "@/types/dto/user.dto";
 import { roleEnum, roleToLabel } from "@/types/enum/role.enum";
 import { Modal, Switch } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Role } from "@prisma/client";
 import { Button, Form, Input, Radio, Switch as AntdSwitch } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { IoTrashBinOutline } from "react-icons/io5";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
@@ -36,7 +35,7 @@ export default function StaffCard({ id }: Props) {
     mutate: userMutate,
   } = useSWR(`/api/users/${id}`, axiosCustomFetcher);
 
-  const handleSubmit = async (body: StaffDashboardUpdateDto) => {
+  const handleSubmit = async (body: UserUpdateDto) => {
     await usersService.UpdateOne(id, { ...body });
     userMutate();
   };

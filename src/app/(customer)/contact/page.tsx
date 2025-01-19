@@ -1,31 +1,19 @@
 "use client";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  // TextField,
-} from "@mui/material";
-import { Select, TextInput, Button } from "@mantine/core";
-import { TextareaAutosize } from "@mui/base";
+
+import styles from "@/styles/customer/contact/ContactPage.module.scss";
+import { Select, TextInput, Button, Textarea } from "@mantine/core";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
-import { useMemo, useReducer, useRef, useState } from "react";
-import { AddressType, info } from "@/types/address.interface";
-import {
-  ActionAddress,
-  DispatchType,
-  District,
-  Province,
-  Ward,
-} from "@/types/vietnamese-location-api/address";
-import { createContact } from "@/action/user.action";
+import { useMemo, useReducer } from "react";
+import { AddressType } from "@/types/address.interface";
+import { DispatchType } from "@/types/vietnamese-location-api/address";
 import { reducerAddress } from "@/utils/vietnamese-address/helpers";
 import { transformAddressEntity } from "@/utils/helpers";
 import { useForm } from "@mantine/form";
 import hotelsService from "@/services/hotels.service";
 import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
-import { string } from "zod";
 import CardDefault from "@/components/custom-component/CardDefault";
+import MantineButton from "@/components/custom-component/MantineButton";
 
 const initialInfo = { id: "", name: "" };
 
@@ -47,6 +35,7 @@ export default function ContactPage() {
     ward: string | null;
     district: string | null;
     province: string | null;
+    note?: string;
   }>({
     mode: "uncontrolled",
     initialValues: {
@@ -177,41 +166,45 @@ export default function ContactPage() {
       province: JSON.parse(form.getValues().province as string),
     };
 
+    console.log(body);
+
     hotelsService.createContact(body);
   };
   return (
     <CardDefault>
-      <form
-        onSubmit={form.onSubmit(handleSubmit)}
-        className="flex justify-center my-8"
-      >
-        <div className="grid justify-items-center gap-y-4">
-          <h3 className="text-2xl font-bold">Liên hệ hợp tác</h3>
-          <TextInput
-            label="Tên khách sạn"
-            placeholder="Khach san"
-            key={form.key("hotelName")}
-            {...form.getInputProps("hotelName")}
-          ></TextInput>
-          <TextInput
-            label="Họ và tên"
-            placeholder="Tên đầy đủ"
-            key={form.key("fullName")}
-            {...form.getInputProps("fullName")}
-          ></TextInput>
-          <TextInput
-            label="Email liên hệ"
-            placeholder="Email"
-            key={form.key("email")}
-            {...form.getInputProps("email")}
-          ></TextInput>
-          <TextInput
-            label="Sô điện thoại"
-            placeholder="só điện thoại"
-            key={form.key("phoneNumber")}
-            {...form.getInputProps("phoneNumber")}
-          ></TextInput>
-          <div className="flex justify-center gap-4">
+      <div className={styles.contact_form_container}>
+        <div className={styles.contact_form_heading}>
+          <span>Liên hệ hợp tác</span>
+        </div>
+        <form
+          onSubmit={form.onSubmit(handleSubmit)}
+          className={styles.contact_form}
+        >
+          <div className={styles.contact_form_grid}>
+            <TextInput
+              label="Tên khách sạn"
+              placeholder="Khách sạn"
+              key={form.key("hotelName")}
+              {...form.getInputProps("hotelName")}
+            ></TextInput>
+            <TextInput
+              label="Họ và tên"
+              placeholder="Tên đầy đủ"
+              key={form.key("fullName")}
+              {...form.getInputProps("fullName")}
+            ></TextInput>
+            <TextInput
+              label="Email liên hệ"
+              placeholder="Email"
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            ></TextInput>
+            <TextInput
+              label="Số điện thoại"
+              placeholder="Số điện thoại"
+              key={form.key("phoneNumber")}
+              {...form.getInputProps("phoneNumber")}
+            ></TextInput>
             <TextInput
               label="Đường"
               placeholder="Đường"
@@ -270,20 +263,21 @@ export default function ContactPage() {
               )}
             />
           </div>
-          <TextareaAutosize
-            aria-label="Lời nhắn"
-            placeholder="Lời nhắn..."
+          <Textarea
+            label="Lời nhắn"
+            placeholder="Gửi lời nhắn..."
+            resize="vertical"
+            autosize
             minRows={3}
-            style={{
-              width: "320px",
-              padding: "8px 10px",
-            }}
-          ></TextareaAutosize>
-          <Button type="submit" mt="md">
-            Submit
-          </Button>
-        </div>
-      </form>
+            maxRows={8}
+            key={form.key("note")}
+            {...form.getInputProps("note")}
+          ></Textarea>
+          <div className={styles.contact_form_action_button}>
+            <MantineButton type="submit">Gửi</MantineButton>
+          </div>
+        </form>
+      </div>
     </CardDefault>
   );
 }

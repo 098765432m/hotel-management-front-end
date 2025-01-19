@@ -50,8 +50,6 @@ export default function HotelForm() {
     mutate: hotelMutate,
   } = useSWR(`/api/hotels/${authStore.authInfo?.hotelId}`, axiosCustomFetcher); //Get Hotel via Id
 
-  console.log(hotel);
-
   //State Start
 
   const [address, addressDispatch] = useReducer(reducerAddress, initialAddress);
@@ -220,12 +218,19 @@ export default function HotelForm() {
           onClose={closeEditForm}
         >
           <div className={styles.main_page_form_container}>
-            <Form onFinish={handleUpdateFinish} form={form}>
+            <Form
+              onFinish={handleUpdateFinish}
+              form={form}
+              labelAlign="left"
+              labelCol={{ span: 10 }}
+              wrapperCol={{ span: 14 }}
+            >
               <div>
                 <Form.Item
                   name={"name"}
                   label="Tên khách sạn"
                   initialValue={hotel.name}
+                  required
                 >
                   <Input></Input>
                 </Form.Item>
@@ -243,6 +248,7 @@ export default function HotelForm() {
                       message: "Vị trí đường khách sạn bị trống",
                     },
                   ]}
+                  required
                 >
                   <Input></Input>
                 </Form.Item>
@@ -299,6 +305,7 @@ export default function HotelForm() {
                         })
                       : JSON.stringify({ id: null, name: null })
                   }
+                  required
                 >
                   <Select
                     placeholder="Chọn Quận/Huyện"
@@ -340,6 +347,7 @@ export default function HotelForm() {
                         })
                       : JSON.stringify({ id: null, name: null })
                   }
+                  required
                 >
                   <Select
                     placeholder="Chọn Tỉnh/Thành phố"

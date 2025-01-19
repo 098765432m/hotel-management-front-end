@@ -1,6 +1,6 @@
 import { hashedPassword } from "@/lib/auth";
 import { prisma } from "@/lib/client";
-import { StaffDashboardUpdateDto } from "@/types/dto/user.dto";
+import { UserUpdateDto } from "@/types/dto/user.dto";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -30,7 +30,7 @@ export async function PUT(
   req: Request,
   { params }: { params: { user_id: string } }
 ) {
-  const { password, ...body }: StaffDashboardUpdateDto = await req.json();
+  const { password, ...body }: UserUpdateDto = await req.json();
 
   const updatedUser = await prisma.user.update({
     where: { id: params.user_id },

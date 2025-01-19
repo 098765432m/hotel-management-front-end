@@ -10,6 +10,6 @@ export interface Hotel {
 
   rooms?: Room[];
   room_types?: RoomTypeCustomerFetchDto[];
-  users: User[];
+  staffs: User[];
   images: Image[];
 }

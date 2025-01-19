@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { StaffDashboardUpdateDto } from "@/types/dto/user.dto";
+import { UserUpdateDto } from "@/types/dto/user.dto";
 import { StaffCreateDto, UserCreateDto } from "@/types/dto/usersCreate.dto";
 
 class UsersService {
@@ -10,10 +10,14 @@ class UsersService {
 
   async getAll() {
     try {
-      return (await this.api("/")).data;
+      return (await this.api.get("/")).data;
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async GetOne(id: string) {
+    return (await this.api.get(`/${id}`)).data;
   }
 
   //Create A User
@@ -30,7 +34,7 @@ class UsersService {
   }
 
   // Update A User
-  async UpdateOne(id: string, body: StaffDashboardUpdateDto) {
+  async UpdateOne(id: string, body: UserUpdateDto) {
     return (await this.api.put(`/${id}`, body)).data;
   }
 

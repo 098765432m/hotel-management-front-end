@@ -4,10 +4,9 @@ import UploadedImage from "@/components/dashboard/main-page/UploadedImage";
 import hotelsService from "@/services/hotels.service";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
-import { FaEdit } from "react-icons/fa";
 import CardDefault from "@/components/custom-component/CardDefault";
 import { addressToString } from "@/utils/helpers";
-import MantineButton from "@/components/custom-component/MantineButton";
+import { Hotel } from "@/types/hotel.interface";
 
 export default async function DashBoardPage() {
   const cookieStore = await cookies();
@@ -17,7 +16,7 @@ export default async function DashBoardPage() {
   const hotelId = decryptedData?.hotelId as string;
 
   if (hotelId) {
-    const hotel = await hotelsService.getOne(hotelId);
+    const hotel: Hotel = await hotelsService.getOne(hotelId);
 
     return (
       <div className={styles.dashboard_container}>
@@ -37,11 +36,18 @@ export default async function DashBoardPage() {
               </div>
               <div>
                 {" "}
-                <span className={styles.label_text}>Số phòng: </span>26
+                <span className={styles.label_text}>Số loại phòng: </span>
+                {hotel.room_types?.length ?? 0}
               </div>
               <div>
                 {" "}
-                <span className={styles.label_text}>Tài khoản quản lý: </span>4
+                <span className={styles.label_text}>Số phòng: </span>
+                {hotel.rooms?.length ?? 0}
+              </div>
+              <div>
+                {" "}
+                <span className={styles.label_text}>Tài khoản quản lý: </span>
+                {hotel.staffs.length ?? 0}
               </div>
             </div>
           </div>

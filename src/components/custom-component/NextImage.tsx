@@ -5,5 +5,5 @@ import Image, { ImageProps } from "next/image";
 interface CustomeNextImageProps extends ImageProps {}
 
 export default function NextImage(props: CustomeNextImageProps) {
-  return <Image {...props} className={styles.custom_next_image}></Image>;
+  return <Image {...props} className={styles.custom_next_image} alt=""></Image>;
 }

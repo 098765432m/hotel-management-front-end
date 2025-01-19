@@ -84,16 +84,22 @@ export default function RoomTypeCard({ RoomType, mutate }: Props) {
         onCancel={() => {
           setIsEditOpen(false);
         }}
+        cancelText="Đóng"
         onOk={handleOk}
+        okText="Lưu"
       >
-        <Form>
-          <Form.Item label="Tên loại phòng" initialValue={name}>
+        <Form
+          labelAlign="left"
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 18 }}
+        >
+          <Form.Item label="Tên loại phòng" initialValue={name} required>
             <Input
               defaultValue={name}
               onChange={(e) => setName(e.currentTarget.value)}
             ></Input>
           </Form.Item>
-          <Form.Item label="Giá loại phòng" initialValue={price}>
+          <Form.Item label="Giá loại phòng" initialValue={price} required>
             <InputNumber
               defaultValue={price}
               step={1000}

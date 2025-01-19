@@ -69,8 +69,6 @@ export async function GET(request: NextRequest) {
   HAVING COUNT(r.status_room) FILTER (WHERE r.status_room = 'AVAILABLE') > 0
   ORDER BY h.name`;
 
-  console.log(query);
-
   const hotels: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
   const responseDto: HotelResultCardDto[] = hotels.map((hotel: any) => ({

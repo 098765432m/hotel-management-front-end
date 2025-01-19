@@ -29,14 +29,15 @@ export default function HotelCard({ hotel }: Props) {
               priority
               src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
               fill
+              sizes="50vw"
               alt={hotel.name}
             ></NextImage>
           ) : (
             <NextImage
               priority
               src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-              width={300}
-              height={200}
+              fill
+              sizes="50vw"
               alt={hotel.name}
             ></NextImage>
           )}
@@ -48,13 +49,7 @@ export default function HotelCard({ hotel }: Props) {
               className={styles.card_info_address}
             >{`${hotel.address.district.name}, ${hotel.address.province.name}`}</div>
           </div>
-          <div className={styles.card_info_main}>
-            {/* {hotel.description != null && (
-              <div className={styles.card_info_description}>
-                {hotel.description}
-              </div>
-            )} */}
-          </div>
+          <div className={styles.card_info_main}></div>
           <div className={styles.navigation_button}>
             <NextLink
               href={`/hotel/${hotel.id}?check_in_date=12-24-2024&check_out_date=12-26-2024`}

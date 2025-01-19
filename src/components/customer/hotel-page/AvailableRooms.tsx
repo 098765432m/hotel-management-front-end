@@ -83,7 +83,7 @@ export default function AvailableRooms({ hotel }: Props) {
           return sum + count * roomType.price;
         }, 0)
       ),
-    [bookingRooms]
+    [bookingRooms, hotel.room_types]
   );
 
   // get query params

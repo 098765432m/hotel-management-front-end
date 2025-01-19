@@ -19,7 +19,7 @@ export default function RoomTypeForm() {
 
   useEffect(() => {
     setPageLoading(false);
-  });
+  }, []);
 
   const handleFinish = async (values: RoomTypeFormValues) => {
     const body = {
@@ -43,10 +43,10 @@ export default function RoomTypeForm() {
         <div className={styles.room_type_add_form_heading}>Loại phòng</div>
 
         <div className={styles.room_type_add_form_input}>
-          <Form.Item name="name" label="Tên loại phòng">
+          <Form.Item name="name" label="Tên loại phòng" required>
             <Input></Input>
           </Form.Item>
-          <Form.Item name="price" label="Giá (đ/đêm)" initialValue={0}>
+          <Form.Item name="price" label="Giá (đ/đêm)" initialValue={0} required>
             <InputNumber step={1000}></InputNumber>
           </Form.Item>
         </div>

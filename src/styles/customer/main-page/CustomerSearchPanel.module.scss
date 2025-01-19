@@ -1,4 +1,6 @@
 .search_panel {
+  display: grid;
+  row-gap: 10px;
   .upper_panel {
     display: flex;
     column-gap: 20px;
@@ -10,11 +12,8 @@
 
     .range_slider_container {
       width: 100%;
-
-      .price_range_value {
-        display: flex;
-        justify-content: center;
-      }
+      display: grid;
+      align-items: center;
     }
   }
 

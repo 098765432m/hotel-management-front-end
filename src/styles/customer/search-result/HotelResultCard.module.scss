@@ -1,17 +1,26 @@
 .result_card {
-  border: 2px dashed burlywood;
-  padding: 6px 10px;
-  display: flex;
-  column-gap: 4px;
+  display: grid;
+  gap: 4px;
 
-  .left_part {
+  .result_image_layout {
+    .result_card_image_container {
+      aspect-ratio: 5/3;
+      display: block;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      overflow: hidden;
+    }
   }
 
-  .right_part {
-    width: 100%;
+  .result_info_layout {
+    display: grid;
+    gap: 4px;
     .header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
     .content {
     }

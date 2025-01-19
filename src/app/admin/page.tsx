@@ -193,7 +193,7 @@ export default function AdminHome() {
 
   useEffect(() => {
     setIsLoading(false);
-  });
+  }, []);
 
   if (isLoading) return <>Loading ...</>;
 
@@ -203,7 +203,7 @@ export default function AdminHome() {
       <CardDefault>
         <div className="space-y-6">
           <div className="flex justify-between items-center px-8">
-            <div className="text-2xl font-semibold">Admin Page</div>
+            <div className="text-2xl font-semibold">Quản trị</div>
           </div>
           <div className="flex">
             <div className="w-1/2">

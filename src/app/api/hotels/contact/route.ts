@@ -8,8 +8,6 @@ import ShortUniqueId from "short-unique-id";
 export async function POST(request: Request) {
   const body: HotelContactCreateDto = await request.json();
 
-  console.log(body);
-
   const result = prisma.$transaction(async (prisma) => {
     const newHotel = await prisma.hotel.create({
       data: {
