@@ -1,0 +1,28 @@
+$table-border: 2px solid black;
+
+.custom_table {
+  width: 100%;
+  border: $table-border;
+  thead {
+    background-color: blanchedalmond;
+    tr {
+      th {
+        border: $table-border;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border: $table-border;
+
+      td {
+        border: $table-border;
+        text-align: center;
+
+        .booking_control {
+        }
+      }
+    }
+  }
+}

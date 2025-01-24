@@ -1,57 +1,61 @@
-import CardDefault from "@/components/CardDefault";
-import HotelForm from "@/components/dashboard/hotel-form";
-import { decrypt, SessionPayload } from "@/lib/session";
-import { Hotel } from "@/types/hotel.interface";
-import { addressToString } from "@/utils/helpers";
-import axios from "axios";
+import styles from "@/styles/dashboard/main-page/MainPage.module.scss";
+import HotelForm from "@/components/dashboard/main-page/HotelForm";
+import UploadedImage from "@/components/dashboard/main-page/UploadedImage";
+import hotelsService from "@/services/hotels.service";
 import { cookies } from "next/headers";
-
-async function getData(hotelId: string | null) {
-  const hotel = (
-    await axios.get(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/hotels/${hotelId ?? ""}`
-    )
-  ).data;
-
-  return hotel;
-}
+import { decrypt } from "@/lib/session";
+import CardDefault from "@/components/custom-component/CardDefault";
+import { addressToString } from "@/utils/helpers";
+import { Hotel } from "@/types/hotel.interface";
 
 export default async function DashBoardPage() {
-  const loginInfoString = cookies().get("login")?.value;
-  const loginInfo = await decrypt(loginInfoString);
-
-  const { userId, role, hotelId } = loginInfo as SessionPayload;
-  console.log("info");
-
-  const hotel: Hotel = await getData(hotelId);
-
-  return (
-    <>
-      <div className="flex justify-around">
-        <div className="">
-          <h1>Thông tin khách sạn</h1>
-          <div>
-            <h1>Tên khách sạn: {hotel.name}</h1>
-            <h3>Địa chỉ: {addressToString(hotel.address)}</h3>
-            <h3>Số điện thoại</h3>
-            {hotel.rooms != null && (
-              <>
-                <h3>Số phòng hiện tại: </h3>
-                <h3>Số phòng trống: </h3>
-                <h3></h3>
-              </>
-            )}
-          </div>
-        </div>
-        <div>
-          <h1>Nhân viên:</h1>
-          <div>
-            <h2>Số nhân viên</h2>
-            <h2>Số tài khoản quản lý</h2>
-          </div>
-        </div>
-      </div>
-      <HotelForm></HotelForm>
-    </>
+  const cookieStore = await cookies();
+  const decryptedData = await decrypt(
+    cookieStore.get("login")?.value as string
   );
+  const hotelId = decryptedData?.hotelId as string;
+
+  if (hotelId) {
+    const hotel: Hotel = await hotelsService.getOne(hotelId);
+
+    return (
+      <div className={styles.dashboard_container}>
+        <CardDefault>
+          <div className={styles.hotel_brief_container}>
+            <div className={styles.hotel_brief_heading}>
+              <span className={styles.hotel_brief_hotel_name}>
+                {hotel.name}
+              </span>
+              <HotelForm></HotelForm> {/* Chỉ hiển thị với MANAGER */}
+            </div>
+            <div className={styles.hotel_brief}>
+              <div>{hotel.description}</div>
+              <div>
+                <span className={styles.label_text}>Địa chỉ:</span>{" "}
+                {addressToString(hotel.address)}
+              </div>
+              <div>
+                {" "}
+                <span className={styles.label_text}>Số loại phòng: </span>
+                {hotel.room_types?.length ?? 0}
+              </div>
+              <div>
+                {" "}
+                <span className={styles.label_text}>Số phòng: </span>
+                {hotel.rooms?.length ?? 0}
+              </div>
+              <div>
+                {" "}
+                <span className={styles.label_text}>Tài khoản quản lý: </span>
+                {hotel.staffs.length ?? 0}
+              </div>
+            </div>
+          </div>
+        </CardDefault>
+        <UploadedImage></UploadedImage>
+      </div>
+    );
+  } else {
+    return <div>Not Found Hotel</div>;
+  }
 }

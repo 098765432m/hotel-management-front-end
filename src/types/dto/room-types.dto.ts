@@ -7,3 +7,8 @@ export interface RoomTypeUpdateDto {
     room_type_id: string;
   }[];
 }
+
+export type RoomTypeCustomerFetchDto = {
+  name: string;
+  price: number;
+};

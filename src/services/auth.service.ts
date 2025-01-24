@@ -7,10 +7,7 @@ class AuthService {
   }
 
   //Login Service
-  async login(formData: FormData) {
-    const username = formData.get("username");
-    const password = formData.get("password");
-
+  async login(username: string, password: string) {
     // Thành công sẽ chuyển tới trang chủ và tạo session
     const result = await this.api.post(`/login`, {
       username: username,
@@ -20,14 +17,13 @@ class AuthService {
   }
 
   //Login Service
-  async register(formData: FormData) {
-    //Trích dữ liệu từ Form data
-    const username = formData.get("username");
-    const password = formData.get("password");
-    const fullName = formData.get("fullName");
-    const email = formData.get("email");
-    const phoneNumber = formData.get("phoneNumber");
-
+  async register(
+    username: string,
+    password: string,
+    fullName: string,
+    email: string,
+    phoneNumber: string
+  ) {
     const result = await this.api.post(`/register`, {
       username: username,
       password: password,

@@ -1,0 +1,49 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.room_type_container {
+  display: grid;
+  row-gap: global-scss.$section-spacing;
+  .room_type_add_form {
+    display: grid;
+    justify-items: center;
+
+    .room_type_add_form_heading {
+      @include global-scss.heading-text;
+    }
+
+    .room_type_add_form_input {
+      min-width: 200px;
+    }
+    .room_type_add_form_submit_button {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .room_type_list_container {
+    .list_header {
+      @include global-scss.heading-text;
+      display: flex;
+      justify-content: center;
+    }
+
+    .room_type_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      align-items: center;
+      gap: 20px;
+
+      .room_type_card {
+        display: grid;
+        place-items: left;
+
+        .room_type_card_header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

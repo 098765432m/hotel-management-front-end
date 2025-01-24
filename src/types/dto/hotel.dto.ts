@@ -4,7 +4,7 @@ import { UploadedImageDto } from "./image.dto";
 interface HotelPutDto {
   name: string;
   address: AddressType;
-  images: UploadedImageDto[];
+  // images: UploadedImageDto[];
 }
 
 interface HotelFormCreateProps {
@@ -20,4 +20,28 @@ interface HotelCreateDto {
   address: AddressType;
 }
 
-export type { HotelPutDto, HotelFormCreateProps, HotelCreateDto };
+interface HotelContactCreateDto extends AddressType {
+  hotelName: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  note?: string;
+}
+
+interface HotelResultCardDto {
+  hotelId: string;
+  hotelName: string;
+  hotelDescription: string;
+  hotelAddress: AddressType;
+  hotelRating: number;
+  hotelPrice: number[];
+  hotelImages: UploadedImageDto[];
+}
+
+export type {
+  HotelPutDto,
+  HotelFormCreateProps,
+  HotelCreateDto,
+  HotelContactCreateDto,
+  HotelResultCardDto,
+};

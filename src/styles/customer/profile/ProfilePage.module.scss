@@ -1,0 +1,74 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.profile_container {
+  display: grid;
+  gap: global-scss.$section-spacing;
+
+  .profile_info_container {
+    display: grid;
+    justify-items: center;
+
+    .profile_image_container {
+      display: flex;
+      position: relative;
+      justify-content: center;
+      width: 200px;
+      height: 200px;
+      border: 2px solid black;
+      border-radius: 50%;
+      overflow: hidden;
+      z-index: 1;
+
+      .edit_image_button {
+        height: 100%;
+        display: none;
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+      }
+
+      &:hover .profile_image {
+        opacity: 50%;
+      }
+
+      &:hover .edit_image_button {
+        display: flex;
+      }
+    }
+
+    .username_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      width: 40vw;
+
+      .username_text {
+        font-size: 22px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        margin-right: 15px;
+      }
+
+      .edit_button_container {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .profile_table_container {
+    .profile_table_heading {
+      @include global-scss.heading-text;
+    }
+  }
+}
+
+.edit_form_container {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  justify-items: center;
+  gap: 20px;
+}

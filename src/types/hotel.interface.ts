@@ -1,14 +1,15 @@
-import { Room, RoomTypes, User } from "@prisma/client";
+import { Image, Room, User } from "@prisma/client";
 import { AddressType } from "./address.interface";
+import { RoomTypeCustomerFetchDto } from "./dto/room-types.dto";
 
 export interface Hotel {
   id: string;
   name: string;
   address: AddressType;
-  img_public_id: string;
-  img_format: string;
+  description?: string;
 
   rooms?: Room[];
-  room_types?: RoomTypes[];
-  users: User[];
+  room_types?: RoomTypeCustomerFetchDto[];
+  staffs: User[];
+  images: Image[];
 }

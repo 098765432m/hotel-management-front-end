@@ -1,10 +1,12 @@
 "use client";
-import { AuthContext } from "@/context/AuthContext";
+
+import styles from "@/styles/dashboard/room-type/RoomType.module.scss";
 import roomTypesServices from "@/services/roomTypes.services";
-import { UserCookieResponse } from "@/types/dto/user.dto";
+import { RootState } from "@/state/store";
 import { Input, InputNumber, Button, Form, Skeleton } from "antd";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 interface RoomTypeFormValues {
   name: string;
@@ -13,17 +15,17 @@ interface RoomTypeFormValues {
 
 export default function RoomTypeForm() {
   const [isPageLoading, setPageLoading] = useState(true);
-  const { auth } = useContext(AuthContext);
+  const authStore = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     setPageLoading(false);
-  });
+  }, []);
 
   const handleFinish = async (values: RoomTypeFormValues) => {
     const body = {
       name: values.name,
       price: values.price,
-      hotel_id: auth!.hotelId!,
+      hotel_id: authStore.authInfo?.hotelId!,
     };
     console.log(body);
 
@@ -32,31 +34,27 @@ export default function RoomTypeForm() {
 
   return (
     <Skeleton loading={isPageLoading} active>
-      <Form onFinish={handleFinish}>
-        <div className="flex justify-center my-12">
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <div className="text-2xl font-bold">Loại phòng</div>
-            </div>
-            <div>
-              <Form.Item name="name" label="Ten loai">
-                <Input></Input>
-              </Form.Item>
-            </div>
-            <div>
-              <Form.Item name="price" label="Gia loai" initialValue={0}>
-                <InputNumber step={1000}></InputNumber>
-              </Form.Item>
-            </div>
-            <Form.Item>
-              <div className="flex justify-center">
-                <Button type="primary" htmlType="submit">
-                  Tạo loại phòng
-                </Button>
-              </div>
-            </Form.Item>
-          </div>
+      <Form
+        onFinish={handleFinish}
+        className={styles.room_type_add_form}
+        labelCol={{ span: 10 }}
+        labelAlign="left"
+      >
+        <div className={styles.room_type_add_form_heading}>Loại phòng</div>
+
+        <div className={styles.room_type_add_form_input}>
+          <Form.Item name="name" label="Tên loại phòng" required>
+            <Input></Input>
+          </Form.Item>
+          <Form.Item name="price" label="Giá (đ/đêm)" initialValue={0} required>
+            <InputNumber step={1000}></InputNumber>
+          </Form.Item>
         </div>
+        <Form.Item className={styles.room_type_add_form_submit_button}>
+          <Button type="primary" htmlType="submit">
+            Tạo loại phòng
+          </Button>
+        </Form.Item>
       </Form>
     </Skeleton>
   );

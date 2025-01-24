@@ -7,6 +7,7 @@ export async function GET() {
       rooms: true,
       room_types: true,
       staffs: true,
+      images: true,
     },
   });
 

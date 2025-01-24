@@ -1,0 +1,28 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.contact_form_container {
+  .contact_form_heading {
+    @include global-scss.heading_text;
+  }
+
+  .contact_form {
+    display: grid;
+    row-gap: 20px;
+    .contact_form_grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 20px;
+      column-gap: 20px;
+
+      @media (max-width: 1024px) {
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      }
+    }
+
+    .contact_form_action_button {
+      display: flex;
+      justify-content: center;
+      column-gap: 20px;
+    }
+  }
+}

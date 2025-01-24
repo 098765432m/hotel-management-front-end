@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import styles from "@/styles/global.module.scss";
 import { ConfigProvider } from "antd";
+
+// Require for Mantine core
+
+import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+import "@mantine/core/styles.css"; // mantine core
+import "@mantine/carousel/styles.css"; // mantine carousel
+
+// Require for Mantine core
+
+//import Redux
+
+import ReduxProvider from "@/components/redux/ReduxProvider";
+
+//import Redux
+
 import Header from "@/components/header/Header";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import AuthProvider from "@/context/AuthContext";
 import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
+import Footer from "@/components/footer/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,24 +44,29 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <ColorSchemeScript></ColorSchemeScript>
+      </head>
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ConfigProvider
             theme={{
-              components: {
-                Collapse: {
-                  headerBg: "#ffffff",
-                  contentBg: "#ffffff",
-                },
-              },
+              components: {},
             }}
           >
-            <AuthProvider authInfo={authInfo}>
-              <main className="py-6 px-12 bg-stone-100">
-                <Header></Header>
-                {children}
-              </main>
-            </AuthProvider>
+            <ReduxProvider authInfo={authInfo}>
+              <MantineProvider>
+                <div id={styles.layout}>
+                  <header>
+                    <Header></Header>
+                  </header>
+                  <main id={styles.main_layout}>{children}</main>
+                  <footer>
+                    <Footer></Footer>
+                  </footer>
+                </div>
+              </MantineProvider>
+            </ReduxProvider>
           </ConfigProvider>
         </AppRouterCacheProvider>
       </body>

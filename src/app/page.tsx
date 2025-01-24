@@ -1,24 +1,59 @@
-import SearchBar from "@/components/SearchBar";
+import styles from "@/styles/customer/main-page/MainPage.module.scss";
 import hotelsService from "@/services/hotels.service";
 import HotelCard from "@/components/HotelCard";
 import { Hotel } from "@/types/hotel.interface";
+import EmptyData from "@/components/custom-component/EmptyData";
+import CardDefault from "@/components/custom-component/CardDefault";
+import CustomerSearchPanel from "@/components/customer/main-page/CustomerSearchPanel";
+import axios from "axios";
+import { transformAddressSelectInput } from "@/utils/helpers";
+import ProvinceCard from "@/components/customer/main-page/ProvinceCard";
 
 export default async function Home() {
-  const hotels = await hotelsService.getAll();
+  const hotels: Hotel[] = await hotelsService.getAll();
+  const listProvinceResponse = await axios.get(
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}` as string
+  );
+
+  const listProvince =
+    transformAddressSelectInput(listProvinceResponse.data) ?? undefined;
 
   if (hotels == undefined) return <div></div>;
   return (
-    <div>
-      <SearchBar></SearchBar>
-      <div className="flex space-x-4 py-3">
+    <div className={styles.main_page_container}>
+      <CardDefault>
+        <CustomerSearchPanel listProvince={listProvince}></CustomerSearchPanel>
+      </CardDefault>
+      <div className={styles.hotel_list_container}>
         {hotels.length > 0 ? (
           hotels.map((hotel: Hotel, index: number) => (
             <HotelCard key={index} hotel={hotel}></HotelCard>
           ))
         ) : (
-          <div>No room available</div>
+          <div>
+            <EmptyData></EmptyData>
+          </div>
         )}
       </div>
+
+      <CardDefault>
+        <div className={styles.province_card_container}>
+          <div className={styles.province_card_header}>Địa điểm nổi bật</div>
+          <div className={styles.province_card_body}>
+            {listProvince?.map(
+              (province: { label: string; value: string }, index) => {
+                return (
+                  <ProvinceCard
+                    name={province.label}
+                    index={index}
+                    key={index}
+                  ></ProvinceCard>
+                );
+              }
+            )}
+          </div>
+        </div>
+      </CardDefault>
     </div>
   );
 }

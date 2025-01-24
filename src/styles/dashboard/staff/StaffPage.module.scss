@@ -1,0 +1,68 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.staff_page_container {
+  display: grid;
+  gap: 1rem;
+  .staff_form_container {
+    .staff_form_heading {
+      @include global-scss.heading-text;
+    }
+
+    .staff_form_submit_button {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .staff_list_container {
+    .staff_list_heading {
+      @include global-scss.heading-text;
+    }
+
+    .staff_list_search_bar {
+      display: flex;
+      margin-bottom: 20px;
+
+      .staff_list_search_bar_input {
+        flex-grow: 1;
+      }
+    }
+
+    .staff_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      .staff_card_container {
+        .staff_avatar_container {
+          display: flex;
+          justify-content: center;
+          margin-bottom: 30px;
+          position: relative;
+
+          .round_border {
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid darkslateblue;
+            background-color: burlywood;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .staff_edit_button {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.edit_modal_form {
+  .edit_form_control {
+    display: flex;
+    justify-content: space-evenly;
+  }
+}

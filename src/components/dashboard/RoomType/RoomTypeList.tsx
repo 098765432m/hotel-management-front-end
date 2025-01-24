@@ -1,44 +1,20 @@
 "use client";
 
+import styles from "@/styles/dashboard/room-type/RoomType.module.scss";
 import { RoomType } from "@/types/roomTypes.interface";
 import { List, Table, TableProps } from "antd";
 
 import RoomTypeCard from "./RoomTypeCard";
-import RoomTypeForm from "./RoomTypeForm";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
+import EmptyData from "@/components/custom-component/EmptyData";
+import CardDefault from "@/components/custom-component/CardDefault";
 
 interface Props {
   hotelId: string;
 }
 
 export default function RoomTypeList({ hotelId }: Props) {
-  //   const columns: TableProps = [
-  //     {
-  //         title: 'Tên loại',
-  //         key: 'name',
-  //         đataIndex: 'name',
-  //     },
-  //     {
-  //         title: 'Giá',
-  //         key: 'price',
-  //         đataIndex: 'price',
-  //     },
-  //     {
-  //         title: 'Giá',
-  //         key: 'price',
-  //         đataIndex: 'price',
-  //     }
-  //   ];
-
-  // const data = RoomTypes.map((roomType: RoomType, index: number) => {
-  //   return {
-  //     key: index,
-  //     name: roomType.name,
-  //     price: roomType.price,
-  //     images: roomType.images,
-  //   };
-  // });
   const {
     data: roomTypes,
     isLoading: isRoomTypesLoading,
@@ -47,24 +23,27 @@ export default function RoomTypeList({ hotelId }: Props) {
   } = useSWR(`/api/roomTypes/hotel/${hotelId}`, axiosCustomFetcher);
 
   return (
-    <>
-      <div className="flex justify-center text-2xl font-semibold">
-        Danh sách phòng
-      </div>
-      <List>
-        {roomTypes
-          ? roomTypes.map((roomType: RoomType, index: number) => {
+    <div className={styles.room_type_list_container}>
+      <div className={styles.list_header}>Danh sách phòng</div>
+
+      <div>
+        {roomTypes ? (
+          <div className={styles.room_type_list}>
+            {roomTypes?.map((roomType: RoomType, index: number) => {
               return (
-                <List.Item key={index}>
+                <div key={index}>
                   <RoomTypeCard
                     RoomType={roomType}
                     mutate={roomTypeMutate}
                   ></RoomTypeCard>
-                </List.Item>
+                </div>
               );
-            })
-          : "Khong co"}
-      </List>
-    </>
+            })}
+          </div>
+        ) : (
+          <EmptyData></EmptyData>
+        )}
+      </div>
+    </div>
   );
 }

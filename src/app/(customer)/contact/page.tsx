@@ -1,47 +1,19 @@
 "use client";
 
-import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
-import { TextareaAutosize } from "@mui/base";
+import styles from "@/styles/customer/contact/ContactPage.module.scss";
+import { Select, TextInput, Button, Textarea } from "@mantine/core";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
-import { useReducer } from "react";
+import { useMemo, useReducer } from "react";
 import { AddressType } from "@/types/address.interface";
-import {
-  District,
-  Province,
-  Ward,
-} from "@/types/vietnamese-location-api/address";
-import { createContact } from "@/action/user.action";
-
-enum addressDispatchType {
-  SET_PROVINCE = "SET_PROVINCE",
-  SET_DISTRICT = "SET_DISTRICT",
-  SET_WARD = "SET_WARD",
-  SET_STREET = "SET_STREET",
-}
-
-function reducer(state: AddressType, action: { type: string; payload: any }) {
-  switch (action.type) {
-    case "SET_PROVINCE":
-      return { ...state, province: action.payload };
-    case "SET_DISTRICT":
-      return { ...state, district: action.payload };
-    case "SET_WARD":
-      return { ...state, ward: action.payload };
-    case "SET_STREET":
-      return { ...state, street: action.payload };
-
-    default:
-      return state;
-  }
-}
+import { DispatchType } from "@/types/vietnamese-location-api/address";
+import { reducerAddress } from "@/utils/vietnamese-address/helpers";
+import { transformAddressEntity } from "@/utils/helpers";
+import { useForm } from "@mantine/form";
+import hotelsService from "@/services/hotels.service";
+import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
+import CardDefault from "@/components/custom-component/CardDefault";
+import MantineButton from "@/components/custom-component/MantineButton";
 
 const initialInfo = { id: "", name: "" };
 
@@ -53,177 +25,259 @@ const initialAddress: AddressType = {
 };
 
 export default function ContactPage() {
-  const [address, addressDispatch] = useReducer(reducer, initialAddress);
+  const [address, addressDispatch] = useReducer(reducerAddress, initialAddress);
+  const form = useForm<{
+    hotelName: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    street: string;
+    ward: string | null;
+    district: string | null;
+    province: string | null;
+    note?: string;
+  }>({
+    mode: "uncontrolled",
+    initialValues: {
+      hotelName: "",
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      street: "",
+      ward: "",
+      district: null,
+      province: null,
+    },
+    validate: {
+      hotelName: (value) =>
+        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
+      fullName: (value) =>
+        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
+      email: (value) =>
+        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
+      phoneNumber: (value) =>
+        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
+    },
+  });
 
   const {
     data: provinces,
     error: provinces_error,
     isLoading: provinces_loading,
-  } = useSWR("https://vapi.vnappmob.com/api/province/", axiosCustomFetcher);
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+    axiosCustomFetcher
+  );
+
   const {
     data: districts,
     error: districts_error,
     isLoading: districts_loading,
   } = useSWR(
-    `https://vapi.vnappmob.com/api/province/district/${address.province.id}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
+      address.province.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
+
   const {
     data: wards,
     error: wards_error,
     isLoading: wards_loading,
   } = useSWR(
-    `https://vapi.vnappmob.com/api/province/ward/${address.district.id}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
+      address.district.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
+  const province_options = useMemo(() => {
+    return transformAddressEntity(provinces);
+  }, [provinces]);
+  const district_options = useMemo(() => {
+    return transformAddressEntity(districts);
+  }, [districts]);
+
+  const ward_options = useMemo(() => {
+    return transformAddressEntity(wards);
+  }, [wards]);
+
+  const handleWardChange = (value: string | null) => {
+    const { id, name } = JSON.parse(value as string);
+
+    addressDispatch({
+      type: DispatchType.SET_WARD,
+      payload: {
+        ward: {
+          id,
+          name,
+        },
+      },
+    });
+
+    form.setValues({
+      ward: value,
+    });
+  };
+  const handleDistrictChange = (value: string | null) => {
+    const { id, name } = JSON.parse(value as string);
+    addressDispatch({
+      type: DispatchType.SET_DISTRICT,
+      payload: {
+        district: {
+          id: id,
+          name: name,
+        },
+      },
+    });
+
+    form.setValues({
+      district: value,
+      ward: null,
+    });
+  };
+  const handleProvinceChange = (value: string | null) => {
+    if (value != null) {
+      const { id, name } = JSON.parse(value as string);
+
+      addressDispatch({
+        type: DispatchType.SET_PROVINCE,
+        payload: {
+          province: {
+            id,
+            name,
+          },
+        },
+      });
+    }
+
+    form.setValues({
+      province: value,
+      district: null,
+      ward: null,
+    });
+  };
+
+  const handleSubmit = () => {
+    const body: HotelContactCreateDto = {
+      ...form.getValues(),
+      ward: JSON.parse(form.getValues().ward as string),
+      district: JSON.parse(form.getValues().district as string),
+      province: JSON.parse(form.getValues().province as string),
+    };
+
+    console.log(body);
+
+    hotelsService.createContact(body);
+  };
   return (
-    <>
-      <form action={createContact} className="flex justify-center my-8">
-        <div className="grid justify-items-center gap-y-4">
-          <h3 className="text-2xl font-bold">Liên hệ hợp tác</h3>
-          <TextField
-            name="hotel_name"
-            label="Tên khách sạn"
-            variant="outlined"
-          ></TextField>
-          <TextField
-            name="user_fullName"
-            label="Họ tên khách hàng"
-            variant="outlined"
-          ></TextField>
-          <TextField
-            name="user_email"
-            label="Email liên hệ"
-            variant="outlined"
-          ></TextField>
-          <TextField
-            name="user_phoneNumber"
-            label="Số điện thoại"
-            variant="outlined"
-          ></TextField>
-          <div className="flex justify-center">
-            <FormControl>
-              <TextField
-                name="street"
-                label="Đường"
-                variant="filled"
-              ></TextField>
-            </FormControl>
-            <FormControl variant="filled" sx={{ mx: 1, minWidth: 240 }}>
-              <InputLabel id="select-ward">Phường/Xã</InputLabel>
-              <Select
-                name="ward"
-                label="select-ward"
-                MenuProps={{
-                  slotProps: { paper: { style: { maxHeight: 200 } } },
-                }}
-                value={JSON.stringify(address.ward)}
-                onChange={(e) =>
-                  addressDispatch({
-                    type: addressDispatchType.SET_WARD,
-                    payload: JSON.parse(e.target.value),
-                  })
-                }
-              >
-                {wards != null &&
-                  wards.results.length > 0 &&
-                  wards.results.map((ward: Ward) => {
-                    return (
-                      <MenuItem
-                        key={ward.ward_id}
-                        value={JSON.stringify({
-                          id: ward.ward_id,
-                          name: ward.ward_name,
-                        })}
-                      >
-                        {ward.ward_name}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ mx: 1, minWidth: 240 }}>
-              <InputLabel id="select-district">Quận/Huyện</InputLabel>
-              <Select
-                name="district"
-                label="select-district"
-                MenuProps={{
-                  slotProps: { paper: { style: { maxHeight: 200 } } },
-                }}
-                value={JSON.stringify(address.district)}
-                onChange={(e) =>
-                  addressDispatch({
-                    type: addressDispatchType.SET_DISTRICT,
-                    payload: JSON.parse(e.target.value),
-                  })
-                }
-              >
-                {districts != null &&
-                  districts.results.length > 0 &&
-                  districts.results.map((district: District) => {
-                    return (
-                      <MenuItem
-                        key={district.district_id}
-                        value={JSON.stringify({
-                          id: district.district_id,
-                          name: district.district_name,
-                        })}
-                      >
-                        {district.district_name}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </FormControl>
-            <FormControl variant="filled" sx={{ mx: 1, minWidth: 240 }}>
-              <InputLabel id="select-province">Tinh/Thành phố</InputLabel>
-              <Select
-                name="province"
-                value={JSON.stringify(address.province)}
-                label="select-province"
-                MenuProps={{
-                  slotProps: { paper: { style: { maxHeight: 200 } } },
-                }}
-                onChange={(e) =>
-                  addressDispatch({
-                    type: addressDispatchType.SET_PROVINCE,
-                    payload: JSON.parse(e.target.value),
-                  })
-                }
-              >
-                {provinces != null &&
-                  provinces.results.length > 0 &&
-                  provinces.results.map((province: Province) => {
-                    return (
-                      <MenuItem
-                        key={province.province_id}
-                        value={JSON.stringify({
-                          id: province.province_id,
-                          name: province.province_name,
-                        })}
-                      >
-                        {province.province_name}
-                      </MenuItem>
-                    );
-                  })}
-              </Select>
-            </FormControl>
-          </div>
-          <TextareaAutosize
-            aria-label="Lời nhắn"
-            placeholder="Lời nhắn..."
-            minRows={3}
-            style={{
-              width: "320px",
-              padding: "8px 10px",
-            }}
-          ></TextareaAutosize>
-          <Button variant="contained" type="submit">
-            Liên hệ
-          </Button>
+    <CardDefault>
+      <div className={styles.contact_form_container}>
+        <div className={styles.contact_form_heading}>
+          <span>Liên hệ hợp tác</span>
         </div>
-      </form>
-    </>
+        <form
+          onSubmit={form.onSubmit(handleSubmit)}
+          className={styles.contact_form}
+        >
+          <div className={styles.contact_form_grid}>
+            <TextInput
+              label="Tên khách sạn"
+              placeholder="Khách sạn"
+              key={form.key("hotelName")}
+              {...form.getInputProps("hotelName")}
+            ></TextInput>
+            <TextInput
+              label="Họ và tên"
+              placeholder="Tên đầy đủ"
+              key={form.key("fullName")}
+              {...form.getInputProps("fullName")}
+            ></TextInput>
+            <TextInput
+              label="Email liên hệ"
+              placeholder="Email"
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            ></TextInput>
+            <TextInput
+              label="Số điện thoại"
+              placeholder="Số điện thoại"
+              key={form.key("phoneNumber")}
+              {...form.getInputProps("phoneNumber")}
+            ></TextInput>
+            <TextInput
+              label="Đường"
+              placeholder="Đường"
+              key={form.key("street")}
+              {...form.getInputProps("street")}
+            ></TextInput>{" "}
+            <Select
+              label="Phường/Xã"
+              placeholder="Chọn Phường/Xã"
+              searchable
+              onChange={handleWardChange}
+              nothingFoundMessage="Nothing found..."
+              value={JSON.stringify(address.ward)}
+              key={form.key("ward")}
+              data={ward_options?.map(
+                (option: { name: string; value: string }) => ({
+                  label: option.name,
+                  value: JSON.stringify({
+                    id: option.value,
+                    name: option.name,
+                  }),
+                })
+              )}
+            />
+            <Select
+              label="Quận/Huyện"
+              placeholder="Chọn Quận/Huyện"
+              searchable
+              onChange={handleDistrictChange}
+              nothingFoundMessage="Nothing found..."
+              value={JSON.stringify(address.district)}
+              key={form.key("district")}
+              data={district_options?.map(
+                (option: { name: string; value: string }) => ({
+                  label: option.name,
+                  value: JSON.stringify({
+                    id: option.value,
+                    name: option.name,
+                  }),
+                })
+              )}
+            />
+            <Select
+              label="Tinh/Thành phố"
+              placeholder="Chọn tỉnh/thành phố"
+              searchable
+              onChange={handleProvinceChange}
+              data={province_options?.map(
+                (option: { name: string; value: string }) => ({
+                  label: option.name,
+                  value: JSON.stringify({
+                    id: option.value,
+                    name: option.name,
+                  }),
+                })
+              )}
+            />
+          </div>
+          <Textarea
+            label="Lời nhắn"
+            placeholder="Gửi lời nhắn..."
+            resize="vertical"
+            autosize
+            minRows={3}
+            maxRows={8}
+            key={form.key("note")}
+            {...form.getInputProps("note")}
+          ></Textarea>
+          <div className={styles.contact_form_action_button}>
+            <MantineButton type="submit">Gửi</MantineButton>
+          </div>
+        </form>
+      </div>
+    </CardDefault>
   );
 }

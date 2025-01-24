@@ -1,0 +1,80 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+$small: 300px;
+$medium: 900px;
+$gap-width: 20px;
+
+.dashboard_container {
+  display: grid;
+  gap: $gap-width;
+  justify-items: stretch;
+
+  .hotel_brief_container {
+    display: flexbox;
+
+    .hotel_brief_heading {
+      display: flex;
+      justify-content: center;
+      position: relative;
+
+      .hotel_brief_hotel_name {
+        font-size: xx-large;
+        font-weight: 800;
+      }
+
+      .dashboard_hotel_edit_button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+      }
+    }
+
+    .hotel_brief {
+      display: grid;
+      justify-items: center;
+    }
+  }
+
+  .uploaded_image_container {
+    display: grid;
+    row-gap: 18px;
+
+    .uploaded_image_heading {
+      display: flex;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .upload_button {
+      display: flex;
+      justify-content: center;
+    }
+
+    .uploaded_image {
+      display: grid;
+      gap: $gap-width;
+      grid-template-columns: repeat(auto-fit, 200px);
+      justify-content: space-evenly;
+
+      .delete_button {
+        position: absolute;
+        top: 5%;
+        right: 5%;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.main_page_form_container {
+  display: grid;
+  // grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  justify-items: center;
+
+  .submit_button {
+    display: flex;
+    justify-content: center;
+  }
+}

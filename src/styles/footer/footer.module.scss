@@ -1,0 +1,26 @@
+.footer {
+  .footer_content_container {
+    display: grid;
+    @media screen and (min-width: 700px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    justify-items: center;
+    padding: 40px 0px;
+    background-color: blanchedalmond;
+
+    .footer_content_column {
+      display: grid;
+      gap: 10px;
+    }
+  }
+
+  .footer_signature_container {
+    display: flex;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    padding: 20px 0px;
+    justify-content: center;
+    background-color: burlywood;
+  }
+}

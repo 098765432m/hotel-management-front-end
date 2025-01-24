@@ -22,14 +22,14 @@ export async function DELETE(
 
     console.log(result);
 
-    const que = await cloudinary.uploader.destroy(
+    const deletedImage = await cloudinary.uploader.destroy(
       publicId,
       (error: any, result: any) => {
         console.log(result, error);
       }
     );
 
-    console.log(que);
+    console.log(deletedImage);
   });
 
   return NextResponse.json({});

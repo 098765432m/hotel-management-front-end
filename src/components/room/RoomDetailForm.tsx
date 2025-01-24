@@ -1,5 +1,5 @@
 import { Input } from "antd";
-import Card from "../CardDefault";
+import Card from "../custom-component/CardDefault";
 
 export default function RoomDetailForm() {
   return (

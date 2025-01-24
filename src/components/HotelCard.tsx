@@ -1,10 +1,13 @@
 "use client";
+
+import styles from "@/styles/customer/hotel-card/HotelCard.module.scss";
+import { FaMapLocationDot as MapLocation } from "react-icons/fa6";
 import { Hotel } from "@/types/hotel.interface";
 import { addressToString } from "@/utils/helpers";
-import Image from "next/image";
-import Card from "./CardDefault";
-import Link from "next/link";
-import Button from "./Button";
+import CardDefault from "./custom-component/CardDefault";
+import NextLink from "./custom-component/NextLink";
+import MantineButton from "./custom-component/MantineButton";
+import NextImage from "./custom-component/NextImage";
 
 interface Props {
   hotel: Hotel;
@@ -18,40 +21,44 @@ export default function HotelCard({ hotel }: Props) {
     "/image/upload/v1";
 
   return (
-    <Card>
-      <div className="block ">
-        <div className="relative ">
-          <div className=" overflow-hidden w-[300px] h-[175px]">
-            <Image
+    <CardDefault>
+      <div className={styles.hotel_card}>
+        <div className={styles.card_image_container}>
+          {hotel.images.length > 0 ? (
+            <NextImage
               priority
-              src={
-                hotel.img_public_id != null
-                  ? `${cloudinary_path}/${hotel.img_public_id}.${hotel.img_format}`
-                  : `${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`
-              }
-              width={300}
-              height={200}
+              src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
+              fill
+              sizes="50vw"
               alt={hotel.name}
-            ></Image>
+            ></NextImage>
+          ) : (
+            <NextImage
+              priority
+              src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+              fill
+              sizes="50vw"
+              alt={hotel.name}
+            ></NextImage>
+          )}
+        </div>
+        <div className={styles.info}>
+          <div className={styles.card_info_heading}>
+            <div className={styles.card_info_hotel_name}>{hotel.name}</div>
+            <div
+              className={styles.card_info_address}
+            >{`${hotel.address.district.name}, ${hotel.address.province.name}`}</div>
           </div>
-          <div className="flex justify-between absolute bottom-0 left-0 w-full px-6 text-stone-200 text-lg font-bold">
-            <div>{hotel.address.province.name}</div>
-            {/* <div>{hotel.room_types ? hotel.room_types![0].price : 0}đ</div> */}
+          <div className={styles.card_info_main}></div>
+          <div className={styles.navigation_button}>
+            <NextLink
+              href={`/hotel/${hotel.id}?check_in_date=12-24-2024&check_out_date=12-26-2024`}
+            >
+              <MantineButton>Xem chi tiết</MantineButton>
+            </NextLink>
           </div>
         </div>
       </div>
-      <div className="mt-3 px-4 w-[300px] overflow-hidden ">
-        <div className="text-xl text-ellipsis overflow-hidden text-nowrap mb-1">
-          {hotel.name}
-        </div>
-        <div className="text-sm">{addressToString(hotel.address)}</div>
-        <div className="text-sm">Show more map</div>
-        <div className="flex justify-center mt-4">
-          <Link href={`/${hotel.id}`}>
-            <Button>Xem chi tiết</Button>
-          </Link>
-        </div>
-      </div>
-    </Card>
+    </CardDefault>
   );
 }

@@ -1,0 +1,16 @@
+.booking_control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal_form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+
+  .modal_form_container_button {
+    display: flex;
+    justify-content: center;
+  }
+}

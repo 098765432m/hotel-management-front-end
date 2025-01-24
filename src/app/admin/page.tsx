@@ -1,36 +1,35 @@
 "use client";
 
 import { Button, notification, Select } from "antd";
-import CardDefault from "@/components/CardDefault";
+import CardDefault from "@/components/custom-component/CardDefault";
 import { Form, Input } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher, axiosFetcher } from "@/lib/fetcher";
-import { useMemo, useState } from "react";
-import { District, Province } from "@/types/vietnamese-location-api/address";
+import { useEffect, useMemo, useReducer, useState } from "react";
+import {
+  ActionAddress,
+  DispatchType,
+  District,
+  initialAddress,
+  null_address,
+  Province,
+} from "@/types/vietnamese-location-api/address";
 import { FormProps, useForm } from "antd/es/form/Form";
 import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 import usersService from "@/services/users.service";
 import hotelsService from "@/services/hotels.service";
 import { HotelsDtoCreate } from "@/types/dto/hotelsCreate.dto";
 import { HotelFormCreateProps } from "@/types/dto/hotel.dto";
-
-//type of address
-interface info {
-  name: string;
-  id: string;
-}
-
-const null_address = {
-  name: "0",
-  id: "0",
-};
+import { transformAddressEntity } from "@/utils/helpers";
+import { AddressType } from "@/types/address.interface";
+import { reducerAddress } from "@/utils/vietnamese-address/helpers";
+import { boolean } from "zod";
 
 export default function AdminHome() {
   const [messageApi, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
-  const [selectedProvince, setSelectedProvince] = useState<info>(null_address);
-  const [selectedDistrict, setSelectedDistrict] = useState<info>(null_address);
-  const [selectedWard, setSelectedWard] = useState<info>(null_address);
+  const [address, addressDispatch] = useReducer(reducerAddress, initialAddress);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   //Antd
   const success = (str: string) => {
@@ -53,96 +52,88 @@ export default function AdminHome() {
     error: provinces_error,
     isLoading: provinces_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
+
   const {
     data: districts,
     error: districts_error,
     isLoading: districts_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/district/${selectedProvince.id}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
+      address.province.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
+
   const {
     data: wards,
     error: wards_error,
     isLoading: wards_loading,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/api/province/ward/${selectedDistrict.id}`,
+    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
+      address.district.id as string
+    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
   const province_options = useMemo(() => {
-    return provinces?.results
-      .sort((a: Province, b: Province) =>
-        a.province_name.localeCompare(b.province_name)
-      )
-      .map((province: Province) => ({
-        name: province.province_name,
-        value: province.province_id,
-      }));
+    return transformAddressEntity(provinces);
   }, [provinces]);
 
   const district_options = useMemo(() => {
-    return districts?.results
-      .sort((a: District, b: District) =>
-        a.district_name.localeCompare(b.district_name)
-      )
-      .map((district: District) => ({
-        name: district.district_name,
-        value: district.district_id,
-      }));
+    return transformAddressEntity(districts);
   }, [districts]);
 
   const ward_options = useMemo(() => {
-    return districts?.results
-      .sort((a: District, b: District) =>
-        a.district_name.localeCompare(b.district_name)
-      )
-      .map((district: District) => ({
-        name: district.district_name,
-        value: district.district_id,
-      }));
+    return transformAddressEntity(wards);
   }, [wards]);
 
   // Handle Province Change
   const handleProvinceChange = (value: any) => {
     const [name, id] = JSON.parse(value);
 
-    setSelectedProvince({
-      name: name,
-      id: id,
+    addressDispatch({
+      type: DispatchType.SET_PROVINCE,
+      payload: {
+        province: {
+          name: name,
+          id: id,
+        },
+      },
     });
 
-    //set lại giá trị District và select
-    setSelectedDistrict(null_address);
+    // set lại giá trị District và select
     form.setFieldsValue({ district: null_address });
 
     //set lại giá trị Ward và select
-    setSelectedWard(null_address);
     form.setFieldsValue({ ward: null_address });
   };
 
   // Handle District Change
   const handleDistrictChange = (value: any) => {
     const [name, id] = JSON.parse(value);
-    setSelectedDistrict({
-      name: name,
-      id: id,
+    addressDispatch({
+      type: DispatchType.SET_DISTRICT,
+      payload: {
+        district: {
+          name: name,
+          id: id,
+        },
+      },
     });
 
     //set lại giá trị Ward và select
-    setSelectedWard(null_address);
     form.setFieldsValue({ ward: null_address });
   };
 
   // Handle Ward Change
   const handleWardChange = (value: any) => {
     const [name, id] = JSON.parse(value);
-    setSelectedWard({
-      name: name,
-      id: id,
+    addressDispatch({
+      type: DispatchType.SET_WARD,
+      payload: { ward: { name: name, id: id } },
     });
   };
 
@@ -178,9 +169,9 @@ export default function AdminHome() {
             name: values.name,
             address: {
               street: values.street,
-              ward: selectedWard,
-              district: selectedDistrict,
-              province: selectedProvince,
+              ward: address.ward,
+              district: address.district,
+              province: address.province,
             },
           });
           success("Khách sạn");
@@ -200,13 +191,19 @@ export default function AdminHome() {
 
   //Handle Create Hotel end
 
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <>Loading ...</>;
+
   return (
     <div>
       {contextHolder}
       <CardDefault>
         <div className="space-y-6">
           <div className="flex justify-between items-center px-8">
-            <div className="text-2xl font-semibold">Admin Page</div>
+            <div className="text-2xl font-semibold">Quản trị</div>
           </div>
           <div className="flex">
             <div className="w-1/2">
@@ -316,7 +313,7 @@ export default function AdminHome() {
                   <Select
                     placeholder="Chọn Xã/Phường"
                     onChange={handleWardChange}
-                    value={selectedWard}
+                    value={address.ward}
                   >
                     <Select.Option value={"0"}>Chọn Xã/Phường</Select.Option>
                     {ward_options &&
@@ -334,7 +331,7 @@ export default function AdminHome() {
                   <Select
                     placeholder="Chọn Quận/Huyện"
                     onChange={handleDistrictChange}
-                    value={selectedDistrict}
+                    value={address.district}
                   >
                     <Select.Option value={"0"}>Chọn Quận/Huyện</Select.Option>
                     {district_options &&
@@ -352,8 +349,7 @@ export default function AdminHome() {
                   <Select
                     placeholder="Chọn Tỉnh/Thành phố"
                     onChange={handleProvinceChange}
-                    value={selectedProvince}
-                    // options={province_options}
+                    value={address.province}
                   >
                     <Select.Option value={["0", "0"]}>
                       Chọn Tỉnh/Thành phố
@@ -362,7 +358,10 @@ export default function AdminHome() {
                       province_options.map((option: any) => (
                         <Select.Option
                           key={option.value}
-                          value={JSON.stringify([option.name, option.value])}
+                          value={
+                            JSON.stringify([option.name, option.value])
+                            // option.value
+                          }
                         >
                           {option.name}
                         </Select.Option>
