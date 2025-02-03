@@ -7,8 +7,8 @@ import { cookies } from "next/headers";
 
 export default async function RoomTypePage() {
   const loginInfoString = cookies().get("login")?.value;
-  const loginInfo = await decrypt(loginInfoString);
-  const { hotelId } = loginInfo as SessionPayload;
+  const loginInfo = (await decrypt(loginInfoString)) as SessionPayload;
+  // const { hotelId } = loginInfo as SessionPayload;
 
   // const RoomTypes: RoomType[] = await roomTypesServices.getAllByHotel(hotelId);
   return (
@@ -18,7 +18,7 @@ export default async function RoomTypePage() {
       </CardDefault>
 
       <CardDefault>
-        <RoomTypeList hotelId={hotelId as string}></RoomTypeList>
+        <RoomTypeList hotelId={loginInfo.hotelId as string}></RoomTypeList>
       </CardDefault>
     </div>
   );

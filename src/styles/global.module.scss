@@ -26,16 +26,30 @@ $section-spacing: 20px;
   border: 2px solid purple;
 }
 
-#layout {
+#guest_layout {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
   min-height: 100dvh;
-  #main_layout {
+  .main_layout {
     display: grid;
     align-items: center;
     padding: 1.5rem $main-padding;
     background-color: #f5f5f4;
+  }
+}
+
+#dashboard_layout {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+  column-gap: 20px;
+  // grid-template-rows: auto 1fr auto;
+  // min-height: 100dvh;
+  .main_layout {
+    display: grid;
+    align-items: center;
+    // padding: 1.5rem $main-padding;
+    // background-color: #f5f5f4;
   }
 }
 

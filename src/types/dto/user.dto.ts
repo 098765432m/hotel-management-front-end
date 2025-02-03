@@ -16,6 +16,10 @@ interface UserGetResponseDto {
   phoneNumber: string;
   role: string;
   hotelId?: string;
+  image?: {
+    public_id: string;
+    format: string;
+  };
 }
 
 interface UserUpdateResponse {

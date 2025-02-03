@@ -24,6 +24,7 @@ import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
 import Footer from "@/components/footer/Footer";
+import DashboardHeader from "@/components/header/dashboard/DashboardHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,15 +57,24 @@ export default async function RootLayout({
           >
             <ReduxProvider authInfo={authInfo}>
               <MantineProvider>
-                <div id={styles.layout}>
-                  <header>
-                    <Header></Header>
-                  </header>
-                  <main id={styles.main_layout}>{children}</main>
-                  <footer>
-                    <Footer></Footer>
-                  </footer>
-                </div>
+                {authInfo && authInfo?.role !== "GUEST" ? (
+                  <div id={styles.dashboard_layout}>
+                    <header>
+                      <DashboardHeader></DashboardHeader>
+                    </header>
+                    <main className={styles.main_layout}>{children}</main>
+                  </div>
+                ) : (
+                  <div id={styles.guest_layout}>
+                    <header>
+                      <Header></Header>
+                    </header>
+                    <main className={styles.main_layout}>{children}</main>
+                    <footer>
+                      <Footer></Footer>
+                    </footer>
+                  </div>
+                )}
               </MantineProvider>
             </ReduxProvider>
           </ConfigProvider>

@@ -1,0 +1,22 @@
+.dashboard_header_container {
+  min-height: 100dvh;
+  display: grid;
+  align-content: start;
+  justify-items: stretch;
+  row-gap: 20px;
+  padding: 0px 20px;
+  background-color: #f5f5f5;
+
+  .header_staff_info {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+
+    padding: 40px 0px;
+  }
+
+  .header_hotel_management_menu {
+    display: grid;
+    row-gap: 20px;
+  }
+}
