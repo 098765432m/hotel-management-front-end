@@ -14,6 +14,8 @@ import hotelsService from "@/services/hotels.service";
 import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
+import { message } from "antd";
+import { AxiosError } from "axios";
 
 const initialInfo = { id: "", name: "" };
 
@@ -26,6 +28,20 @@ const initialAddress: AddressType = {
 
 export default function ContactPage() {
   const [address, addressDispatch] = useReducer(reducerAddress, initialAddress);
+  const [messageApi, contextHolder] = message.useMessage();
+  const contactSuccess = () => {
+    messageApi.open({
+      type: "success",
+      content: "Tạo khách sạn thành công!",
+    });
+  };
+  const contactError = (message: string) => {
+    messageApi.open({
+      type: "error",
+      content: `${message}`,
+    });
+  };
+
   const form = useForm<{
     hotelName: string;
     fullName: string;
@@ -158,27 +174,37 @@ export default function ContactPage() {
     });
   };
 
-  const handleSubmit = () => {
-    const body: HotelContactCreateDto = {
-      // ...form.getValues(),
-      hotel_name: form.getValues().hotelName,
-      full_name: form.getValues().fullName,
-      phone_number: form.getValues().phoneNumber,
-      email: form.getValues().email,
-      note: form.getValues().note,
-      street: form.getValues().street,
+  const handleSubmit = async () => {
+    try {
+      const body: HotelContactCreateDto = {
+        // ...form.getValues(),
+        hotel_name: form.getValues().hotelName,
+        full_name: form.getValues().fullName,
+        phone_number: form.getValues().phoneNumber,
+        email: form.getValues().email,
+        note: form.getValues().note,
+        street: form.getValues().street,
 
-      ward: JSON.parse(form.getValues().ward as string),
-      district: JSON.parse(form.getValues().district as string),
-      province: JSON.parse(form.getValues().province as string),
-    };
+        ward: JSON.parse(form.getValues().ward as string),
+        district: JSON.parse(form.getValues().district as string),
+        province: JSON.parse(form.getValues().province as string),
+      };
 
-    console.log(body);
+      console.log(body);
 
-    hotelsService.createContact(body);
+      await hotelsService.createContact(body);
+      contactSuccess();
+    } catch (error) {
+      console.log(error);
+
+      if (error instanceof AxiosError) {
+        contactError(error.response!.data.message);
+      }
+    }
   };
   return (
     <CardDefault>
+      {contextHolder}
       <div className={styles.contact_form_container}>
         <div className={styles.contact_form_heading}>
           <span>Liên hệ hợp tác</span>
