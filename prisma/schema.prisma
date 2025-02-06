@@ -31,11 +31,11 @@ model User {
   id                String     @id @unique
   username          String     @unique
   password          String
-  fullName          String     
+  full_name          String     
   email             String     @unique
-  phoneNumber       String     
+  phone_number       String     
   role              Role       @default(GUEST)
-  isActive          Boolean    @default(false)
+  is_active          Boolean    @default(false)
 
   //Booking
   booking           Booking[]
@@ -72,10 +72,10 @@ model Hotel {
   average_rating        Float     @default(0)
 
   //Room
-  rooms                 Room[]  //One to Many
+  rooms                 Room[]
 
   //Room_Type
-  room_types            RoomTypes[]
+  room_types            RoomType[]
 
   //List of users who work in this hotel
   staffs                User[]
@@ -98,7 +98,7 @@ model Room {
 
   //Room Type
   room_type_id    String
-  room_type       RoomTypes     @relation(fields: [room_type_id], references: [id])
+  room_type       RoomType     @relation(fields: [room_type_id], references: [id])
 
   //Booking
   booking         Booking[]
@@ -121,12 +121,12 @@ model Booking {
   user              User?           @relation(fields: [user_id], references: [id])
 
   //Guest with no account
-  fullName          String?
-  phoneNumber       String?  // Sửa thành snake_case       
+  full_name         String?
+  phone_number      String?     
   email             String?         
 }
 
-model RoomTypes { // Bỏ số nhiều
+model RoomType {
   id                String    @default(cuid()) @id @unique
   name              String    
   price             Int       @default(0)
@@ -144,6 +144,19 @@ model RoomTypes { // Bỏ số nhiều
   @@unique([hotel_id, name])
 }
 
+model Bill {
+  id                String    @default(cuid()) @id @unique
+  total_price       Int
+  check_in_date     DateTime
+  check_out_date    DateTime
+  guest_name        String
+  guest_phone       String
+  hotel_name        String
+  room_type_name    String
+  room_name         String
+  staff_billed_name String
+  date_billed       DateTime
+}
 
 model Image {
   id                String        @id @unique @default(cuid())
@@ -160,5 +173,5 @@ model Image {
 
   //one-to-many
   room_type_id      String?
-  room_type         RoomTypes?     @relation("RoomTypeImages", fields: [room_type_id], references: [id], onDelete: Restrict)
+  room_type         RoomType?     @relation("RoomTypeImages", fields: [room_type_id], references: [id], onDelete: Restrict)
 }

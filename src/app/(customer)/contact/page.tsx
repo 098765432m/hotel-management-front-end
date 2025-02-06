@@ -160,7 +160,14 @@ export default function ContactPage() {
 
   const handleSubmit = () => {
     const body: HotelContactCreateDto = {
-      ...form.getValues(),
+      // ...form.getValues(),
+      hotel_name: form.getValues().hotelName,
+      full_name: form.getValues().fullName,
+      phone_number: form.getValues().phoneNumber,
+      email: form.getValues().email,
+      note: form.getValues().note,
+      street: form.getValues().street,
+
       ward: JSON.parse(form.getValues().ward as string),
       district: JSON.parse(form.getValues().district as string),
       province: JSON.parse(form.getValues().province as string),

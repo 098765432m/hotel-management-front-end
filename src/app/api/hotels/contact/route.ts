@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const result = prisma.$transaction(async (prisma) => {
     const newHotel = await prisma.hotel.create({
       data: {
-        name: body.hotelName,
+        name: body.hotel_name,
         address: {
           street: body.street,
           ward: body.ward,
@@ -25,12 +25,13 @@ export async function POST(request: Request) {
 
     const newUser = await prisma.user.create({
       data: {
+        ...body,
         id: uid.rnd(),
         username: body.email,
         password: await hashedPassword("113446"),
         email: body.email,
-        fullName: body.fullName,
-        phoneNumber: body.phoneNumber,
+        full_name: body.full_name,
+        phone_number: body.phone_number,
         role: "MANAGER",
 
         hotel_id: newHotel.id,

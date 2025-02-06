@@ -5,7 +5,7 @@ export async function GET(
   request: Request,
   { params }: { params: { hotelId: string } }
 ) {
-  const roomTypes = await prisma.roomTypes.findMany({
+  const roomTypes = await prisma.roomType.findMany({
     where: {
       hotel_id: params.hotelId,
     },

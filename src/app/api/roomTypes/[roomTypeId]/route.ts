@@ -9,7 +9,7 @@ export async function PUT(
   const body: RoomType = await request.json();
 
   const [updatedRoomType, images] = await prisma.$transaction([
-    prisma.roomTypes.update({
+    prisma.roomType.update({
       where: { id: params.roomTypeId },
       data: {
         name: body.name,

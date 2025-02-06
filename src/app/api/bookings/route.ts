@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       // 1. Check on all Room Type customer booking
       for (const bookingType of data.booking_type_list) {
         const roomTypeName = bookingType[0] as string;
-        const roomType = await tx.roomTypes.findUnique({
+        const roomType = await tx.roomType.findUnique({
           where: {
             hotel_id_name: {
               name: roomTypeName,

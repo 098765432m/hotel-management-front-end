@@ -3,11 +3,11 @@ import { Role } from "@prisma/client";
 export interface UserCreateDto {
   username: string;
   password?: string;
-  fullName: string;
+  full_name: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
   role?: Role;
-  isActive?: boolean;
+  is_active?: boolean;
 
   hotel_id?: string | undefined;
 }

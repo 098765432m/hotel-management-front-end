@@ -15,14 +15,15 @@ export async function POST(request: Request) {
 
   const result = await prisma.user.create({
     data: {
+      ...body,
       id: uid.rnd(),
-      username: body.username,
+      // username: body.username,
       password: body.password,
-      fullName: body.fullName,
-      email: body.email,
-      phoneNumber: body.phoneNumber,
-      role: body.role,
-      hotel_id: body.hotel_id,
+      // fullName: body.fullName,
+      // email: body.email,
+      // phoneNumber: body.phoneNumber,
+      // role: body.role,
+      // hotel_id: body.hotel_id,
     },
   });
 

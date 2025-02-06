@@ -221,13 +221,13 @@ export default function AdminHome() {
                 <Form.Item label="Mật khẩu" name="password">
                   <Input type="password"></Input>
                 </Form.Item>
-                <Form.Item label="Họ và tên" name="fullName">
+                <Form.Item label="Họ và tên" name="full_name">
                   <Input></Input>
                 </Form.Item>
                 <Form.Item label="Địa chỉ Email" name="email">
                   <Input></Input>
                 </Form.Item>
-                <Form.Item label="So dien thoai" name="phoneNumber">
+                <Form.Item label="So dien thoai" name="phone_number">
                   <Input></Input>
                 </Form.Item>
                 <Form.Item label="Vai trò" name="role" initialValue={"GUEST"}>

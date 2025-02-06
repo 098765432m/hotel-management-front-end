@@ -15,11 +15,5 @@ export async function POST(request: Request) {
     process.env.CLOUDINARY_API_SECRET as string
   );
 
-  // try {
-  //   const updaloadResponse = await cloudinary.uploader.upload(im)
-  // } catch (error) {
-
-  // }
-
   return Response.json({ signature });
 }

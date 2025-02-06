@@ -21,10 +21,10 @@ interface HotelCreateDto {
 }
 
 interface HotelContactCreateDto extends AddressType {
-  hotelName: string;
-  fullName: string;
+  hotel_name: string;
+  full_name: string;
   email: string;
-  phoneNumber: string;
+  phone_number: string;
   note?: string;
 }
 

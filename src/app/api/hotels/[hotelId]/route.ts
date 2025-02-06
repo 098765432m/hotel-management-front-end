@@ -48,16 +48,5 @@ export async function PUT(
     },
   });
 
-  // const newImages =
-  //   body.images.length > 0
-  //     ? await prisma.image.createMany({
-  //         data: body.images.map((image) => ({
-  //           public_id: image.public_id,
-  //           format: image.format,
-  //           hotel_id: params.hotelId,
-  //         })),
-  //       })
-  //     : null;
-
   return NextResponse.json(newHotel);
 }
