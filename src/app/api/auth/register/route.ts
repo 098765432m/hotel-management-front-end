@@ -4,30 +4,28 @@ import { UserCreateDto } from "@/types/dto/usersCreate.dto";
 import { prisma } from "@/lib/client";
 import { NextResponse } from "next/server";
 import ShortUniqueId from "short-unique-id";
+import { handleNextApiError } from "@/lib/error-handler/errorHandler";
 
 export async function POST(request: Request) {
-  const uid = new ShortUniqueId({ length: 6 });
-  const body: UserCreateDto = await request.json();
+  try {
+    const uid = new ShortUniqueId({ length: 6 });
+    const body: UserCreateDto = await request.json();
+    console.log(body);
 
-  //Hashed Password
-  body.password = await hashedPassword(body.password!);
-  console.log("Hashed password: " + body.password);
+    //Hashed Password
+    body.password = await hashedPassword(body.password!);
+    console.log("Hashed password: " + body.password);
 
-  const result = await prisma.user.create({
-    data: {
-      ...body,
-      id: uid.rnd(),
-      // username: body.username,
-      password: body.password,
-      // fullName: body.fullName,
-      // email: body.email,
-      // phoneNumber: body.phoneNumber,
-      // role: body.role,
-      // hotel_id: body.hotel_id,
-    },
-  });
+    const result = await prisma.user.create({
+      data: {
+        ...body,
+        id: uid.rnd(),
+        password: body.password,
+      },
+    });
 
-  console.log(result);
-
-  return NextResponse.json(result);
+    return NextResponse.json(result);
+  } catch (error) {
+    return handleNextApiError(error);
+  }
 }

@@ -27,9 +27,9 @@ class AuthService {
     const result = await this.api.post(`/register`, {
       username: username,
       password: password,
-      fullName: fullName,
+      full_name: fullName,
       email: email,
-      phoneNumber: phoneNumber,
+      phone_number: phoneNumber,
     });
     return result.data;
   }

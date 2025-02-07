@@ -18,13 +18,14 @@
     row-gap: 20px;
 
     .login_link {
+      display: flex;
+      justify-content: right;
       margin-top: 3px;
       font-size: 10px;
       font-style: italic;
       text-decoration: underline;
       font-weight: 700;
       opacity: 40%;
-      float: right;
     }
 
     .register_form_control {

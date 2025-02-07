@@ -2,21 +2,15 @@
 
 import styles from "@/styles/auth/register.module.scss";
 import authService from "@/services/auth.service";
-import {
-  Button,
-  TextField,
-  Snackbar,
-  Alert,
-  SnackbarCloseReason,
-} from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import Link from "next/link";
 import CardDefault from "@/components/custom-component/CardDefault";
-import { PasswordInput, TextInput } from "@mantine/core";
+import { Box, LoadingOverlay, PasswordInput, TextInput } from "@mantine/core";
 import NextLink from "@/components/custom-component/NextLink";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { useForm } from "@mantine/form";
+import { useState } from "react";
+import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
+import { AxiosError } from "axios";
 
 interface RegisterForm {
   username: string;
@@ -28,33 +22,80 @@ interface RegisterForm {
 }
 
 export default function RegisterPage() {
+  const [registerStatus, setRegisterStatus] = useState<null | {
+    status: "LOADING" | "ERROR" | "SUCCESS";
+    message: string;
+  }>(null);
+
   const form = useForm<RegisterForm>({
     mode: "uncontrolled",
+    initialValues: {
+      username: "",
+      password: "",
+      checkedPassword: "",
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+    },
+    validate: {
+      username: (value) =>
+        value.length < 6 ? "Tên đăng nhập phải có ít nhất 6 ký tự" : null,
+      password: (value) =>
+        value.length < 6 ? "Mật khẩu phải có ít nhất 6 ký tự" : null,
+      checkedPassword: (value) =>
+        value.length < 6 ? "Mật khẩu phải có ít nhất 6 ký tự" : null,
+      fullName: (value) =>
+        value.length < 6 ? "Họ và tên phải có ít nhất 6 ký tự" : null,
+      email: (value) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/;
+        if (!emailRegex.test(value)) return "Email không hợp lệ";
+      },
+      phoneNumber: (value) => {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(value)) {
+          return "Số điện thoại không hợp lệ";
+        }
+      },
+    },
   });
   const router = useRouter();
 
   // Xử lý submit của form
   const handleSubmit = async (body: RegisterForm) => {
     // Đăng ký tài khoản GUEST mới và chuyển trang
+    console.log(body);
 
-    if (body.password === body.checkedPassword) {
-      await authService.register(
-        body.username,
-        body.password,
-        body.fullName,
-        body.email,
-        body.phoneNumber
-      );
-      router.push("/login");
-    } else {
-      alert("Mật khẩu không đúng");
+    try {
+      // setRegisterStatus({ status: "LOADING", message: "" });
+      if (body.password === body.checkedPassword) {
+        await authService.register(
+          body.username,
+          body.password,
+          body.fullName,
+          body.email,
+          body.phoneNumber
+        );
+        setRegisterStatus(null);
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error(error);
+      setRegisterStatus(null);
+      if (error instanceof AxiosError)
+        setRegisterStatus({
+          status: "ERROR",
+          message: error.response!.data.message,
+        });
     }
   };
 
   return (
-    <>
-      <div className={styles.register_form_container}>
-        <CardDefault>
+    <div className={styles.register_form_container}>
+      <CardDefault>
+        <Box pos={"relative"}>
+          <LoadingOverlay
+            visible={registerStatus?.status === "LOADING"}
+          ></LoadingOverlay>
           <div className={styles.register_form_heading}>Đăng ký</div>
           <form
             className={styles.register_form}
@@ -109,13 +150,18 @@ export default function RegisterPage() {
               <div className={styles.login_link}>
                 <NextLink href={`/login`}>Đã có tài khoản?</NextLink>
               </div>
+              {registerStatus?.status === "ERROR" && (
+                <ErrorCustomNotify
+                  message={registerStatus.message}
+                ></ErrorCustomNotify>
+              )}
             </div>
             <div className={styles.register_form_control}>
               <MantineButton type="submit">Đăng ký</MantineButton>
             </div>
           </form>
-        </CardDefault>
-      </div>
-    </>
+        </Box>
+      </CardDefault>
+    </div>
   );
 }

@@ -2,9 +2,8 @@
 
 import styles from "@/styles/auth/login.module.scss";
 import authService from "@/services/auth.service";
-import { Button, TextField } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
+import { useReducer, useRef, useState } from "react";
 import Link from "next/link";
 import React from "react";
 import { UserCookieResponse } from "@/types/dto/user.dto";
@@ -14,13 +13,32 @@ import { AppDispatch } from "@/state/store";
 import { logIn } from "@/state/user/authSlice";
 import CardDefault from "@/components/custom-component/CardDefault";
 import { Form, useForm } from "@mantine/form";
-import { PasswordInput, TextInput } from "@mantine/core";
+import { Box, LoadingOverlay, PasswordInput, TextInput } from "@mantine/core";
 import MantineButton from "@/components/custom-component/MantineButton";
 import NextLink from "@/components/custom-component/NextLink";
+import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
+import SuccessCustomNotify from "@/components/custom-component/notification/SuccessCustomNotify";
+import { ValidationError } from "@/lib/error-handler/errors";
+import { message } from "antd";
+import { AxiosError } from "axios";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [loginStatus, setLoginStatus] = useState<null | {
+    status: "LOADING" | "ERROR";
+    message: string;
+  }>(null);
   const form = useForm({
     mode: "uncontrolled",
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validate: {
+      username: (value) =>
+        value.length < 5 ? "Tên đăng nhập không hợp lệ!" : null,
+      password: (value) => (value.length < 5 ? "Mật khẩu không hợp lệ!" : null),
+    },
   });
   // Global Dispatch START
 
@@ -28,73 +46,91 @@ export default function LoginPage() {
 
   // Global Dispatch END
 
-  const router = useRouter();
-
-  // Giá trị của form input
-  const usernameRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
   // Xử lý Submit của Form
   const handleSubmit = async (username: string, password: string) => {
-    const user: UserCookieResponse | null = await authService.login(
-      username,
-      password
-    ); //Get user info
+    // form.validate();
+    try {
+      setLoginStatus({ status: "LOADING", message: "" });
+      const user: UserCookieResponse | null = await authService.login(
+        username,
+        password
+      ); //Get user info
+      setLoginStatus(null);
 
-    if (user != null) {
-      dispatch(logIn(user));
+      if (user != null) {
+        dispatch(logIn(user));
 
-      // Redirect User by Role
-      switch (user.role) {
-        case roleEnum.ADMIN:
-          router.push("/admin");
-          break;
-        case roleEnum.MANAGER || roleEnum.STAFF:
-          router.push("/dashboard");
-          break;
-        case roleEnum.GUEST:
-          router.push("/");
-          break;
+        // Chuyển hướng trang tùy theo role
+        switch (user.role) {
+          case roleEnum.ADMIN:
+            router.push("/admin");
+            break;
+          case roleEnum.MANAGER || roleEnum.STAFF:
+            router.push("/dashboard");
+            break;
+          case roleEnum.GUEST:
+            router.push("/");
+            break;
 
-        default:
-          break;
+          default:
+            break;
+        }
+      }
+    } catch (error) {
+      setLoginStatus({ status: "ERROR", message: "Đã có lỗi xảy ra" });
+      if (error instanceof AxiosError) {
+        setLoginStatus({
+          status: "ERROR",
+          message: error.response!.data.message,
+        });
       }
     }
   };
-
   return (
     <div className={styles.login_form_container}>
       <CardDefault>
-        <div className={styles.login_form_heading}>Đăng nhập</div>
-        <form
-          className={styles.login_form}
-          onSubmit={form.onSubmit((values) =>
-            handleSubmit(values.username, values.password)
-          )}
-        >
-          <TextInput
-            withAsterisk
-            label="Tên đăng nhập"
-            placeholder="Tên đăng nhập"
-            key={form.key("username")}
-            {...form.getInputProps("username")}
-          ></TextInput>
-          <div>
-            <PasswordInput
+        <Box pos={"relative"}>
+          <LoadingOverlay
+            visible={loginStatus?.status === "LOADING"}
+          ></LoadingOverlay>
+          <div className={styles.login_form_heading}>Đăng nhập</div>
+          <form
+            className={styles.login_form}
+            onSubmit={form.onSubmit((values) =>
+              handleSubmit(values.username, values.password)
+            )}
+          >
+            <TextInput
               withAsterisk
-              label="Mật khẩu"
-              placeholder="Mật khẩu"
-              key={form.key("password")}
-              {...form.getInputProps("password")}
-            ></PasswordInput>
-            <div className={styles.register_link}>
-              <NextLink href={`/register`}>Chưa có tài khoản</NextLink>
+              label="Tên đăng nhập"
+              placeholder="Tên đăng nhập"
+              key={form.key("username")}
+              {...form.getInputProps("username")}
+            ></TextInput>
+            <div>
+              <PasswordInput
+                withAsterisk
+                label="Mật khẩu"
+                placeholder="Mật khẩu"
+                key={form.key("password")}
+                {...form.getInputProps("password")}
+              ></PasswordInput>
+              <div className={styles.register_link}>
+                <NextLink href={`/register`}>Chưa có tài khoản</NextLink>
+              </div>
+
+              {/* Báo lỗi cho khách hàng */}
+              {loginStatus?.status === "ERROR" && (
+                <ErrorCustomNotify
+                  message={loginStatus.message}
+                ></ErrorCustomNotify>
+              )}
             </div>
-          </div>
-          <div className={styles.login_form_control}>
-            <MantineButton type="submit">Đăng nhập</MantineButton>
-          </div>
-        </form>
+            <div className={styles.login_form_control}>
+              <MantineButton type="submit">Đăng nhập</MantineButton>
+            </div>
+          </form>
+        </Box>
       </CardDefault>
     </div>
   );
