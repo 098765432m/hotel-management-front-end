@@ -1,13 +1,17 @@
 import { hashedPassword } from "@/lib/auth";
 import { prisma } from "@/lib/client";
+import { handleNextApiError } from "@/lib/error-handler/errorHandler";
+import { ValidationError } from "@/lib/error-handler/errors";
 import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
 import { Prisma } from "@prisma/client";
 import { message } from "antd";
+import { time, timeEnd } from "console";
 import { NextResponse } from "next/server";
 import ShortUniqueId from "short-unique-id";
 
 export async function POST(request: Request) {
   try {
+    time("error handling");
     const body: HotelContactCreateDto = await request.json();
 
     const result = await prisma.$transaction(async (prisma) => {
@@ -44,19 +48,11 @@ export async function POST(request: Request) {
   } catch (error) {
     console.log(error);
 
-    if (error instanceof Error)
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Tên đăng nhập, email, hoặc số điện thoại đã bị trùng",
-        },
-        { status: 401 }
-      );
-    return NextResponse.json(
-      { success: false, message: "Lỗi hệ thống" },
-      { status: 500 }
-    );
+    timeEnd("error handling");
+    return handleNextApiError(error);
   }
+
+  timeEnd("error handling");
 
   return NextResponse.json({ success: true }, { status: 201 });
 }

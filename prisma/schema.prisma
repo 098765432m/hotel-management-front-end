@@ -66,7 +66,7 @@ model Rating {
 
 model Hotel {
   id                    String    @default(cuid()) @id @unique
-  name                  String    
+  name                  String    @unique
   address               Json
   description           String?
   average_rating        Float     @default(0)
