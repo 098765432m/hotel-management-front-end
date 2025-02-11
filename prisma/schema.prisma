@@ -61,7 +61,7 @@ model Rating {
   hotel                 Hotel     @relation("HotelRatings",fields: [hotel_id], references: [id], onDelete: Cascade) // Delete Rating on Hotel has been removed
 
   guest_id              String
-  guest                 User      @relation("UserRatings", fields: [guest_id], references: [id], onDelete: Cascade) // Delete Rating on Geust account has been deleted
+  guest                 User      @relation("UserRatings", fields: [guest_id], references: [id], onDelete: Cascade) // Delete Rating on Guest account has been deleted
 }
 
 model Hotel {

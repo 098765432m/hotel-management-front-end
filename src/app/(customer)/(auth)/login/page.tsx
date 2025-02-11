@@ -3,8 +3,7 @@
 import styles from "@/styles/auth/login.module.scss";
 import authService from "@/services/auth.service";
 import { useRouter } from "next/navigation";
-import { useReducer, useRef, useState } from "react";
-import Link from "next/link";
+import { useState } from "react";
 import React from "react";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { roleEnum } from "@/types/enum/role.enum";
@@ -12,14 +11,11 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/state/store";
 import { logIn } from "@/state/user/authSlice";
 import CardDefault from "@/components/custom-component/CardDefault";
-import { Form, useForm } from "@mantine/form";
+import { useForm } from "@mantine/form";
 import { Box, LoadingOverlay, PasswordInput, TextInput } from "@mantine/core";
 import MantineButton from "@/components/custom-component/MantineButton";
 import NextLink from "@/components/custom-component/NextLink";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
-import SuccessCustomNotify from "@/components/custom-component/notification/SuccessCustomNotify";
-import { ValidationError } from "@/lib/error-handler/errors";
-import { message } from "antd";
 import { AxiosError } from "axios";
 
 export default function LoginPage() {

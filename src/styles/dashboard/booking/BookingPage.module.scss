@@ -1,0 +1,12 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.booking_page_container {
+  display: grid;
+  row-gap: global-scss.$section-spacing;
+
+  .booking_table_container {
+    .booking_table_heading {
+      @include global-scss.heading-text;
+    }
+  }
+}

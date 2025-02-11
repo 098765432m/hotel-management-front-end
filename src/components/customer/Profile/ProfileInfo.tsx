@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/styles/customer/profile/ProfilePage.module.scss";
-import { updateAccount } from "@/action/user.action";
+import { updateAccount } from "@/lib/action/user.action";
 import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
 import EmptyData from "@/components/custom-component/EmptyData";

@@ -69,10 +69,21 @@ export default function ContactPage() {
         value.length <= 0 ? "Tên khách sạn không thể trống" : null,
       fullName: (value) =>
         value.length <= 0 ? "Tên khách sạn không thể trống" : null,
-      email: (value) =>
-        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
-      phoneNumber: (value) =>
-        value.length <= 0 ? "Tên khách sạn không thể trống" : null,
+      email: (value) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-z]{2,6}$/;
+        if (!emailRegex.test(value)) return "Email không hợp lệ";
+      },
+      phoneNumber: (value) => {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(value)) {
+          return "Số điện thoại không hợp lệ";
+        }
+      },
+      street: (value) => value.length <= 0 && "Đường không thể trống",
+      // *** Validate address
+      // ward: (value) => value == null && "Phường/Xã không thể trống",
+      // district: (value) => value == null && "Quận/Huyện không thể trống",
+      // province: (value) => !value && "Tỉnh/Thành phố không thể trống",
     },
   });
 

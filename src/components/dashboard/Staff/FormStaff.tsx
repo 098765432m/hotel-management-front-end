@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
-import { createDashboardUser } from "@/action/user.action";
+import { createDashboardUser } from "@/lib/action/user.action";
 import CardDefault from "@/components/custom-component/CardDefault";
 // import { AuthContext } from "@/context/AuthContext";
 import usersService from "@/services/users.service";
@@ -26,9 +26,9 @@ export default function FormStaff() {
   const onFinish: FormProps<FieldType>["onFinish"] = async (value) => {
     await usersService.CreateOne({
       username: value.username_add,
-      fullName: value.fullName_add,
+      full_name: value.fullName_add,
       email: value.email_add,
-      phoneNumber: value.phoneNumber_add,
+      phone_number: value.phoneNumber_add,
       role: value.role_add,
       hotel_id: authStore.authInfo?.hotelId as string,
     });

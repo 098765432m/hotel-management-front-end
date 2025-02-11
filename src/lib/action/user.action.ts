@@ -2,8 +2,6 @@
 
 import { hashedPassword } from "@/lib/auth";
 import { prisma } from "@/lib/client";
-import { UserUpdateResponse } from "@/types/dto/user.dto";
-import { roleEnum } from "@/types/enum/role.enum";
 import ShortUniqueId from "short-unique-id";
 
 interface DetailInfo {
@@ -71,9 +69,9 @@ export async function createContact(formData: FormData) {
           id: uid.rnd(),
           username: newContact.user_email,
           password: await hashedPassword("113446"), //Mật khẩu mặc định
-          fullName: newContact.user_fullName,
+          full_name: newContact.user_fullName,
           email: newContact.user_email,
-          phoneNumber: newContact.user_phoneNumber,
+          phone_number: newContact.user_phoneNumber,
           role: "MANAGER",
 
           hotel_id: newHotel.id,
@@ -113,7 +111,7 @@ export async function updateAccount(formData: FormData) {
     },
     data: {
       username: userRequest.username,
-      fullName: userRequest.fullName,
+      full_name: userRequest.fullName,
       email: userRequest.email,
     },
   });

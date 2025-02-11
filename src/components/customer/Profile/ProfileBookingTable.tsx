@@ -51,8 +51,7 @@ export default function ProfileBookingTable() {
               </tr>
             </thead>
             <tbody>
-              {bookings ? (
-                bookings &&
+              {bookings && bookings.length > 0 ? (
                 bookings.map(
                   (booking: GetBookingsByUserDtoResponse, index: number) => {
                     return (

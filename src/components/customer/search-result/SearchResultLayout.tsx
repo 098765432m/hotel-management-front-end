@@ -66,7 +66,7 @@ export default function SearchResultLayout({ listProvince }: Props) {
     setResultHotel(result);
 
     setIsSearching(false);
-  }, [hotelName, priceRange, ratingRange]);
+  }, [hotelName, priceRange, ratingRange, provinceId]);
 
   useEffect(() => {
     performSearch();

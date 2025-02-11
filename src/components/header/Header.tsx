@@ -7,8 +7,6 @@ import HeaderLoginButton from "./HeaderLoginButton";
 import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
-import MantineButton from "../custom-component/MantineButton";
-import { NavLink } from "@mantine/core";
 
 export default function Header() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);

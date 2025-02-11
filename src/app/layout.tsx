@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import styles from "@/styles/global.module.scss";
 import { ConfigProvider } from "antd";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 // Require for Mantine core
 
@@ -16,15 +16,11 @@ import "@mantine/carousel/styles.css"; // mantine carousel
 
 import ReduxProvider from "@/components/redux/ReduxProvider";
 
-//import Redux
-
-import Header from "@/components/header/Header";
+//import Redux End
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
-import Footer from "@/components/footer/Footer";
-import DashboardHeader from "@/components/header/dashboard/DashboardHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,34 +46,17 @@ export default async function RootLayout({
       </head>
       <body className={inter.className}>
         <AppRouterCacheProvider>
-          <ConfigProvider
-            theme={{
-              components: {},
-            }}
-          >
-            <ReduxProvider authInfo={authInfo}>
-              <MantineProvider>
-                {authInfo && authInfo?.role !== "GUEST" ? (
-                  <div id={styles.dashboard_layout}>
-                    <header>
-                      <DashboardHeader></DashboardHeader>
-                    </header>
-                    <main className={styles.main_layout}>{children}</main>
-                  </div>
-                ) : (
-                  <div id={styles.guest_layout}>
-                    <header>
-                      <Header></Header>
-                    </header>
-                    <main className={styles.main_layout}>{children}</main>
-                    <footer>
-                      <Footer></Footer>
-                    </footer>
-                  </div>
-                )}
-              </MantineProvider>
-            </ReduxProvider>
-          </ConfigProvider>
+          <AntdRegistry>
+            <ConfigProvider
+              theme={{
+                components: {},
+              }}
+            >
+              <ReduxProvider authInfo={authInfo}>
+                <MantineProvider>{children}</MantineProvider>
+              </ReduxProvider>
+            </ConfigProvider>
+          </AntdRegistry>
         </AppRouterCacheProvider>
       </body>
     </html>

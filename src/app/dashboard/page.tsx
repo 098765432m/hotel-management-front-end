@@ -1,23 +1,40 @@
+"use client";
+
 import styles from "@/styles/dashboard/main-page/MainPage.module.scss";
 import HotelForm from "@/components/dashboard/main-page/HotelForm";
 import UploadedImage from "@/components/dashboard/main-page/UploadedImage";
 import hotelsService from "@/services/hotels.service";
 import { cookies } from "next/headers";
-import { decrypt } from "@/lib/session";
+import { decrypt, SessionPayload } from "@/lib/session";
 import CardDefault from "@/components/custom-component/CardDefault";
 import { addressToString } from "@/utils/helpers";
 import { Hotel } from "@/types/hotel.interface";
+import { UserCookieResponse } from "@/types/dto/user.dto";
+import { useSelector } from "react-redux";
+import { RootState } from "@/state/store";
+import useSWR from "swr";
+import { axiosCustomFetcher } from "@/lib/fetcher";
+import { Skeleton } from "antd";
 
-export default async function DashBoardPage() {
-  const cookieStore = await cookies();
-  const decryptedData = await decrypt(
-    cookieStore.get("login")?.value as string
-  );
-  const hotelId = decryptedData?.hotelId as string;
+export default function DashBoardPage() {
+  // const cookieStore = cookies();
 
-  if (hotelId) {
-    const hotel: Hotel = await hotelsService.getOne(hotelId);
+  // const authCookie = await decrypt(cookieStore.get("login")?.value as string); // Decrypt JWT
+  // console.log(authCookie);
 
+  // const authInfo: UserCookieResponse = authCookie as SessionPayload; // Convert JWT payload to auth type
+
+  // const hotel: Hotel = await hotelsService.getOne(authInfo?.hotelId as string);
+
+  const auInfo = useSelector((state: RootState) => state.auth.authInfo);
+
+  const {
+    data: hotel,
+    isLoading: isHotelLoading,
+    error: isHotelError,
+  } = useSWR(`/api/hotels/${auInfo?.hotelId as string}`, axiosCustomFetcher);
+
+  if (hotel)
     return (
       <div className={styles.dashboard_container}>
         <CardDefault>
@@ -55,7 +72,4 @@ export default async function DashBoardPage() {
         <UploadedImage></UploadedImage>
       </div>
     );
-  } else {
-    return <div>Not Found Hotel</div>;
-  }
 }

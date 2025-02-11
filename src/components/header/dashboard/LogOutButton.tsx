@@ -1,6 +1,6 @@
 "use client";
 
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { logOut as logOutFromLib } from "@/lib/auth";
 import { AppDispatch } from "@/state/store";
 import { useDispatch } from "react-redux";
