@@ -1,12 +1,30 @@
 "use client";
 
 import styles from "@/styles/header/Header.module.scss";
-import NextLink from "../custom-component/NextLink";
-import Card from "../custom-component/CardDefault";
+import NextLink from "../../custom-component/NextLink";
+import Card from "../../custom-component/CardDefault";
 import HeaderLoginButton from "./HeaderLoginButton";
 import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
+import ProfileDropDownMenu from "./ProfileDropDownMenu";
+
+const data = [
+  {
+    label: "098765432m",
+    value: "asd",
+    children: [
+      {
+        value: "profile",
+        label: "Trang cá nhân",
+      },
+      {
+        value: "logout",
+        label: "Đăng xuất",
+      },
+    ],
+  },
+];
 
 export default function Header() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -42,7 +60,8 @@ export default function Header() {
               <NextLink href={"/contact"}>Liên hệ</NextLink>
             </span>
           )}
-          <HeaderLoginButton></HeaderLoginButton>
+          {/* <HeaderLoginButton></HeaderLoginButton> */}
+          <ProfileDropDownMenu></ProfileDropDownMenu>
         </span>
       </div>
     </Card>

@@ -1,6 +1,6 @@
 import styles from "@/styles/global.module.scss";
 import Footer from "@/components/footer/Footer";
-import Header from "@/components/header/Header";
+import Header from "@/components/header/customer/Header";
 
 export default function CustomerLayout({
   children,

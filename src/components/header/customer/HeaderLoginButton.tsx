@@ -1,7 +1,7 @@
 "use client";
 
 import { FaCircleUser } from "react-icons/fa6";
-import NextLink from "../custom-component/NextLink";
+import NextLink from "../../custom-component/NextLink";
 import React, { useState } from "react";
 import { logOut as logOutFromLib } from "@/lib/auth";
 import { Button, Menu, MenuItem } from "@mui/material";

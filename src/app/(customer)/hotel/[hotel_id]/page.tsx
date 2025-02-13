@@ -8,7 +8,7 @@ import { axiosCustomFetcher } from "@/lib/fetcher";
 import bookingsService from "@/services/bookings.service";
 import { UploadedHotelImage } from "@/types/dto/image.dto";
 import { rangeISOToRangeDayJS } from "@/utils/dayjs";
-import { Button } from "@mantine/core";
+import { Button, Skeleton as MantineSkeleton } from "@mantine/core";
 import { Input, Rating, TextField } from "@mui/material";
 import { DatePicker } from "antd";
 import { Dayjs } from "dayjs";
@@ -54,27 +54,6 @@ export default function HotelDetail({
     console.log(dates);
     console.log(dateStrings);
   };
-
-  //HandleSubmit
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   const formData = new FormData(e.currentTarget as HTMLFormElement);
-
-  //   formData.append("hotelId", params.hotel_id);
-
-  //   if (dateRange != null) {
-  //     formData.append("checkInDate", dateRange[0].toISOString());
-  //     formData.append("checkOutDate", dateRange[1].toISOString());
-  //   } else {
-  //     formData.append("dateBookingRange", "");
-  //   }
-
-  //   await bookingsService.CreateOne(formData);
-  // };
-
-  //If hotel unedfine return null
-  if (hotel == undefined) return <div></div>;
   return (
     <div className={styles.hotel}>
       {/* Card thông tin phòng*/}
@@ -82,34 +61,35 @@ export default function HotelDetail({
         <CardDefault>
           <div className={styles.hotel_detail}>
             <span className={styles.hotel_detail_images_container}>
-              {hotel.images.length > 0 ? (
+              {hotel && hotel.images.length > 0 ? (
                 <Carousel withIndicators height={"100%"}>
-                  {hotel.images.map((image: UploadedHotelImage) => {
-                    return (
-                      <Carousel.Slide key={image.public_id}>
-                        <div
-                          style={{
-                            aspectRatio: "3/2",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <NextImage
-                            key={image.public_id}
-                            src={`${cloudinary_path}/${image.public_id}.${image.format}`}
-                            width={400}
-                            height={300}
-                            alt={hotel.name}
-                            priority
+                  {hotel &&
+                    hotel.images.map((image: UploadedHotelImage) => {
+                      return (
+                        <Carousel.Slide key={image.public_id}>
+                          <div
                             style={{
-                              objectFit: "cover",
-                              width: "100%",
-                              height: "100%",
+                              aspectRatio: "3/2",
+                              overflow: "hidden",
                             }}
-                          ></NextImage>
-                        </div>
-                      </Carousel.Slide>
-                    );
-                  })}
+                          >
+                            <NextImage
+                              key={image.public_id}
+                              src={`${cloudinary_path}/${image.public_id}.${image.format}`}
+                              width={400}
+                              height={300}
+                              alt={hotel.name}
+                              priority
+                              style={{
+                                objectFit: "cover",
+                                width: "100%",
+                                height: "100%",
+                              }}
+                            ></NextImage>
+                          </div>
+                        </Carousel.Slide>
+                      );
+                    })}
                 </Carousel>
               ) : (
                 <>
@@ -117,7 +97,7 @@ export default function HotelDetail({
                     src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
                     width={400}
                     height={300}
-                    alt={hotel.name}
+                    alt={hotel?.name}
                     priority
                   ></NextImage>
                 </>
@@ -126,7 +106,7 @@ export default function HotelDetail({
             <span className={styles.hotel_detail_heading_container}>
               <div>
                 <div className={styles.hotel_detail_heading}>
-                  <span className={styles.hotel_name}>{hotel.name}</span>
+                  <span className={styles.hotel_name}>{hotel?.name}</span>
                   <span className={styles.button_control}>
                     <span className={styles.hotel_heading_rating_container}>
                       <span className={styles.rating_number}>4.6</span>
@@ -152,7 +132,7 @@ export default function HotelDetail({
                   </span>
                 </div>
                 <div className={styles.hotel_detail_heading_description}>
-                  {hotel.description != undefined ? (
+                  {hotel && hotel.description != undefined ? (
                     <p>{hotel.description}</p>
                   ) : (
                     // prettier-ignore
@@ -174,59 +154,7 @@ export default function HotelDetail({
           </div>
         </CardDefault>
       </div>
-      {/* Card Input thông tin khách hàng */}
-      <div>
-        {/* <CardDefault>
-          <form onSubmit={handleSubmit}>
-            <div className="">
-              <div>
-                <div className="">Thông tin khách hàng</div>
-                <div className="">
-                  <i>
-                    Tên khách hàng phải phù hợp với giấy tờ tùy thân để nhận
-                    phòng.
-                  </i>
-                </div>
-              </div>
-              <div className="">
-                <div className="">
-                  <span className="">
-                    <div>
-                      <TextField
-                        name="fullName"
-                        placeholder="Họ và tên"
-                      ></TextField>
-                    </div>
-                  </span>
-                </div>
-                <div className="">
-                  <span className="">
-                    <Input name="email" placeholder="Email"></Input>
-                  </span>
-                  <span className="">
-                    <Input
-                      name="phoneNumber"
-                      placeholder="Số điện thoại"
-                    ></Input>
-                  </span>
-                </div>
-                <div>
-                  <DatePicker.RangePicker
-                    value={dateRange}
-                    onChange={onDateRangePickerChange}
-                  ></DatePicker.RangePicker>
-                </div>
-                <div className="">
-                  <MantineButton type="submit">Đặt phòng</MantineButton>
-                </div>
-              </div>
-            </div>
-          </form>
-        </CardDefault> */}
-      </div>
-      <div>
-        <AvailableRooms hotel={hotel}></AvailableRooms>
-      </div>
+      <div>{hotel && <AvailableRooms hotel={hotel}></AvailableRooms>}</div>
     </div>
   );
 }

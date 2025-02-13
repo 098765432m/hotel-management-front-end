@@ -40,5 +40,10 @@ export default function DashboardUserInfoHeader() {
         <div>{user.username}</div>
       </div>
     );
-  else return <Skeleton></Skeleton>;
+  else
+    return (
+      <div>
+        <Skeleton.Image active></Skeleton.Image>
+      </div>
+    );
 }

@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
     FROM 
       "Hotel" h 
     LEFT JOIN 
-      "RoomTypes" rt ON h.id = rt.hotel_id
+      "RoomType" rt ON h.id = rt.hotel_id
     LEFT JOIN 
       "Room" r ON r.room_type_id = rt.id
     LEFT JOIN

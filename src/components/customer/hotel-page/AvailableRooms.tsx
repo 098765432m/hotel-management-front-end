@@ -21,8 +21,6 @@ import UserInfoBookingForm from "./UserInfoBookingForm";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 interface Props {
   hotel: Hotel;
-  // check_in_date: string;
-  // check_out_date: string;
 }
 
 export type BookingState = {

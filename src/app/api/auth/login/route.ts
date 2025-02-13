@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     });
 
     if (user == null) {
-      throw new ValidationError("Tên đăng nhập không tồn tại");
+      throw new ValidationError("Tài khoản đăng nhập không tồn tại!");
     }
 
     // Check if password is valid
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
         hotelId: user.hotel_id,
       });
     } else {
-      throw new ValidationError("Mật khẩu không hợp lệ");
+      throw new ValidationError("Mật khẩu không hợp lệ!");
     }
 
     const userResponse: UserCookieResponse | null = result
