@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "@/styles/header/dashboard/DashboardHeader.module.scss";
 import { useRouter } from "next/navigation";
 import { logOut as logOutFromLib } from "@/lib/auth";
 import { AppDispatch } from "@/state/store";
@@ -12,6 +13,7 @@ export default function LogOutButton() {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <div
+      className={styles.log_out_button}
       onClick={async () => {
         await logOutFromLib();
         dispatch(logOutFromStore());

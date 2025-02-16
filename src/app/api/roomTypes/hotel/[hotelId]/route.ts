@@ -1,18 +1,27 @@
 import { prisma } from "@/lib/client";
-import { NextResponse } from "next/server";
+import { handleNextApiError } from "@/lib/error-handler/errorHandler";
+import CustomError from "@/lib/error-handler/errors";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { hotelId: string } }
 ) {
-  const roomTypes = await prisma.roomType.findMany({
-    where: {
-      hotel_id: params.hotelId,
-    },
-    include: {
-      images: true,
-    },
-  });
+  try {
+    const roomTypes = await prisma.roomType.findMany({
+      where: {
+        hotel_id: params.hotelId,
+      },
+      include: {
+        images: true,
+      },
+      orderBy: {
+        name: "asc",
+      },
+    });
 
-  return NextResponse.json(roomTypes);
+    return NextResponse.json(roomTypes);
+  } catch (error) {
+    return handleNextApiError(error);
+  }
 }

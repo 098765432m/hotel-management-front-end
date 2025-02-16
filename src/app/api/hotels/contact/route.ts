@@ -1,7 +1,7 @@
 import { hashedPassword } from "@/lib/auth";
 import { prisma } from "@/lib/client";
 import { handleNextApiError } from "@/lib/error-handler/errorHandler";
-import { ValidationError } from "@/lib/error-handler/errors";
+import CustomError from "@/lib/error-handler/errors";
 import { HotelContactCreateDto } from "@/types/dto/hotel.dto";
 import { Prisma } from "@prisma/client";
 import { message } from "antd";

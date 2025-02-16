@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/styles/customer/hotel-detail/AvailableCard.module.scss";
+import styles from "@/styles/customer/hotel-detail/AvailableRooms.module.scss";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -8,11 +8,13 @@ import bookingsService from "@/services/bookings.service";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
-import { number, string } from "zod";
-import { log } from "node:console";
+import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
+import { AxiosError } from "axios";
+import { useState } from "react";
 
 interface Props {
   hotel_id: string;
+  totalPrice: number;
   booking_rooms: {
     [roomTypeId: string]: number;
   };
@@ -22,7 +24,10 @@ interface Props {
 
 export default function UserInfoBookingForm(props: Props) {
   const authStore = useSelector((state: RootState) => state.auth);
-  console.log(authStore.authInfo?.id);
+  const [bookingState, setBookingState] = useState<{
+    status: "ERROR";
+    message: string;
+  } | null>(null);
 
   const form = useForm<{
     fullName: string;
@@ -30,33 +35,66 @@ export default function UserInfoBookingForm(props: Props) {
     email: string;
   }>({
     mode: "uncontrolled",
+    initialValues: {
+      fullName: "",
+      phoneNumber: "",
+      email: "",
+    },
+    validate: {
+      fullName: (value) =>
+        value.length <= 3 ? "Họ tên phải có ít nhất 3 ký tự" : null,
+      phoneNumber: (value) => {
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(value)) return "Số điện thoại không hợp lệ!";
+      },
+      email: (value) => {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/;
+        if (!emailRegex.test(value)) return "Email không hợp lệ!";
+      },
+    },
   });
 
   const handleSubmit = async (values: any) => {
-    const formData = form.getValues();
+    console.log("asdasd");
 
-    const filtered_booking_rooms = Object.entries(props.booking_rooms)
-      .filter(([roomName, roomCount]) => roomCount > 0)
-      .map(([roomName, roomCount]) => [roomName, roomCount]);
+    try {
+      const formData = form.getValues();
 
-    console.log(filtered_booking_rooms);
+      const filtered_booking_rooms = Object.entries(props.booking_rooms)
+        .filter(([roomName, roomCount]) => roomCount > 0)
+        .map(([roomName, roomCount]) => [roomName, roomCount]);
 
-    const body: BookingsDtoCreate = {
-      hotel_id: props.hotel_id,
-      booking_type_list: filtered_booking_rooms,
-      check_in_date: props.check_in_date,
-      check_out_date: props.check_out_date,
-      user_id: authStore.authInfo?.id ?? undefined,
-      fullName: formData.fullName,
-      phoneNumber: formData.phoneNumber,
-      email: formData.email,
-    };
+      // console.log(filtered_booking_rooms);
+      console.log("123");
 
-    await bookingsService.CreateOne(body);
+      const body: BookingsDtoCreate = {
+        hotel_id: props.hotel_id,
+        booking_type_list: filtered_booking_rooms,
+        check_in_date: props.check_in_date,
+        check_out_date: props.check_out_date,
+        user_id: authStore.authInfo?.id ?? undefined,
+        fullName: formData.fullName,
+        phoneNumber: formData.phoneNumber,
+        email: formData.email,
+      };
+
+      await bookingsService.CreateOne(body);
+
+      // form.reset();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response!.data.message);
+      } else {
+        console.log(error);
+      }
+
+      // form.reset();
+    }
   };
   return (
     <form className={styles.modal_form} onSubmit={form.onSubmit(handleSubmit)}>
       <TextInput
+        disabled={props.totalPrice == 0}
         withAsterisk
         label="Họ và tên"
         placeholder="Họ và tên"
@@ -64,6 +102,7 @@ export default function UserInfoBookingForm(props: Props) {
         {...form.getInputProps("fullName")}
       ></TextInput>
       <TextInput
+        disabled={props.totalPrice == 0}
         withAsterisk
         label="Số điện thoại"
         placeholder="Số điện thoại"
@@ -71,14 +110,29 @@ export default function UserInfoBookingForm(props: Props) {
         {...form.getInputProps("phoneNumber")}
       ></TextInput>
       <TextInput
+        disabled={props.totalPrice == 0}
         withAsterisk
         label="Email"
         placeholder="Email"
         key={form.key("email")}
         {...form.getInputProps("email")}
       ></TextInput>
+
+      {props.totalPrice == 0 ? (
+        <ErrorCustomNotify message="Hãy chọn phòng để đặt!"></ErrorCustomNotify>
+      ) : (
+        ""
+      )}
+
+      {bookingState?.status === "ERROR" ? (
+        <ErrorCustomNotify message={bookingState.message}></ErrorCustomNotify>
+      ) : (
+        ""
+      )}
       <div className={styles.modal_form_container_button}>
-        <MantineButton type="submit">Đặt ngay</MantineButton>
+        <MantineButton type="submit" disabled={props.totalPrice == 0}>
+          Đặt ngay
+        </MantineButton>
       </div>
     </form>
   );

@@ -7,7 +7,10 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 // Require for Mantine core
 
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
+
+import { DatesProvider } from "@mantine/dates";
 import "@mantine/core/styles.css"; // mantine core
+import "@mantine/dates/styles.css"; //mantine dates
 import "@mantine/carousel/styles.css"; // mantine carousel
 
 // Require for Mantine core
@@ -52,9 +55,11 @@ export default async function RootLayout({
                 components: {},
               }}
             >
-              <ReduxProvider authInfo={authInfo}>
-                <MantineProvider>{children}</MantineProvider>
-              </ReduxProvider>
+              <DatesProvider settings={{ locale: "vi" }}>
+                <ReduxProvider authInfo={authInfo}>
+                  <MantineProvider>{children}</MantineProvider>
+                </ReduxProvider>
+              </DatesProvider>
             </ConfigProvider>
           </AntdRegistry>
         </AppRouterCacheProvider>

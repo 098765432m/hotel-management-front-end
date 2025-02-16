@@ -2,5 +2,14 @@
   display: grid;
   justify-content: center;
   justify-items: center;
-  margin-top: 20dvh;
+  position: relative;
+  top: 20dvh;
+
+  .inner_block {
+    display: grid;
+
+    justify-content: center;
+    justify-items: center;
+    padding: 6rem 10rem;
+  }
 }

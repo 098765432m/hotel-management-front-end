@@ -27,8 +27,6 @@ export default function ProfileDropDownMenu() {
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
-      console.log("Mouse has been clicked");
-
       if (!menuRef.current?.contains(e.target as Node))
         setIsDropDownMenuOpen(false);
     };
@@ -84,7 +82,7 @@ export default function ProfileDropDownMenu() {
         )}
       </div>
     );
-  else return <div>Đăng xuất</div>;
+  else return <NextLink href={"/login"}>Đăng nhập</NextLink>;
 }
 
 interface DropDownItemProps {

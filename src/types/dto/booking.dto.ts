@@ -1,5 +1,5 @@
 import { BookingState } from "@/components/customer/hotel-page/AvailableRooms";
-import { Status_Booking } from "@prisma/client";
+import { Prisma, Status_Booking } from "@prisma/client";
 
 export interface BookingsDtoCreate {
   check_in_date: string;

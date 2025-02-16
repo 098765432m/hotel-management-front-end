@@ -1,11 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  ValidationError,
-  AuthenticationError,
-  AuthorizationError,
-  NotFoundError,
-  InternalServerError,
-} from "./errors";
+import CustomError from "./errors";
 import { message } from "antd";
 import { Prisma } from "@prisma/client";
 
@@ -20,29 +14,29 @@ export function handleNextApiError(error: unknown) {
     }
   }
 
-  if (error instanceof ValidationError) {
-    (errorMessage = error.message ?? ValidationError.name),
+  if (error instanceof CustomError.ValidationError) {
+    (errorMessage = error.message ?? CustomError.ValidationError.name),
       (errorStatus = error.statusCode);
   }
 
-  if (error instanceof AuthenticationError) {
-    errorMessage = error.message ?? AuthenticationError.name;
-    errorStatus = (error as AuthenticationError).statusCode;
+  if (error instanceof CustomError.AuthenticationError) {
+    errorMessage = error.message ?? CustomError.AuthenticationError.name;
+    errorStatus = (error as CustomError.AuthenticationError).statusCode;
   }
 
-  if (error instanceof AuthorizationError) {
-    errorMessage = error.message ?? AuthorizationError.name;
-    errorStatus = (error as AuthorizationError).statusCode;
+  if (error instanceof CustomError.AuthorizationError) {
+    errorMessage = error.message ?? CustomError.AuthorizationError.name;
+    errorStatus = (error as CustomError.AuthorizationError).statusCode;
   }
 
-  if (error instanceof NotFoundError) {
-    errorMessage = error.message ?? NotFoundError.name;
-    errorStatus = (error as NotFoundError).statusCode;
+  if (error instanceof CustomError.NotFoundError) {
+    errorMessage = error.message ?? CustomError.NotFoundError.name;
+    errorStatus = (error as CustomError.NotFoundError).statusCode;
   }
 
-  if (error instanceof InternalServerError) {
-    errorMessage = error.message ?? InternalServerError.name;
-    errorStatus = (error as InternalServerError).statusCode;
+  if (error instanceof CustomError.InternalServerError) {
+    errorMessage = error.message ?? CustomError.InternalServerError.name;
+    errorStatus = (error as CustomError.InternalServerError).statusCode;
   }
 
   return NextResponse.json(

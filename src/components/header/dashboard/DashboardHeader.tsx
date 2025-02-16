@@ -6,7 +6,9 @@ import DashboardUserInfoHeader from "./DashboardUserInfoHeader";
 export default async function DashboardHeader() {
   return (
     <div className={styles.dashboard_header_container}>
-      <DashboardUserInfoHeader></DashboardUserInfoHeader>
+      <div className={styles.header_user_avatar_container}>
+        <DashboardUserInfoHeader></DashboardUserInfoHeader>
+      </div>
       <div className={styles.header_hotel_management_menu}>
         <div>
           <div>
@@ -26,7 +28,7 @@ export default async function DashboardHeader() {
           </div>
         </div>
         <div>
-          <div>Số liệu thống kê</div>
+          <NextLink href={"/"}>Số liệu thống kê</NextLink>
           <LogOutButton></LogOutButton>
         </div>
       </div>

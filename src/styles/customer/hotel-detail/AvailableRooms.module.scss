@@ -1,0 +1,27 @@
+.available_rooms_container {
+  display: grid;
+  row-gap: 20px;
+  .booking_control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter_control {
+    display: flex;
+    column-gap: 3rem;
+    & > div {
+      flex: 1;
+    }
+  }
+}
+.modal_form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+
+  .modal_form_container_button {
+    display: flex;
+    justify-content: center;
+  }
+}

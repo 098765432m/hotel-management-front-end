@@ -22,8 +22,6 @@ export default function DashboardUserInfoHeader() {
     setIsDoneLoading(true);
   }, []);
 
-  if (!isDoneLoading) return <Skeleton active></Skeleton>;
-
   if (user)
     return (
       <div className={styles.header_staff_info}>
@@ -38,12 +36,6 @@ export default function DashboardUserInfoHeader() {
           }
         ></NextImage>
         <div>{user.username}</div>
-      </div>
-    );
-  else
-    return (
-      <div>
-        <Skeleton.Image active></Skeleton.Image>
       </div>
     );
 }

@@ -1,12 +1,12 @@
 import { Booking } from "@/types/booking.interface";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/client";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
 import dayjs from "dayjs";
-import { BookingState } from "@/components/customer/hotel-page/AvailableRooms";
-import { log } from "node:console";
+import { handleNextApiError } from "@/lib/error-handler/errorHandler";
+import CustomError from "@/lib/error-handler/errors";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const bookings = await prisma.booking.findMany({
     include: {
       room: true,
@@ -18,10 +18,11 @@ export async function GET() {
 
 // Customer Booking in Hotel Page
 export async function POST(request: Request) {
+  console.log("Create Booking");
+
   try {
     // Get body
     const data: BookingsDtoCreate = await request.json();
-    console.log(data);
 
     // Create query whether customer booking with account or not
     let query = {};
@@ -54,7 +55,9 @@ export async function POST(request: Request) {
         });
 
         if (!roomType) {
-          throw new Error("Không tồn tại loại phòng!");
+          throw new CustomError.InternalServerError(
+            "Không tồn tại loại phòng!"
+          );
         }
 
         // 2. Loop to check all Rooms available
@@ -71,18 +74,18 @@ export async function POST(request: Request) {
           });
 
           if (!room) {
-            throw new Error("Phòng không khả dụng");
+            throw new CustomError.InternalServerError("Phòng không khả dụng!");
           }
 
           // 3. Update Room's status
-          await tx.room.update({
-            where: {
-              id: room.id,
-            },
-            data: {
-              status_room: "OCCUPIED",
-            },
-          });
+          // await tx.room.update({
+          //   where: {
+          //     id: room.id,
+          //   },
+          //   data: {
+          //     status_room: "OCCUPIED",
+          //   },
+          // });
 
           // 4. Create Booking with customer info
           const booking = await tx.booking.create({
@@ -111,7 +114,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.log(error);
-    throw new Error();
+    return handleNextApiError(error);
   }
 }

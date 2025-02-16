@@ -1,6 +1,6 @@
 "use client";
 
-import styles from "@/styles/customer/hotel-detail/AvailableCard.module.scss";
+import styles from "@/styles/customer/hotel-detail/AvailableRooms.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
 import { Hotel } from "@/types/hotel.interface";
@@ -19,6 +19,13 @@ import { useDisclosure } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import UserInfoBookingForm from "./UserInfoBookingForm";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
+import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { DatesRangeValue, DateValue } from "@mantine/dates";
+import useSWR from "swr";
+import { axiosCustomFetcher } from "@/lib/fetcher";
+import { GetRoomTypeBookingDtoResponse } from "@/types/dto/room-types.dto";
+import { Prisma } from "@prisma/client";
 interface Props {
   hotel: Hotel;
 }
@@ -56,8 +63,29 @@ function bookingReducer(
 }
 
 export default function AvailableRooms({ hotel }: Props) {
-  const router = useRouter();
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [filterDateRange, setFilterDateRange] =
+    useState<DatesRangeValue | null>(null);
+
+  // Convert Date to Query String
+
+  const dateRangeQuery: string = useMemo(() => {
+    return filterDateRange && filterDateRange[0] && filterDateRange[1]
+      ? `${filterDateRange[0].toISOString()},${filterDateRange[1].toISOString()}`
+      : "";
+  }, [filterDateRange]);
+
+  // Fetch Available room
+  const { data: availableRoomTypes } = useSWR(
+    () =>
+      hotel && dateRangeQuery && dateRangeQuery[0] && dateRangeQuery[1]
+        ? `/api/roomTypes/hotel/${hotel.id}/booking?dateRange=${dateRangeQuery}`
+        : null,
+    axiosCustomFetcher
+  );
+
+  console.log(availableRoomTypes);
 
   const initialBookingState: BookingState | null = hotel.room_types
     ? hotel.room_types.reduce(
@@ -73,7 +101,7 @@ export default function AvailableRooms({ hotel }: Props) {
     initialBookingState
   );
 
-  const totalValue = useMemo(
+  const totalPrice = useMemo(
     () =>
       NumberToMoneyFormat(
         hotel.room_types?.reduce((sum, roomType) => {
@@ -89,7 +117,24 @@ export default function AvailableRooms({ hotel }: Props) {
   const check_out_date = useSearchParams().get("check_out_date") ?? null;
 
   return (
-    <CardDefault>
+    <CardDefault className={styles.available_rooms_container}>
+      <div className={styles.filter_control}>
+        <MantineDatePicker
+          type="range"
+          valueFormat="DD/MM/YYYY"
+          placeholder="Chọn ngày tra cứu"
+          onChange={(value: DatesRangeValue | DateValue | Date[]) => {
+            if (Array.isArray(value) && value.length === 2)
+              setFilterDateRange(value as DatesRangeValue);
+            else {
+              setFilterDateRange(null);
+            }
+          }}
+          // Date Cần điền vào
+        ></MantineDatePicker>
+        <div>{filterDateRange?.[0]?.toDateString()}</div>
+        <div>{filterDateRange?.[1]?.toDateString()}</div>
+      </div>
       <CustomTable>
         <thead>
           <tr>
@@ -100,52 +145,70 @@ export default function AvailableRooms({ hotel }: Props) {
             <th>Tổng</th>
           </tr>
         </thead>
-        {hotel.room_types != null && hotel.room_types.length > 0 ? (
+        {availableRoomTypes != null ? (
           <tbody>
-            {hotel.room_types.map((roomType, index: number) => (
-              <tr key={index}>
-                <td>{roomType.name}</td>
-                <td>2</td>
-                <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
-                <td>
-                  <NumberInput
-                    placeholder="Nhập số"
-                    step={1}
-                    defaultValue={0}
-                    min={0}
-                    max={10}
-                    suffix=" Phòng"
-                    clampBehavior="strict"
-                    onChange={(value: number | string) =>
-                      dispatchBookingRooms({
-                        type: "SET_ROOM_COUNT",
-                        payload: {
-                          roomTypeName: roomType.name,
-                          count:
-                            typeof value == "string" ? parseInt(value) : value,
-                        },
-                      })
-                    }
-                  ></NumberInput>
-                </td>
-                {index === 0 && (
-                  <td rowSpan={0}>
-                    <div className={styles.booking_control}>
-                      {totalValue} Đ
-                      <MantineButton
-                        onClick={
-                          parseInt(totalValue) > 0
-                            ? open
-                            : () => router.push("/")
-                        }
-                      >
-                        Đặt ngay
-                      </MantineButton>
-                    </div>
+            {availableRoomTypes.map(
+              (
+                roomType: Prisma.RoomTypeGetPayload<{
+                  include: {
+                    rooms: {
+                      include: {
+                        booking: true;
+                      };
+                    };
+                  };
+                }>,
+                index: number
+              ) => (
+                <tr
+                  key={index}
+                  className={`${
+                    roomType.rooms.some((room) => {
+                      //Make row blur when roomType not have A Single room AVAILABLE
+                      room.booking?.length > 0;
+                    })
+                      ? "opacity-35"
+                      : ""
+                  } `}
+                >
+                  <td>{roomType.name}</td>
+                  <td>2</td>
+                  <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
+                  <td>
+                    <NumberInput
+                      disabled={roomType.rooms.length == 0}
+                      placeholder="Nhập số"
+                      step={1}
+                      defaultValue={0}
+                      min={0}
+                      max={10}
+                      suffix=" Phòng"
+                      clampBehavior="strict"
+                      onChange={(value: number | string) =>
+                        dispatchBookingRooms({
+                          type: "SET_ROOM_COUNT",
+                          payload: {
+                            roomTypeName: roomType.name,
+                            count:
+                              typeof value == "string"
+                                ? parseInt(value)
+                                : value,
+                          },
+                        })
+                      }
+                    ></NumberInput>
                   </td>
-                )}
-              </tr>
-            ))}
+                  {index === 0 && (
+                    <td rowSpan={0} className="opacity-100">
+                      <div className={styles.booking_control}>
+                        {totalPrice} Đ
+                        <MantineButton onClick={open}>Đặt ngay</MantineButton>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              )
+            )}
           </tbody>
         ) : (
           <tbody>
@@ -168,6 +231,7 @@ export default function AvailableRooms({ hotel }: Props) {
         {check_in_date && check_out_date && bookingRooms && (
           <UserInfoBookingForm
             hotel_id={hotel.id}
+            totalPrice={parseInt(totalPrice)}
             booking_rooms={bookingRooms}
             check_in_date={check_in_date}
             check_out_date={check_out_date}

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/client";
 import { NextResponse } from "next/server";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { handleNextApiError } from "@/lib/error-handler/errorHandler";
-import { ValidationError } from "@/lib/error-handler/errors";
+import CustomError from "@/lib/error-handler/errors";
 
 interface loginForm {
   username: string;
@@ -23,7 +23,9 @@ export async function POST(request: Request) {
     });
 
     if (user == null) {
-      throw new ValidationError("Tài khoản đăng nhập không tồn tại!");
+      throw new CustomError.ValidationError(
+        "Tài khoản đăng nhập không tồn tại!"
+      );
     }
 
     // Check if password is valid
@@ -39,7 +41,7 @@ export async function POST(request: Request) {
         hotelId: user.hotel_id,
       });
     } else {
-      throw new ValidationError("Mật khẩu không hợp lệ!");
+      throw new CustomError.ValidationError("Mật khẩu không hợp lệ!");
     }
 
     const userResponse: UserCookieResponse | null = result
