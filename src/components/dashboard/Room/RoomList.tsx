@@ -11,22 +11,14 @@ import { Form } from "antd";
 import RoomCard from "./RoomCard";
 
 export default function RoomList() {
-  const authStore = useSelector((state: RootState) => state.auth);
+  const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
-  const {
-    data: rooms,
-    isLoading: isRoomsLoading,
-    error: isRoomsError,
-  } = useSWR(
-    `/api/rooms/hotel/${authStore.authInfo?.hotelId}`,
+  const { data: rooms } = useSWR(
+    () => `/api/rooms/hotel/${authInfo!.hotelId}`,
     axiosCustomFetcher
   );
-  const {
-    data: roomTypes,
-    isLoading: isRoomTypesLoading,
-    error: isRoomTypesError,
-  } = useSWR(
-    `/api/roomTypes/hotel/${authStore.authInfo?.hotelId}`,
+  const { data: roomTypes } = useSWR(
+    () => `/api/roomTypes/hotel/${authInfo!.hotelId}`,
     axiosCustomFetcher
   );
 

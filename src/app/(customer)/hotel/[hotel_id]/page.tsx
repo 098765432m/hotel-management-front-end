@@ -39,11 +39,10 @@ export default function HotelDetail({
     process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME +
     "/image/upload/v1";
 
-  const {
-    data: hotel,
-    isLoading: isHotelLoading,
-    error: isHotelError,
-  } = useSWR(`/api/hotels/${params.hotel_id}`, axiosCustomFetcher);
+  const { data: hotel } = useSWR(
+    () => `/api/hotels/${params.hotel_id}`,
+    axiosCustomFetcher
+  );
 
   //OnDateRangePicker
   const onDateRangePickerChange = (

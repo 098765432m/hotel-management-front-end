@@ -6,21 +6,12 @@ import { axiosCustomFetcher } from "@/lib/fetcher";
 import useSWR from "swr";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
-import { Skeleton } from "antd";
-import { useEffect, useState } from "react";
-
 export default function DashboardUserInfoHeader() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
-  const [isDoneLoading, setIsDoneLoading] = useState(false);
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    error: isUserError,
-  } = useSWR(`/api/users/${authInfo?.id as string}`, axiosCustomFetcher);
-
-  useEffect(() => {
-    setIsDoneLoading(true);
-  }, []);
+  const { data: user } = useSWR(
+    () => `/api/users/${authInfo?.id as string}`,
+    axiosCustomFetcher
+  );
 
   if (user)
     return (
@@ -30,7 +21,7 @@ export default function DashboardUserInfoHeader() {
           height={50}
           alt="User Avatar"
           src={
-            user.image
+            user && user.image
               ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${user.image.public_id}.${user.image.format}`
               : (process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string)
           }

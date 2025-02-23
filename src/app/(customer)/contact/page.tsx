@@ -87,34 +87,23 @@ export default function ContactPage() {
     },
   });
 
-  const {
-    data: provinces,
-    error: provinces_error,
-    isLoading: provinces_loading,
-  } = useSWR(
+  const { data: provinces } = useSWR(
     `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+    axiosCustomFetcher,
+    {
+      refreshInterval: 0, // Giá trị hầu như không thay đổi
+    } // Có thể chuyển sang fetch bằng useSWRInmutate
+  );
+
+  const { data: districts } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${address.province.id}/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
-  const {
-    data: districts,
-    error: districts_error,
-    isLoading: districts_loading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
-      address.province.id as string
-    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
-    axiosCustomFetcher
-  );
-
-  const {
-    data: wards,
-    error: wards_error,
-    isLoading: wards_loading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
-      address.district.id as string
-    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+  const { data: wards } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${address.district.id}/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 

@@ -18,42 +18,44 @@ export default async function Home() {
   const listProvince =
     transformAddressSelectInput(listProvinceResponse.data) ?? undefined;
 
-  if (hotels == undefined) return <div></div>;
-  return (
-    <div className={styles.main_page_container}>
-      <CardDefault>
-        <CustomerSearchPanel listProvince={listProvince}></CustomerSearchPanel>
-      </CardDefault>
-      <div className={styles.hotel_list_container}>
-        {hotels.length > 0 ? (
-          hotels.map((hotel: Hotel, index: number) => (
-            <HotelCard key={index} hotel={hotel}></HotelCard>
-          ))
-        ) : (
-          <div>
-            <EmptyData></EmptyData>
-          </div>
-        )}
-      </div>
-
-      <CardDefault>
-        <div className={styles.province_card_container}>
-          <div className={styles.province_card_header}>Địa điểm nổi bật</div>
-          <div className={styles.province_card_body}>
-            {listProvince?.map(
-              (province: { label: string; value: string }, index) => {
-                return (
-                  <ProvinceCard
-                    name={province.label}
-                    index={index}
-                    key={index}
-                  ></ProvinceCard>
-                );
-              }
-            )}
-          </div>
+  if (hotels && hotels.length > 0)
+    return (
+      <div className={styles.main_page_container}>
+        <CardDefault>
+          <CustomerSearchPanel
+            listProvince={listProvince}
+          ></CustomerSearchPanel>
+        </CardDefault>
+        <div className={styles.hotel_list_container}>
+          {hotels.length > 0 ? (
+            hotels.map((hotel: Hotel, index: number) => (
+              <HotelCard key={index} hotel={hotel}></HotelCard>
+            ))
+          ) : (
+            <div>
+              <EmptyData></EmptyData>
+            </div>
+          )}
         </div>
-      </CardDefault>
-    </div>
-  );
+
+        <CardDefault>
+          <div className={styles.province_card_container}>
+            <div className={styles.province_card_header}>Địa điểm nổi bật</div>
+            <div className={styles.province_card_body}>
+              {listProvince?.map(
+                (province: { label: string; value: string }, index) => {
+                  return (
+                    <ProvinceCard
+                      name={province.label}
+                      index={index}
+                      key={index}
+                    ></ProvinceCard>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </CardDefault>
+      </div>
+    );
 }

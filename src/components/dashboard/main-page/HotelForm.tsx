@@ -43,12 +43,10 @@ export default function HotelForm() {
 
   const [isEditFormOpen, { open: openEditForm, close: closeEditForm }] =
     useDisclosure(false);
-  const {
-    data: hotel,
-    isLoading: isHotelLoading,
-    error: isHotelError,
-    mutate: hotelMutate,
-  } = useSWR(`/api/hotels/${authStore.authInfo?.hotelId}`, axiosCustomFetcher); //Get Hotel via Id
+  const { data: hotel, mutate: hotelMutate } = useSWR(
+    () => `/api/hotels/${authStore.authInfo?.hotelId}`,
+    axiosCustomFetcher
+  ); //Get Hotel via Id
 
   //State Start
 
@@ -58,34 +56,26 @@ export default function HotelForm() {
 
   //SWR Start
 
-  const {
-    data: provinces,
-    error: provinces_error,
-    isLoading: provinces_loading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+  const { data: provinces } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+    axiosCustomFetcher,
+    { refreshInterval: 0 }
+  );
+
+  const { data: districts } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
+        address.province.id as string
+      }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 
-  const {
-    data: districts,
-    error: districts_error,
-    isLoading: districts_loading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/districts/${
-      address.province.id as string
-    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
-    axiosCustomFetcher
-  );
-
-  const {
-    data: wards,
-    error: wards_error,
-    isLoading: wards_loading,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
-      address.district.id as string
-    }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
+  const { data: wards } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/wards/${
+        address.district.id as string
+      }/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}`,
     axiosCustomFetcher
   );
 

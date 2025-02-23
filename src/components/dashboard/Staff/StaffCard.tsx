@@ -18,25 +18,23 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import useSWR from "swr";
 
 interface Props {
-  id: string;
+  userId: string;
 }
 
-export default function StaffCard({ id }: Props) {
+export default function StaffCard({ userId }: Props) {
   const [isActive, setIsActive] = useState(false);
   const [isEditFormOpened, { open: openEditForm, close: closeEditForm }] =
     useDisclosure(false);
   const [form] = Form.useForm();
   const [isPasswordDisabled, setIsPasswordDisabled] = useState(true);
 
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    error: isUserError,
-    mutate: userMutate,
-  } = useSWR(`/api/users/${id}`, axiosCustomFetcher);
+  const { data: user, mutate: userMutate } = useSWR(
+    () => `/api/users/${userId}`,
+    axiosCustomFetcher
+  );
 
   const handleSubmit = async (body: UserUpdateDto) => {
-    await usersService.UpdateOne(id, { ...body });
+    await usersService.UpdateOne(userId, { ...body });
     userMutate();
   };
 

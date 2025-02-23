@@ -85,8 +85,6 @@ export default function AvailableRooms({ hotel }: Props) {
     axiosCustomFetcher
   );
 
-  console.log(availableRoomTypes);
-
   const initialBookingState: BookingState | null = hotel.room_types
     ? hotel.room_types.reduce(
         (state, roomType) => ({
@@ -145,7 +143,7 @@ export default function AvailableRooms({ hotel }: Props) {
             <th>Tổng</th>
           </tr>
         </thead>
-        {availableRoomTypes != null ? (
+        {availableRoomTypes && availableRoomTypes.length > 0 ? (
           <tbody>
             {availableRoomTypes.map(
               (
@@ -153,7 +151,7 @@ export default function AvailableRooms({ hotel }: Props) {
                   include: {
                     rooms: {
                       include: {
-                        booking: true;
+                        bookings: true;
                       };
                     };
                   };
@@ -165,7 +163,7 @@ export default function AvailableRooms({ hotel }: Props) {
                   className={`${
                     roomType.rooms.some((room) => {
                       //Make row blur when roomType not have A Single room AVAILABLE
-                      room.booking?.length > 0;
+                      room.bookings?.length > 0;
                     })
                       ? "opacity-35"
                       : ""

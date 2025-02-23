@@ -21,7 +21,7 @@ export default function ProfileDropDownMenu() {
   const dispatch = useDispatch<AppDispatch>();
 
   const { data: user } = useSWR(
-    `/api/users/${userInfo?.id}`,
+    () => `/api/users/${userInfo?.id}`,
     axiosCustomFetcher
   );
 

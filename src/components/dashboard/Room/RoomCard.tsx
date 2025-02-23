@@ -25,11 +25,10 @@ interface Props {
 export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const {
-    data: room,
-    isLoading: isRoomLoading,
-    error: isRoomError,
-  } = useSWR(`/api/rooms/${roomId}`, axiosCustomFetcher);
+  const { data: room } = useSWR(
+    () => `/api/rooms/${roomId}`,
+    axiosCustomFetcher
+  );
 
   async function handleSubmit(id: string, body: RoomDtoUpdateRequest) {
     await roomsServices.UpdateOne(id, body);

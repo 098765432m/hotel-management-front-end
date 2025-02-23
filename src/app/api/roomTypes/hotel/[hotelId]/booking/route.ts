@@ -36,7 +36,7 @@ export async function GET(
         hotel_id: params.hotelId,
         rooms: {
           some: {
-            booking: {
+            bookings: {
               none: {
                 OR: [
                   {
@@ -52,7 +52,7 @@ export async function GET(
       include: {
         rooms: {
           where: {
-            booking: {
+            bookings: {
               none: {
                 OR: [
                   {

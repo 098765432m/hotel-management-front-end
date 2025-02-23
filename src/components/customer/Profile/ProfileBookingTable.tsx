@@ -18,13 +18,9 @@ export default function ProfileBookingTable() {
   const authStore = useSelector((state: RootState) => state.auth);
 
   // Get Booking Data Table
-  const {
-    data: bookings,
-    isLoading: isBookingsLoading,
-    error: isBookingsError,
-    mutate: bookingsMutate,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/bookings/user/${authStore.authInfo?.id}`,
+  const { data: bookings, mutate: bookingsMutate } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/bookings/user/${authStore.authInfo?.id}`,
     axiosCustomFetcher
   );
 

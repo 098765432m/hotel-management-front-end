@@ -1,11 +1,7 @@
 # image
 
-- Khi lấy ảnh từ url nên nhớ phải thêm /version vào dù có thể tự tạo /v1
+- Crop image
 
-* Upload vầ lấy ảnh từ Cloudinary
+- Optimize ảnh cho load nhanh
 
-* Crop image
-
-* Optimize ảnh cho load nhanh
-
-* Responsive ảnh
+- Responsive ảnh

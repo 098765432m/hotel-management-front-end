@@ -2,25 +2,21 @@
 
 import styles from "@/styles/dashboard/room-type/RoomType.module.scss";
 import { RoomType } from "@/types/roomTypes.interface";
-import { List, Table, TableProps } from "antd";
 
 import RoomTypeCard from "./RoomTypeCard";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/fetcher";
 import EmptyData from "@/components/custom-component/EmptyData";
-import CardDefault from "@/components/custom-component/CardDefault";
 
 interface Props {
   hotelId: string;
 }
 
 export default function RoomTypeList({ hotelId }: Props) {
-  const {
-    data: roomTypes,
-    isLoading: isRoomTypesLoading,
-    error: isRoomTypesError,
-    mutate: roomTypeMutate,
-  } = useSWR(`/api/roomTypes/hotel/${hotelId}`, axiosCustomFetcher);
+  const { data: roomTypes, mutate: roomTypeMutate } = useSWR(
+    () => `/api/roomTypes/hotel/${hotelId}`,
+    axiosCustomFetcher
+  );
 
   return (
     <div className={styles.room_type_list_container}>

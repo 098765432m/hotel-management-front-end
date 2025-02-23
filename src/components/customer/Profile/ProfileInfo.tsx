@@ -37,13 +37,8 @@ export default function ProfileInfo({ user_init }: Props) {
     useDisclosure(false);
 
   // Get User Data
-  const {
-    data: user,
-    isLoading: isUserLoading,
-    error: isUserError,
-    mutate: userMutate,
-  } = useSWR(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/users/${user_init.id}`,
+  const { data: user, mutate: userMutate } = useSWR(
+    () => `${process.env.NEXT_PUBLIC_APP_URL}/api/users/${user_init.id}`,
     axiosCustomFetcher
   );
 

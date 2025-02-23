@@ -13,19 +13,11 @@ import { useSelector } from "react-redux";
 import useSWR from "swr";
 import StaffCard from "./StaffCard";
 
-interface Props {
-  hotelId: string;
-}
-
 export default function ListStaff() {
-  const authStore = useSelector((state: RootState) => state.auth);
+  const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
-  const {
-    data: staffs,
-    isLoading: isStaffsLoading,
-    error: isStaffsError,
-  } = useSWR(
-    `/api/users/hotel/${authStore.authInfo?.hotelId}`,
+  const { data: staffs } = useSWR(
+    () => `/api/users/hotel/${authInfo!.hotelId}`,
     axiosCustomFetcher
   );
 
@@ -44,8 +36,9 @@ export default function ListStaff() {
         </div>
         <div className={styles.staff_list}>
           {staffs &&
+            staffs.length > 0 &&
             staffs.map((staff: StaffOfHotelDto, index: number) => {
-              return <StaffCard id={staff.id} key={index}></StaffCard>;
+              return <StaffCard userId={staff.id} key={index}></StaffCard>;
             })}
         </div>
       </div>

@@ -1,4 +1,5 @@
 namespace CustomError {
+  // Lỗi Input người dùng
   export class ValidationError extends Error {
     statusCode: number;
 
@@ -8,7 +9,6 @@ namespace CustomError {
       this.statusCode = 400;
     }
   }
-
   export class AuthenticationError extends Error {
     statusCode: number;
 
@@ -29,6 +29,7 @@ namespace CustomError {
     }
   }
 
+  // Lỗi không tìm thấy tài nguyên
   export class NotFoundError extends Error {
     statusCode: number;
 
@@ -39,6 +40,7 @@ namespace CustomError {
     }
   }
 
+  // Lỗi hệ thống
   export class InternalServerError extends Error {
     statusCode: number;
 

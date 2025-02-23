@@ -13,17 +13,19 @@ import { RootState } from "@/state/store";
 import { RoomDtoCreate } from "@/types/dto/room.dto";
 
 export default function RoomForm() {
-  const authStore = useSelector((state: RootState) => state.auth);
+  const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
-  const {
-    data: roomTypes,
-    isLoading: roomTypeLoading,
-    error: roomTypeError,
-  } = useSWR(`${process.env.NEXT_PUBLIC_APP_URL}/api/roomTypes`, axiosFetcher);
+  const { data: roomTypes } = useSWR(
+    () =>
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/roomTypes/hotel/${
+        authInfo!.hotelId
+      }`,
+    axiosFetcher
+  );
 
   async function handleSubmit(body: RoomDtoCreate) {
     await roomsServices.CreateOne(body);
-    mutate(`/api/rooms/hotel/${authStore.authInfo?.hotelId}`);
+    mutate(`/api/rooms/hotel/${authInfo!.hotelId}`);
   }
 
   if (roomTypes)
@@ -44,7 +46,7 @@ export default function RoomForm() {
                 name: values.add_room_name,
                 description: values.add_room_description,
                 room_type_id: values.add_room_type_id,
-                hotel_id: authStore.authInfo?.hotelId as string,
+                hotel_id: authInfo!.hotelId as string,
               })
             }
           >

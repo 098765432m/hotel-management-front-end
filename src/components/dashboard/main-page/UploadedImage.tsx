@@ -9,16 +9,16 @@ import imagesService from "@/services/images.service";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
+import { axiosCustomFetcher } from "@/lib/fetcher";
 
 export default function UploadedImage() {
   const authStore = useSelector((state: RootState) => state.auth);
 
   //Fetch Hotel
-  const {
-    data: hotel,
-    isLoading: isHotelLoading,
-    error: isHotelError,
-  } = useSWR(`/api/hotels/${authStore.authInfo?.hotelId}`);
+  const { data: hotel } = useSWR(
+    () => `/api/hotels/${authStore.authInfo?.hotelId}`,
+    axiosCustomFetcher
+  );
 
   //Handle Remove Image
   const handleRemoveImage = async (imageId: string, public_id: string) => {
