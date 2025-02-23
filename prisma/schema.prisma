@@ -101,7 +101,10 @@ model Room {
   room_type       RoomType     @relation(fields: [room_type_id], references: [id])
 
   //Booking
-  booking         Booking[]
+  bookings        Booking[]
+
+  current_booking_id          String?      @unique
+  current_booking             Booking?     @relation("CurrentBooking",fields: [current_booking_id], references: [id])
 
   @@unique([name, room_type_id])
 }
@@ -111,10 +114,14 @@ model Booking {
   check_in_date     DateTime        @default(now())
   check_out_date    DateTime        
   status            Status_Booking  @default(BOOKED)
+  createAt          DateTime        @default(now())
+  updateAt          DateTime        @default(now()) @updatedAt
 
   //Room
   room_id           String
   room              Room            @relation(fields: [room_id], references: [id])
+
+  current_room      Room?           @relation("CurrentBooking")
 
   //User
   user_id           String?
@@ -123,7 +130,12 @@ model Booking {
   //Guest with no account
   full_name         String?
   phone_number      String?     
-  email             String?         
+  email             String?     
+
+  //index
+  // @@index([check_in_date, check_out_date])
+  // @@index([user_id])
+  // @@index([status], type: Hash)    
 }
 
 model RoomType {

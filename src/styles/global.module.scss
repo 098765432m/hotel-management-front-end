@@ -12,6 +12,7 @@ $section-spacing: 20px;
   font-size: 1.75rem;
   line-height: 6rem;
   font-weight: bold;
+  user-select: none;
 }
 
 @mixin description-text() {

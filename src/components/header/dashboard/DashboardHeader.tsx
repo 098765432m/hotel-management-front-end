@@ -18,6 +18,9 @@ export default async function DashboardHeader() {
             <NextLink href={"/dashboard/booking"}>Lịch phòng</NextLink>
           </div>
           <div>
+            <NextLink href={"/dashboard/payment"}>Thanh toán</NextLink>
+          </div>
+          <div>
             <NextLink href={"/dashboard/roomType"}>Quản lý loại phòng</NextLink>
           </div>
           <div>

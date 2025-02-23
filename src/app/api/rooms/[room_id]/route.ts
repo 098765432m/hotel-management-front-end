@@ -12,7 +12,7 @@ export async function GET(
     include: {
       hotel: true,
       room_type: true,
-      booking: true,
+      bookings: true,
     },
   });
 

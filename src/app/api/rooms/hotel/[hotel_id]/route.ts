@@ -11,6 +11,8 @@ export async function GET(
     },
     include: {
       room_type: true,
+      bookings: true,
+      current_booking: true,
     },
     orderBy: {
       name: "asc",

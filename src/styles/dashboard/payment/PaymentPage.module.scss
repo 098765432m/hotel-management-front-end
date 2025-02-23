@@ -1,0 +1,24 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.payment_page_container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  column-gap: global-scss.$section-spacing;
+
+  .payment_panel_container {
+    .payment_panel_heading {
+      @include global-scss.heading-text;
+    }
+  }
+
+  .room_table_container {
+    user-select: none;
+
+    tbody tr {
+      cursor: pointer;
+    }
+    .room_table_heading {
+      @include global-scss.heading-text;
+    }
+  }
+}
