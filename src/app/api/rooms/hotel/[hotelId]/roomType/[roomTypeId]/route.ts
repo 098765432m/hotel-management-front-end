@@ -8,21 +8,25 @@ export async function GET(
     params,
   }: {
     params: {
-      hotel_id: string;
-      room_type_id: string;
+      hotelId: string;
+      roomTypeId: string;
     };
   }
 ) {
   try {
     const rooms = await prisma.room.findMany({
       where: {
-        hotel_id: params.hotel_id,
-        room_type_id: params.room_type_id,
+        hotel_id: params.hotelId,
+        room_type_id: params.roomTypeId,
       },
 
       select: {
         id: true,
         name: true,
+      },
+
+      orderBy: {
+        name: "asc",
       },
     });
 

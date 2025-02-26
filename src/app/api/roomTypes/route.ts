@@ -8,6 +8,9 @@ export async function GET() {
       rooms: true,
       images: true,
     },
+    orderBy: {
+      name: "asc",
+    },
   });
 
   return NextResponse.json(roomTypes);

@@ -19,9 +19,12 @@ $table-border: 2px solid black;
       td {
         border: $table-border;
         text-align: center;
-
-        .booking_control {
-        }
+      }
+      .control_column {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
       }
     }
   }

@@ -21,13 +21,13 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { room_id: string } }
+  { params }: { params: { roomId: string } }
 ) {
   const body: RoomDtoUpdateRequest = await req.json();
 
   const updatedRoom = await prisma.room.update({
     where: {
-      id: params.room_id,
+      id: params.roomId,
     },
     data: body,
   });

@@ -13,6 +13,22 @@ export interface BookingsDtoCreate {
   phoneNumber?: string | null;
 }
 
+export interface BookingsDashboardDtoCreate {
+  checkInDate: string;
+  checkOutDate: string;
+  roomId: string;
+  status: Status_Booking;
+  userId?: string | null;
+  fullName?: string;
+  phoneNumber?: string;
+}
+
+export interface BookingsDashboardDtoUpdate {
+  checkInDate: string;
+  checkOutDate: string;
+  roomId: string;
+}
+
 export interface GetBookingsByUserDtoResponse {
   id: string;
   check_in_date: string;

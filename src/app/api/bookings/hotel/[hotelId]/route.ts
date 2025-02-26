@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/client";
 import { handleNextApiError } from "@/lib/error-handler/errorHandler";
 import CustomError from "@/lib/error-handler/errors";
-import dayjs from "dayjs";
+import { BookingsDashboardDtoCreate } from "@/types/dto/booking.dto";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -23,6 +23,9 @@ export async function GET(
         "Lỗi hệ thống! Format ngày bị lỗi"
       );
     }
+
+    console.log("datequery", "filterDate", dateQuery, filterDate);
+
     const bookings = await prisma.booking.findMany({
       where: {
         room: {
@@ -42,6 +45,7 @@ export async function GET(
             hotel_id: true,
             room_type: {
               select: {
+                id: true,
                 name: true,
                 price: true,
               },
@@ -49,14 +53,45 @@ export async function GET(
           },
         },
       },
+      orderBy: [{ status: "asc" }, { room: { name: "asc" } }],
     });
-
-    console.log("bookings", bookings);
-
     return NextResponse.json(bookings);
   } catch (error) {
     console.error(error);
 
+    return handleNextApiError(error);
+  }
+}
+
+//Dashboard Tạo 1 Booking
+export async function POST(
+  request: Request,
+  { params }: { params: { hotelId: string } }
+) {
+  try {
+    const body: BookingsDashboardDtoCreate = await request.json();
+
+    console.log("body", body);
+
+    const createdBooking = await prisma.booking.create({
+      data: {
+        check_in_date: body.checkInDate,
+        check_out_date: body.checkOutDate,
+        status: body.status,
+        room_id: body.roomId,
+        ...(body.userId
+          ? {
+              user_id: body.userId,
+            }
+          : {
+              full_name: body.fullName,
+              phone_number: body.phoneNumber,
+            }),
+      },
+    });
+    return NextResponse.json(createdBooking);
+  } catch (error) {
+    console.error(error);
     return handleNextApiError(error);
   }
 }

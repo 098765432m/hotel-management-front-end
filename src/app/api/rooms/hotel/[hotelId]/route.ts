@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
-  { params }: { params: { hotel_id: string } }
+  { params }: { params: { hotelId: string } }
 ) {
   const rooms = await prisma.room.findMany({
     where: {
-      hotel_id: params.hotel_id,
+      hotel_id: params.hotelId,
     },
     include: {
       room_type: true,

@@ -12,6 +12,9 @@ export async function GET(
     include: {
       image: true,
     },
+    orderBy: {
+      role: "asc",
+    },
   });
 
   return NextResponse.json(staffs);

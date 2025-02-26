@@ -10,6 +10,9 @@ export async function GET() {
       hotel: true,
       booking: true,
     },
+    orderBy: {
+      role: "asc",
+    },
   });
 
   return NextResponse.json(users);
@@ -25,13 +28,7 @@ export async function POST(req: Request) {
     data: {
       ...data,
       id: uid.rnd(),
-      // username: data.username,
       password: await hashedPassword(data.password ?? "113446"),
-      // full_name: data.full_name,
-      // email: data.email,
-      // phone_number: data.phone_number,
-      // role: data.role,
-      // hotel_id: data.hotel_id,
     },
   });
 
