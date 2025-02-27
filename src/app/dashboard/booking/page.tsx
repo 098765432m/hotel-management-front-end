@@ -28,6 +28,7 @@ import { FaTrashAlt, FaCheck } from "react-icons/fa";
 
 import { MdEdit } from "react-icons/md";
 import { AxiosError } from "axios";
+import { convertBookingStatusToLabel } from "@/utils/helpers";
 
 interface ModalBookingForm
   extends Prisma.BookingGetPayload<{
@@ -159,9 +160,10 @@ export default function BookingPage() {
                       <td>
                         {dayjs(booking.check_out_date).format("DD-MM-YYYY")}
                       </td>
-                      <td>{booking.status}</td>
+                      <td>{convertBookingStatusToLabel(booking.status)}</td>
                       <td className={customTableStyles.control_column}>
                         <Popconfirm
+                          disabled={booking.status !== Status_Booking.BOOKED}
                           placement="topRight"
                           title="Nhận phòng cho khách hàng này ?"
                           onConfirm={async () => {
@@ -180,7 +182,10 @@ export default function BookingPage() {
                           okText="Nhận"
                           cancelText="Không"
                         >
-                          <button className="bg-green-400 border-0 rounded-md text-white cursor-pointer hover:bg-green-500 flex items-center py-2">
+                          <button
+                            disabled={booking.status !== Status_Booking.BOOKED}
+                            className="bg-green-400 border-0 rounded-md text-white cursor-pointer disabled:bg-slate-300 hover:bg-green-500 flex items-center py-2"
+                          >
                             <FaCheck></FaCheck>
                           </button>
                         </Popconfirm>
@@ -205,7 +210,8 @@ export default function BookingPage() {
 
                             form.setFieldValue(["roomId"], booking.room_id);
                           }}
-                          className="bg-yellow-400 border-0 rounded-md text-white cursor-pointer hover:bg-yellow-500 flex items-center py-2"
+                          disabled={booking.status === Status_Booking.PAID}
+                          className="bg-yellow-400 border-0 rounded-md text-white cursor-pointer disabled:bg-slate-300 hover:bg-yellow-500 flex items-center py-2"
                         >
                           <MdEdit></MdEdit>
                         </button>
@@ -222,7 +228,7 @@ export default function BookingPage() {
                           okText="Có"
                           cancelText="Không"
                         >
-                          <button className="bg-red-400 border-0 rounded-md text-white cursor-pointer hover:bg-red-500 flex items-center py-2">
+                          <button className="bg-red-400 border-0 rounded-md text-white cursor-pointer disabled:bg-slate-300 hover:bg-red-500 flex items-center py-2">
                             <FaTrashAlt></FaTrashAlt>
                           </button>
                         </Popconfirm>
@@ -343,7 +349,7 @@ export default function BookingPage() {
               {Object.values(Status_Booking).map((status) => {
                 return (
                   <Select.Option key={status} value={status}>
-                    {status}
+                    {convertBookingStatusToLabel(status)}
                   </Select.Option>
                 );
               })}

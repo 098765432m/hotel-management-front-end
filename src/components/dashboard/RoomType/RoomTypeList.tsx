@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function RoomTypeList({ hotelId }: Props) {
-  const { data: roomTypes, mutate: roomTypeMutate } = useSWR(
+  const { data: roomTypes } = useSWR(
     () => `/api/roomTypes/hotel/${hotelId}`,
     axiosCustomFetcher
   );
@@ -29,8 +29,8 @@ export default function RoomTypeList({ hotelId }: Props) {
               return (
                 <div key={index}>
                   <RoomTypeCard
+                    hotelId={hotelId}
                     RoomType={roomType}
-                    mutate={roomTypeMutate}
                   ></RoomTypeCard>
                 </div>
               );

@@ -28,14 +28,14 @@ enum Status_Booking {
 }
 
 model User {
-  id                String     @id @unique
-  username          String     @unique
+  id                String    @id @unique
+  username          String    @unique
   password          String
-  full_name          String     
-  email             String     @unique
-  phone_number       String    @unique
-  role              Role       @default(GUEST)
-  is_active          Boolean   @default(false)
+  full_name         String     
+  email             String    @unique
+  phone_number      String    @unique
+  role              Role      @default(GUEST)
+  is_active         Boolean   @default(false)
 
   //Booking
   booking           Booking[]
@@ -128,8 +128,8 @@ model Booking {
   user              User?           @relation(fields: [user_id], references: [id])
 
   //Guest with no account
-  full_name         String?
-  phone_number      String?
+  full_name         String
+  phone_number      String
 
   //index
   // @@index([check_in_date, check_out_date])
@@ -157,6 +157,7 @@ model RoomType {
 
 model Bill {
   id                String    @default(cuid()) @id @unique
+  discount          Int       @default(0)
   total_price       Int
   check_in_date     DateTime
   check_out_date    DateTime
@@ -166,7 +167,8 @@ model Bill {
   room_type_name    String
   room_name         String
   staff_billed_name String
-  date_billed       DateTime
+  note              String?
+  date_billed       DateTime      @default(now())
 }
 
 model Image {

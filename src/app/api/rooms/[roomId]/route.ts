@@ -3,11 +3,13 @@ import { prisma } from "@/lib/client";
 import { RoomDtoUpdateRequest } from "@/types/dto/room.dto";
 export async function GET(
   request: Request,
-  { params }: { params: { room_id: string } }
+  { params }: { params: { roomId: string } }
 ) {
+  console.log("roomID", params.roomId);
+
   const room = await prisma.room.findUnique({
     where: {
-      id: params.room_id,
+      id: params.roomId,
     },
     include: {
       hotel: true,

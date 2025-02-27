@@ -15,20 +15,21 @@ import {
 } from "antd";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { useState } from "react";
+import { mutate as mutateGlobal } from "swr";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
 import { IoCloudUpload as UploadIcon } from "react-icons/io5";
 import { UploadedRoomTypeImage } from "@/types/dto/image.dto";
 import CardDefault from "@/components/custom-component/CardDefault";
-import MantineButton from "@/components/custom-component/MantineButton";
+
 import { Button } from "@mantine/core";
 
 interface Props {
+  hotelId: string;
   RoomType: RoomType;
-  mutate: any;
 }
 
-export default function RoomTypeCard({ RoomType, mutate }: Props) {
+export default function RoomTypeCard({ hotelId, RoomType }: Props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isConfirmRmOpen, setConfirmRmOpen] = useState(false);
   const [name, setName] = useState(RoomType.name);
@@ -46,19 +47,16 @@ export default function RoomTypeCard({ RoomType, mutate }: Props) {
       images: uploadedImage,
     });
 
-    mutate();
-    console.log(typeof mutate());
+    mutateGlobal(`/api/roomTypes/hotel/${hotelId}`); // Tại sao mutate không được
 
     setUploadedImage([]);
   };
 
   //Handle Remove a Single Image
   const handleRemoveImage = async (imageId: string, public_id: string) => {
-    const result = await imagesService.removeOne(imageId, public_id);
+    await imagesService.removeOne(imageId, public_id);
 
-    mutate();
-
-    console.log(result);
+    mutateGlobal(`/api/roomTypes/hotel/${hotelId}`); // Tại sao mutate không được
   };
 
   return (

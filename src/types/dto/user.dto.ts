@@ -1,5 +1,4 @@
 import { Role } from "@prisma/client";
-import { string } from "zod";
 
 interface UserCookieResponse {
   id: string;
