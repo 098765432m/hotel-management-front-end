@@ -10,7 +10,7 @@ import { Hotel } from "@/types/hotel.interface";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 
 export default function DashBoardPage() {
   const auInfo = useSelector((state: RootState) => state.auth.authInfo);

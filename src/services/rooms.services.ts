@@ -23,6 +23,11 @@ class RoomsService {
     }
   }
 
+  // Trả về số lượng phòng của khách sạn
+  async getTotalHotelRooms(hotelId: string) {
+    return (await this.api.get(`/hotel/${hotelId}`)).data;
+  }
+
   //Create A Room
   async CreateOne(body: RoomDtoCreate) {
     return (await this.api.post(`/`, body)).data;

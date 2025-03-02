@@ -2,7 +2,7 @@
 
 import styles from "@/styles/header/dashboard/DashboardHeader.module.scss";
 import NextImage from "@/components/custom-component/NextImage";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import useSWR from "swr";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";

@@ -7,7 +7,7 @@ import CustomTable from "@/components/custom-component/CustomTable";
 import EmptyData from "@/components/custom-component/EmptyData";
 import MantineButton from "@/components/custom-component/MantineButton";
 import NextImage from "@/components/custom-component/NextImage";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import bookingsService from "@/services/bookings.service";
 import { RootState } from "@/state/store";
 import { GetBookingsByUserDtoResponse } from "@/types/dto/booking.dto";

@@ -23,7 +23,7 @@ import MantineDatePicker from "@/components/custom-component/date-picker/Mantine
 import dayjs, { Dayjs } from "dayjs";
 import { DatesRangeValue, DateValue } from "@mantine/dates";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { GetRoomTypeBookingDtoResponse } from "@/types/dto/room-types.dto";
 import { Prisma } from "@prisma/client";
 interface Props {

@@ -3,7 +3,7 @@
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import NextImage from "@/components/custom-component/NextImage";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import usersService from "@/services/users.service";
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
 import { UserUpdateDto } from "@/types/dto/user.dto";

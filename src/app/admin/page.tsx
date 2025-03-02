@@ -4,7 +4,7 @@ import { Button, notification, Select } from "antd";
 import CardDefault from "@/components/custom-component/CardDefault";
 import { Form, Input } from "antd";
 import useSWR from "swr";
-import { axiosCustomFetcher, axiosFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher, axiosFetcher } from "@/lib/swr";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import {
   ActionAddress,

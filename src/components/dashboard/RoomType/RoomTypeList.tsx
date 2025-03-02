@@ -5,7 +5,7 @@ import { RoomType } from "@/types/roomTypes.interface";
 
 import RoomTypeCard from "./RoomTypeCard";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import EmptyData from "@/components/custom-component/EmptyData";
 
 interface Props {

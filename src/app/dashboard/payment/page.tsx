@@ -6,10 +6,21 @@ import CustomTable from "@/components/custom-component/CustomTable";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import useSWRInfinite from "swr/infinite";
+import { axiosCustomFetcher, getSWRInfiniteKey } from "@/lib/swr";
 import EmptyData from "@/components/custom-component/EmptyData";
 import { Prisma, Status_Room } from "@prisma/client";
-import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Pagination,
+  PaginationProps,
+  Select,
+} from "antd";
 import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { convertRoomStatusToLabel } from "@/utils/helpers";
@@ -17,11 +28,14 @@ import { BillDtoDashboardCreate } from "@/types/dto/bill.dto";
 import billsService from "@/services/bills.service";
 import usersService from "@/services/users.service";
 import { AxiosError } from "axios";
+import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
+import {
+  RoomHotelListApiResponse,
+  RoomHotelPayload,
+} from "@/types/dto/room.dto";
+import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 
 //Type Prisma include relation
-type RoomWithRelation = Prisma.RoomGetPayload<{
-  include: { room_type: true; bookings: true; current_booking: true };
-}>;
 
 export default function PaymentPage() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -32,11 +46,35 @@ export default function PaymentPage() {
       note: string;
     };
   }>();
-  const { data: rooms } = useSWR(
-    () => `/api/rooms/hotel/${authInfo!.hotelId}`,
-    axiosCustomFetcher
+
+  const getKey = (pageIndex: number, previousPageData: any | null) => {
+    if (previousPageData && !previousPageData.length) return null; // reached the end
+    console.log("pageIndex: ", pageIndex);
+
+    return `/api/rooms/hotel/${
+      authInfo!.hotelId
+    }?page=${pageIndex}&pageSize=${5}`; // SWR key
+  };
+
+  const {
+    data: roomListResponse,
+    size,
+    setSize,
+  } = useCustomSWRInfinite(
+    // getSWRInfiniteKey(`/api/rooms/hotel/${authInfo!.hotelId}?pageSize=${5}`),
+    // (pageIndex) =>
+    `/api/rooms/hotel/${authInfo?.hotelId}?pageSize=${5}`
   );
 
+  //Lấy tổng số phòng
+  let roomData: { rooms: RoomHotelPayload[]; totalRoom: number } | null = null;
+  if (roomListResponse && roomListResponse[0] && roomListResponse[0].success) {
+    roomData = roomListResponse[0].data;
+  }
+
+  console.log("rooms", roomListResponse);
+
+  // Hiển thị Message
   const [messageApi, contextHolder] = message.useMessage();
 
   const successPopUp = (successMessage: string) => {
@@ -55,7 +93,7 @@ export default function PaymentPage() {
 
   const [discount, setDiscount] = useState<number>(0);
 
-  const [selectedRoom, setSelectedRoom] = useState<RoomWithRelation | null>(
+  const [selectedRoom, setSelectedRoom] = useState<RoomHotelPayload | null>(
     null
   );
 
@@ -256,36 +294,57 @@ export default function PaymentPage() {
         <CardDefault>
           <div className={styles.room_table_container}>
             <div className={styles.room_table_heading}>Danh sách phòng</div>
-            <CustomTable>
-              <thead>
-                <tr>
-                  <th>Phòng </th>
-                  <th>Loại</th>
-                  <th>Giá</th>
-                  <th>Trạng thái</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rooms && rooms.length > 0 ? (
-                  rooms.map((room: RoomWithRelation) => {
-                    return (
-                      <tr onClick={() => setSelectedRoom(room)}>
-                        <td>{room.name}</td>
-                        <td>{room.room_type.name}</td>
-                        <td>{room.room_type.price}</td>
-                        <td>{convertRoomStatusToLabel(room.status_room)}</td>
-                      </tr>
-                    );
-                  })
-                ) : (
+            <div className={styles.room_table_layout}>
+              <CustomTable>
+                <thead>
                   <tr>
-                    <td rowSpan={3} colSpan={4}>
-                      <EmptyData></EmptyData>
-                    </td>
+                    <th>Phòng </th>
+                    <th>Loại</th>
+                    <th>Giá</th>
+                    <th>Trạng thái</th>
                   </tr>
-                )}
-              </tbody>
-            </CustomTable>
+                </thead>
+                <tbody>
+                  {roomListResponse &&
+                  roomListResponse[size - 1] &&
+                  roomListResponse[size - 1].data.rooms.length > 0 ? (
+                    roomListResponse[size - 1].data.rooms.map(
+                      (room: RoomHotelPayload) => {
+                        return (
+                          <tr
+                            onClick={() => setSelectedRoom(room)}
+                            key={room.id}
+                          >
+                            <td>{room.name}</td>
+                            <td>{room.room_type.name}</td>
+                            <td>{room.room_type.price}</td>
+                            <td>
+                              {convertRoomStatusToLabel(room.status_room)}
+                            </td>
+                          </tr>
+                        );
+                      }
+                    )
+                  ) : (
+                    <tr>
+                      <td rowSpan={3} colSpan={4}>
+                        <EmptyData></EmptyData>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </CustomTable>
+              <AntdPagination
+                current={size}
+                onChange={(value: number) => {
+                  setSize(value);
+                  console.log("pagination: ", value);
+                }}
+                total={
+                  roomData && roomData.totalRoom > 0 ? roomData.totalRoom : 0
+                }
+              ></AntdPagination>
+            </div>
           </div>
         </CardDefault>
       </div>

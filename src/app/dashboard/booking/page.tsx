@@ -5,7 +5,7 @@ import customTableStyles from "@/styles/custom-component/CustomTable.module.scss
 import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { RootState } from "@/state/store";
 import { DateValue } from "@mantine/dates";
 import {
@@ -21,7 +21,6 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useSWR from "swr";
-import CustomPagination from "@/components/custom-component/CustomPagination";
 import { Prisma, Status_Booking } from "@prisma/client";
 import bookingsService from "@/services/bookings.service";
 import { FaTrashAlt, FaCheck } from "react-icons/fa";
@@ -240,7 +239,6 @@ export default function BookingPage() {
                 )}
               </tbody>
             </CustomTable>
-            <CustomPagination currentPage={1} totalPage={10}></CustomPagination>
           </div>
         </CardDefault>
       </div>

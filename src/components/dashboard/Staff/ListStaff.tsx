@@ -3,7 +3,7 @@
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { RootState } from "@/state/store";
 import { StaffOfHotelDto } from "@/types/dto/user.dto";
 import { TextInput } from "@mantine/core";

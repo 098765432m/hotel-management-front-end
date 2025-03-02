@@ -4,7 +4,7 @@ import styles from "@/styles/customer/hotel-detail/HotelDetail.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import AvailableRooms from "@/components/customer/hotel-page/AvailableRooms";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import bookingsService from "@/services/bookings.service";
 import { UploadedHotelImage } from "@/types/dto/image.dto";
 import { rangeISOToRangeDayJS } from "@/utils/dayjs";

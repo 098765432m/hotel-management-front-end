@@ -5,7 +5,7 @@ import { RoomType } from "@/types/roomTypes.interface";
 
 import CardDefault from "@/components/custom-component/CardDefault";
 import { Button, Form, Input, Select } from "antd";
-import { axiosFetcher } from "@/lib/fetcher";
+import { axiosFetcher } from "@/lib/swr";
 import useSWR, { mutate } from "swr";
 import roomsServices from "@/services/rooms.services";
 import { useSelector } from "react-redux";
@@ -24,6 +24,8 @@ export default function RoomForm() {
   );
 
   async function handleSubmit(body: RoomDtoCreate) {
+    console.log(body);
+
     await roomsServices.CreateOne(body);
     mutate(`/api/rooms/hotel/${authInfo!.hotelId}`);
   }

@@ -4,7 +4,7 @@ import styles from "@/styles/dashboard/main-page/MainPage.module.scss";
 import { Button, Form, Input, Popconfirm, Select } from "antd";
 import CardDefault from "../../custom-component/CardDefault";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { useEffect, useMemo, useReducer, useState } from "react";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
 import { UploadedImageDto } from "@/types/dto/image.dto";

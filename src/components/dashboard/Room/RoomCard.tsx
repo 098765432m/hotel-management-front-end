@@ -12,7 +12,7 @@ import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoTrashBinOutline } from "react-icons/io5";
 import MantineButton from "@/components/custom-component/MantineButton";
 import useSWR, { mutate } from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import roomsServices from "@/services/rooms.services";
 import { RoomDtoUpdateRequest } from "@/types/dto/room.dto";
 

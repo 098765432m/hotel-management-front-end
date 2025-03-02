@@ -3,7 +3,7 @@
 import styles from "@/styles/customer/contact/ContactPage.module.scss";
 import { Select, TextInput, Button, Textarea } from "@mantine/core";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { useMemo, useReducer } from "react";
 import { AddressType } from "@/types/address.interface";
 import { DispatchType } from "@/types/vietnamese-location-api/address";

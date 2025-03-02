@@ -5,7 +5,7 @@ import NextImage from "@/components/custom-component/NextImage";
 import NextLink from "@/components/custom-component/NextLink";
 import React, { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 import { logOut as logOutFromLib } from "@/lib/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/state/store";

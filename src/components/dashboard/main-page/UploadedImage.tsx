@@ -9,7 +9,7 @@ import imagesService from "@/services/images.service";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
-import { axiosCustomFetcher } from "@/lib/fetcher";
+import { axiosCustomFetcher } from "@/lib/swr";
 
 export default function UploadedImage() {
   const authStore = useSelector((state: RootState) => state.auth);
