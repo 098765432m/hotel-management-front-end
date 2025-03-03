@@ -1,21 +1,26 @@
 import { axiosCustomFetcher } from "@/lib/swr";
+import { ApiResponse } from "@/types/common/api-response";
 import useSWRInfinite from "swr/infinite";
 
-export default function useCustomSWRInfinite(key: string) {
-  const { data, size, setSize, isValidating, isLoading } = useSWRInfinite(
+export default function useCustomSWRInfinite<T extends ApiResponse<any>>(
+  key: string | null
+) {
+  const { data, size, setSize, isValidating, isLoading } = useSWRInfinite<T>(
     (pageIndex, previousPageData) => {
+      if (key === null) return null;
+
       // Đầu trang
       if (pageIndex === 0) return () => key;
 
       //Trang kế
       const isIncludeQuestion = key.includes("?");
-      const isIncludePageSize = key.includes("pageSize=");
+      const isIncludeLimit = key.includes("limit=");
 
       return () =>
         `${key}${isIncludeQuestion ? "&" : "?"}page=${pageIndex}${
-          isIncludePageSize
+          isIncludeLimit
             ? ``
-            : `&pageSize=${process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE}`
+            : `&limit=${process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE}`
         }`;
     },
     axiosCustomFetcher

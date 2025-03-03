@@ -20,6 +20,7 @@ import {
   Pagination,
   PaginationProps,
   Select,
+  Spin,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
@@ -34,6 +35,7 @@ import {
   RoomHotelPayload,
 } from "@/types/dto/room.dto";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
+import CustomSpinning from "@/components/custom-component/CustomSpinning";
 
 //Type Prisma include relation
 
@@ -51,19 +53,16 @@ export default function PaymentPage() {
     if (previousPageData && !previousPageData.length) return null; // reached the end
     console.log("pageIndex: ", pageIndex);
 
-    return `/api/rooms/hotel/${
-      authInfo!.hotelId
-    }?page=${pageIndex}&pageSize=${5}`; // SWR key
+    return `/api/rooms/hotel/${authInfo!.hotelId}?page=${pageIndex}&limit=${5}`; // SWR key
   };
 
   const {
     data: roomListResponse,
     size,
     setSize,
-  } = useCustomSWRInfinite(
-    // getSWRInfiniteKey(`/api/rooms/hotel/${authInfo!.hotelId}?pageSize=${5}`),
-    // (pageIndex) =>
-    `/api/rooms/hotel/${authInfo?.hotelId}?pageSize=${5}`
+    isValidating: isRoomListValidating,
+  } = useCustomSWRInfinite<RoomHotelListApiResponse>(
+    `/api/rooms/hotel/${authInfo?.hotelId}?limit=${5}`
   );
 
   //Lấy tổng số phòng
@@ -305,9 +304,19 @@ export default function PaymentPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {roomListResponse &&
-                  roomListResponse[size - 1] &&
-                  roomListResponse[size - 1].data.rooms.length > 0 ? (
+                  {isRoomListValidating ? ( //Hiển thị loading state
+                    <tr>
+                      <td
+                        rowSpan={6}
+                        colSpan={4}
+                        className={styles.loading_state}
+                      >
+                        <CustomSpinning tip="Loading"></CustomSpinning>
+                      </td>
+                    </tr>
+                  ) : roomListResponse &&
+                    roomListResponse[size - 1] &&
+                    roomListResponse[size - 1].data.rooms.length > 0 ? (
                     roomListResponse[size - 1].data.rooms.map(
                       (room: RoomHotelPayload) => {
                         return (

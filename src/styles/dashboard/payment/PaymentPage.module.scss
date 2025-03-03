@@ -20,10 +20,5 @@
     .room_table_heading {
       @include global-scss.heading-text;
     }
-
-    .room_table_layout {
-      display: grid;
-      row-gap: 20px;
-    }
   }
 }

@@ -1,18 +1,33 @@
-import { Role } from "@prisma/client";
+import { Prisma, Role } from "@prisma/client";
+import { ApiResponse } from "../common/api-response";
 
-interface UserCookieResponse {
+export interface UserCookieResponse {
   id: string;
   username: string;
   role: string;
   hotelId?: string | null;
 }
 
-interface UserGetResponseDto {
+// GET /hotel/[hotelId]
+export interface StaffHotelPayload
+  extends Omit<
+    Prisma.UserGetPayload<{ include: { image: true } }>,
+    "password"
+  > {}
+
+export type StaffHotelApiResponse = ApiResponse<{
+  staffs: StaffHotelPayload[];
+  total: number;
+}>;
+
+// End
+
+export interface UserGetResponseDto {
   id: string;
   username: string;
   fullName: string;
-  email: string;
   phoneNumber: string;
+  email: string;
   role: string;
   hotelId?: string;
   image?: {
@@ -21,7 +36,7 @@ interface UserGetResponseDto {
   };
 }
 
-interface UserUpdateResponse {
+export interface UserUpdateResponse {
   username: string;
   fullName: string;
   email: string;
@@ -30,7 +45,7 @@ interface UserUpdateResponse {
   hotelId?: string | null;
 }
 
-interface UserUpdateDto {
+export interface UserUpdateDto {
   username: string;
   password?: string;
   fullName: string;
@@ -40,7 +55,7 @@ interface UserUpdateDto {
   isActive?: boolean;
 }
 
-interface StaffOfHotelDto {
+export interface StaffOfHotelDto {
   id: string;
   username: string;
   fullName: string;
@@ -52,11 +67,3 @@ interface StaffOfHotelDto {
     format: string;
   };
 }
-
-export type {
-  UserCookieResponse,
-  UserGetResponseDto,
-  UserUpdateResponse,
-  UserUpdateDto,
-  StaffOfHotelDto,
-};

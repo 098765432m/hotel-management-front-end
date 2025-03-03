@@ -11,17 +11,17 @@ export async function GET(
     const pageQuery = req.nextUrl.searchParams.get("page");
     console.log("pageQuery", pageQuery);
 
-    const pageSizeQuery = req.nextUrl.searchParams.get("pageSize");
+    const limitQuery = req.nextUrl.searchParams.get("limit");
     const pageIndex = pageQuery ? Number(pageQuery) : undefined; // Vị trí số trang hiện tại
 
     //Tính kích cỡ số lượng 1 trang
-    const pageSize = pageSizeQuery ? Number(pageSizeQuery) : undefined;
+    const limit = limitQuery ? Number(limitQuery) : undefined;
 
     console.log(hotelId, pageIndex);
     //Tính số phần tử bỏ qua
-    const pageSkip = pageSize && pageIndex ? pageIndex * pageSize : undefined;
+    const pageSkip = limit && pageIndex ? pageIndex * limit : undefined;
 
-    console.log("pageSize", pageSize);
+    console.log("pageSize", limit);
 
     console.log("pageSkip", pageSkip);
 
@@ -40,7 +40,7 @@ export async function GET(
           name: "asc",
         },
         skip: pageSkip,
-        take: pageSize,
+        take: limit,
       }),
 
       // Trả về tổng số phòng của khách sạn

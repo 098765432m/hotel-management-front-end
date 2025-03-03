@@ -99,13 +99,6 @@ export default function BookingPage() {
     axiosCustomFetcher
   );
 
-  // useEffect(() => {
-  //   if (rooms && rooms?.length > 0 && pendingRoomId != null) {
-  //     form.setFieldsValue({ roomId: pendingRoomId });
-  //     setPendingRoomId(null);
-  //   }
-  // }, [rooms, pendingRoomId]);
-
   return (
     <>
       <div className={styles.booking_page_container}>

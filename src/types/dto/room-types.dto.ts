@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { ApiResponse } from "../common/api-response";
 
 export interface RoomTypeUpdateDto {
   name: string;
@@ -17,3 +18,12 @@ export type RoomTypeCustomerFetchDto = {
   name: string;
   price: number;
 };
+
+// GET /hotel/[hotelId]
+export interface RoomTypeHotelPayload
+  extends Prisma.RoomTypeGetPayload<{ include: { images: true } }> {}
+
+export type RoomTypeHotelApiResponse = ApiResponse<{
+  roomTypes: RoomTypeHotelPayload[];
+  totalRoomType: number;
+}>;

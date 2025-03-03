@@ -23,10 +23,11 @@ import { UploadedRoomTypeImage } from "@/types/dto/image.dto";
 import CardDefault from "@/components/custom-component/CardDefault";
 
 import { Button } from "@mantine/core";
+import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
 
 interface Props {
   hotelId: string;
-  RoomType: RoomType;
+  RoomType: RoomTypeHotelPayload;
 }
 
 export default function RoomTypeCard({ hotelId, RoomType }: Props) {

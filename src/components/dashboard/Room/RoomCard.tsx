@@ -15,11 +15,12 @@ import useSWR, { mutate } from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
 import roomsServices from "@/services/rooms.services";
 import { RoomDtoUpdateRequest } from "@/types/dto/room.dto";
+import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
 
 interface Props {
   hotelId: string;
   roomId: string;
-  roomTypes: RoomType[];
+  roomTypes: RoomTypeHotelPayload[] | null;
 }
 
 export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
@@ -97,11 +98,12 @@ export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
             </Form.Item>
             <Form.Item name={"roomTypeId"} label="Loại phòng" required>
               <Select>
-                {roomTypes.map((roomType: RoomType, index: number) => (
-                  <Select.Option value={roomType.id} key={index}>
-                    {roomType.name}
-                  </Select.Option>
-                ))}
+                {roomTypes &&
+                  roomTypes.map((roomType: RoomType, index: number) => (
+                    <Select.Option value={roomType.id} key={index}>
+                      {roomType.name}
+                    </Select.Option>
+                  ))}
               </Select>
             </Form.Item>
             <div className={styles.edit_form_control}>

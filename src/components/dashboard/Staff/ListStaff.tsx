@@ -5,21 +5,38 @@ import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { axiosCustomFetcher } from "@/lib/swr";
 import { RootState } from "@/state/store";
-import { StaffOfHotelDto } from "@/types/dto/user.dto";
+import { StaffHotelApiResponse, StaffOfHotelDto } from "@/types/dto/user.dto";
 import { TextInput } from "@mantine/core";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 import { useSelector } from "react-redux";
 import useSWR from "swr";
 import StaffCard from "./StaffCard";
+import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
+import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
+import EmptyData from "@/components/custom-component/EmptyData";
+import CustomSpinning from "@/components/custom-component/CustomSpinning";
 
 export default function ListStaff() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
-  const { data: staffs } = useSWR(
-    () => `/api/users/hotel/${authInfo!.hotelId}`,
-    axiosCustomFetcher
+  const {
+    data: staffApiResponse,
+    size: staffSize,
+    setSize: setStaffSize,
+    isValidating: isStaffValidating,
+  } = useCustomSWRInfinite<StaffHotelApiResponse>(
+    authInfo ? `/api/users/hotel/${authInfo!.hotelId}` : null
   );
+
+  let staffData = null;
+  if (
+    staffApiResponse &&
+    staffApiResponse.length > 0 &&
+    staffApiResponse[staffSize - 1].success
+  ) {
+    staffData = staffApiResponse[staffSize - 1].data;
+  }
 
   return (
     <CardDefault>
@@ -34,13 +51,28 @@ export default function ListStaff() {
             <FaMagnifyingGlass></FaMagnifyingGlass>
           </MantineButton>
         </div>
-        <div className={styles.staff_list}>
-          {staffs &&
-            staffs.length > 0 &&
-            staffs.map((staff: StaffOfHotelDto, index: number) => {
-              return <StaffCard userId={staff.id} key={index}></StaffCard>;
-            })}
-        </div>
+        {isStaffValidating ? (
+          <CustomSpinning size="default"></CustomSpinning>
+        ) : (
+          <>
+            <div className={styles.staff_list}>
+              {staffData && staffData.staffs.length > 0 ? (
+                staffData.staffs.map((staff) => {
+                  return (
+                    <StaffCard userId={staff.id} key={staff.id}></StaffCard>
+                  );
+                })
+              ) : (
+                <EmptyData></EmptyData>
+              )}
+            </div>
+            <AntdPagination
+              current={staffSize}
+              onChange={(value: number) => setStaffSize(value)}
+              total={staffData?.total ?? 0}
+            ></AntdPagination>
+          </>
+        )}
       </div>
     </CardDefault>
   );
