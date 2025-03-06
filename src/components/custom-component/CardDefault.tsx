@@ -1,15 +1,27 @@
 import styles from "@/styles/custom-component/CardDefault.module.scss";
-import React from "react";
+import React, { forwardRef } from "react";
 import clsx from "clsx";
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
   children: React.ReactNode;
 }
 
+// const CardDefault = forwardRef<HTMLDivElement, Props>(
+//   ({ children, className, ...rest }) => {
+//     return (
+//       <div className={clsx(styles.custom_card_default, className)} {...rest}>
+//         {children}
+//       </div>
+//     );
+//   }
+// );
+
+// export default CardDefault;
+
 // Component Card chung
-export default function CardDefault({ children, className }: Props) {
+export default function CardDefault({ children, className, ...rest }: Props) {
   return (
-    <div className={clsx(styles.custom_card_default, className)}>
+    <div className={clsx(styles.custom_card_default, className)} {...rest}>
       {children}
     </div>
   );

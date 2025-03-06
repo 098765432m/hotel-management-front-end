@@ -1,8 +1,6 @@
 import styles from "@/styles/customer/search-result/SearchResultPage.module.scss";
-import SearchResultList from "@/components/customer/search-result/search-result-list/SearchResultList";
 import { transformAddressSelectInput } from "@/utils/helpers";
 import axios from "axios";
-import SearchPanel from "@/components/customer/search-result/search-panel/SearchPanel";
 import SearchResultLayout from "@/components/customer/search-result/SearchResultLayout";
 export default async function SearchResultPage() {
   const listProvinceResponse = await axios.get(

@@ -29,14 +29,9 @@ export default function RoomList() {
     authInfo?.hotelId ? `/api/rooms/hotel/${authInfo!.hotelId}?limit=6` : null
   );
 
-  let roomCurrentData = null;
-  if (
-    roomsApiResponse &&
-    roomsApiResponse[sizeRoom - 1] &&
-    roomsApiResponse[sizeRoom - 1].data
-  ) {
-    roomCurrentData = roomsApiResponse[sizeRoom - 1].data;
-  }
+  const roomCurrentData = roomsApiResponse
+    ? roomsApiResponse[sizeRoom - 1]?.data ?? null
+    : null;
 
   console.log(roomsApiResponse);
 
@@ -50,9 +45,9 @@ export default function RoomList() {
       <div className={styles.room_list_container}>
         <div className={styles.room_list_heading}>Danh sách phòng</div>
 
-        {isRoomValidating ? (
+        {isRoomValidating || !roomCurrentData ? (
           <CustomSpinning></CustomSpinning>
-        ) : roomCurrentData && roomCurrentData.rooms.length > 0 ? (
+        ) : roomCurrentData.rooms.length > 0 ? (
           <>
             <div className={styles.room_list}>
               {roomCurrentData.rooms.map(

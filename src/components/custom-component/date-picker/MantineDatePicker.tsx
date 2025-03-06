@@ -5,5 +5,7 @@ interface Props
   extends React.ComponentPropsWithoutRef<typeof DatePickerInput> {}
 
 export default function MantineDatePicker(props: Props) {
-  return <DatePickerInput {...props}></DatePickerInput>;
+  return (
+    <DatePickerInput valueFormat="DD/MM/YYYY" {...props}></DatePickerInput>
+  );
 }

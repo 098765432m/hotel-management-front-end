@@ -7,33 +7,28 @@
   .search_panel_container {
     display: grid;
     gap: 10px;
+    padding: 20px 0px;
 
     .search_result_heading {
       @include global-scss.heading_text;
     }
-
-    .search_text_container {
-      display: flex;
-
-      .search_input {
-        flex-grow: 1;
-      }
-    }
-
-    .filter_panel_container {
+    .filter_input_layout {
       display: grid;
-      gap: 40px;
+      gap: 10px;
+      grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
+      align-items: center;
+      .filter_hotel_name_container {
+      }
 
-      .filter_slider_flex_container {
-        display: grid;
-        gap: 20px;
-        grid-template-columns: 1fr 1fr;
-        align-items: center;
-        .filter_slider_container {
-          display: flexbox;
-          gap: 20px;
-          align-items: center;
-        }
+      .filter_address_container {
+      }
+
+      .filter_slider_container {
+        padding-bottom: 20px;
+      }
+
+      .filter_button {
+        grid-column: 1/-1;
       }
     }
   }

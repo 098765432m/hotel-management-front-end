@@ -1,5 +1,5 @@
-import { Spin } from "antd";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 export default function CustomerLoading() {
-  return <Spin size="large"></Spin>;
+  return <MantineLoading></MantineLoading>;
 }

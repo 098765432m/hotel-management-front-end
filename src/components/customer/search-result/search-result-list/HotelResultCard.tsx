@@ -12,27 +12,20 @@ import {
 } from "react-icons/ri";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
+import { useRouter } from "next/navigation";
+import { HotelResultCardDto } from "@/types/dto/hotel.dto";
+import { DatesRangeValue } from "@mantine/dates";
 
 interface Props {
-  hotelId: string;
-  hotelName: string;
-  description: string;
-  price: number[];
-  address: AddressType;
-  rating: number;
-  images: UploadedImageDto[];
+  filterDateRange: DatesRangeValue | [null, null];
+  hotel: HotelResultCardDto;
 }
 
-export default function HotelResultCard({
-  hotelId,
-  hotelName,
-  description,
-  price,
-  address,
-  rating,
-  images,
-}: Props) {
+export default function HotelResultCard(props: Props) {
+  const router = useRouter();
   const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
+
+  console.log("hotel-result-card -- images", props.hotel.hotelImages);
 
   return (
     <CardDefault>
@@ -41,8 +34,10 @@ export default function HotelResultCard({
           <div className={styles.result_card_image_container}>
             <NextImage
               src={
-                images
-                  ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${images[0].public_id}.${images[0].format}`
+                props.hotel.hotelImages &&
+                props.hotel.hotelImages.length > 0 &&
+                props.hotel.hotelImages[0].public_id
+                  ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${props.hotel.hotelImages[0].public_id}.${props.hotel.hotelImages[0].format}`
                   : (process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string)
               }
               alt="pic"
@@ -55,7 +50,15 @@ export default function HotelResultCard({
         <div className={styles.result_info_layout}>
           <div className={styles.header}>
             <div>
-              <NextLink href={"/"}>{hotelName}</NextLink>
+              <NextLink
+                href={`/hotel/${
+                  props.hotel.hotelId
+                }?filterDateRange=${encodeURIComponent(
+                  JSON.stringify(props.filterDateRange)
+                )}`}
+              >
+                {props.hotel.hotelName}
+              </NextLink>
             </div>
             <div>
               {isFavorite ? (
@@ -73,8 +76,22 @@ export default function HotelResultCard({
               )}
             </div>
           </div>
-          <div className={styles.content}>{description ? description : ""}</div>
-          <MantineButton>Đặt ngay</MantineButton>
+          <div className={styles.content}>
+            {props.hotel.hotelDescription ? props.hotel.hotelDescription : ""}
+          </div>
+          <MantineButton
+            onClick={() =>
+              router.push(
+                `/hotel/${
+                  props.hotel.hotelId
+                }?filterDateRange=${encodeURIComponent(
+                  JSON.stringify(props.filterDateRange)
+                )}`
+              )
+            }
+          >
+            Đặt ngay
+          </MantineButton>
         </div>
       </div>
     </CardDefault>

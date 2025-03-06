@@ -78,18 +78,23 @@ export async function POST(
         check_in_date: body.checkInDate,
         check_out_date: body.checkOutDate,
         status: body.status,
-        room_id: body.roomId,
-        ...(body.userId
-          ? {
-              user_id: body.userId,
-            }
-          : {
-              full_name: body.fullName,
-              phone_number: body.phoneNumber,
-            }),
+        room: {
+          connect: {
+            id: body.roomId,
+          },
+        },
+        full_name: body.fullName,
+        phone_number: body.phoneNumber,
+        ...(body.userId && {
+          user: {
+            connect: {
+              id: body.userId,
+            },
+          },
+        }),
       },
     });
-    return NextResponse.json(createdBooking);
+    return NextResponse.json(createdBooking, { status: 201 });
   } catch (error) {
     console.error(error);
     return handleNextApiError(error);

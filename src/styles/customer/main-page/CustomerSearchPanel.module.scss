@@ -7,13 +7,11 @@
     justify-content: space-around;
 
     .province_select_container {
-      width: 100%;
+      flex-grow: 1;
     }
 
     .range_slider_container {
-      width: 100%;
-      display: grid;
-      align-items: center;
+      flex-grow: 1;
     }
   }
 

@@ -1,4 +1,3 @@
-import { Booking } from "@/types/booking.interface";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/client";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
@@ -24,18 +23,6 @@ export async function POST(request: Request) {
     // Get body
     const data: BookingsDtoCreate = await request.json();
 
-    // Create query whether customer booking with account or not
-    let query = {};
-    if (data.user_id != undefined) {
-      query = { user_id: data.user_id };
-    } else {
-      query = {
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-      };
-    }
-
     // Transaction
     // Check RoomType and RoomAvailable
     // Booking Room and change Room's status
@@ -43,13 +30,13 @@ export async function POST(request: Request) {
       const bookingResults = []; // contain result of transaction
 
       // 1. Check on all Room Type customer booking
-      for (const bookingType of data.booking_type_list) {
+      for (const bookingType of data.bookingTypeList) {
         const roomTypeName = bookingType[0] as string;
         const roomType = await tx.roomType.findUnique({
           where: {
             hotel_id_name: {
               name: roomTypeName,
-              hotel_id: data.hotel_id,
+              hotel_id: data.hotelId,
             },
           },
         });
@@ -77,34 +64,36 @@ export async function POST(request: Request) {
             throw new CustomError.InternalServerError("Phòng không khả dụng!");
           }
 
-          // 3. Update Room's status
-          // await tx.room.update({
-          //   where: {
-          //     id: room.id,
-          //   },
-          //   data: {
-          //     status_room: "OCCUPIED",
-          //   },
-          // });
-
-          // 4. Create Booking with customer info
+          // 3. Create Booking with customer info
           const booking = await tx.booking.create({
             data: {
-              ...query,
+              full_name: data.fullName,
+              phone_number: data.phoneNumber,
               check_in_date: dayjs(
-                data.check_in_date,
+                data.checkInDate,
                 "MM-DD-YYYY"
               ).toISOString(),
               check_out_date: dayjs(
-                data.check_out_date,
+                data.checkOutDate,
                 "MM-DD-YYYY"
               ).toISOString(),
               status: "BOOKED",
-              room_id: room.id,
+              room: {
+                connect: {
+                  id: room.id,
+                },
+              },
+              ...(data.userId && {
+                user: {
+                  connect: {
+                    id: data.userId,
+                  },
+                },
+              }),
             },
           });
 
-          // add to result
+          // Add to result
           bookingResults.push(booking);
         }
       }
@@ -112,8 +101,10 @@ export async function POST(request: Request) {
       return bookingResults;
     });
 
-    return NextResponse.json(result);
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
+    console.error(error);
+
     return handleNextApiError(error);
   }
 }

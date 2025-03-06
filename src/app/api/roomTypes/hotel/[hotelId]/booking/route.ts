@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/client";
 import { handleNextApiError } from "@/lib/error-handler/errorHandler";
 import CustomError from "@/lib/error-handler/errors";
+import { DatesRangeValue } from "@mantine/dates";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -8,23 +9,30 @@ export async function GET(
   { params }: { params: { hotelId: string } }
 ) {
   try {
-    const dateRange = request.nextUrl.searchParams.get("dateRange"); //Lấy chuỗi query
+    const filterDateRangeParams =
+      request.nextUrl.searchParams.get("filterDateRange"); //Lấy chuỗi query
+    const filterDateRange: DatesRangeValue | [null, null] =
+      filterDateRangeParams
+        ? ((
+            JSON.parse(decodeURIComponent(filterDateRangeParams)) as [
+              string,
+              string
+            ]
+          ).map((date) => (date ? new Date(date) : null)) as DatesRangeValue)
+        : [null, null];
 
-    if (!dateRange) {
+    if (
+      !filterDateRange ||
+      !Array.isArray(filterDateRange) ||
+      filterDateRange.length !== 2
+    ) {
       // Throw Lỗi nếu không nhận được ngày đặt phòng
       throw new CustomError.ValidationError("Hãy điền vào ngày đặt phòng!");
     }
 
-    // Tách chuỗi lấy giá trị ngày đặt phòng
-    const [checkInDate, checkOutDate] = dateRange
-      .split(",")
-      .map((date) => new Date(date));
-
-    console.log(checkInDate, checkOutDate);
-
-    if (!checkInDate || !checkOutDate) {
-      console.error("Check In Date", checkInDate);
-      console.error("Check Out Date", checkOutDate);
+    if (!filterDateRange[0] || !filterDateRange[1]) {
+      console.error("Check In Date", filterDateRange[0]);
+      console.error("Check Out Date", filterDateRange[1]);
       throw new CustomError.InternalServerError("Format ngày không hợp lệ");
     }
 
@@ -40,8 +48,8 @@ export async function GET(
               none: {
                 OR: [
                   {
-                    check_in_date: { lt: checkOutDate },
-                    check_out_date: { gt: checkInDate },
+                    check_in_date: { lt: filterDateRange[0] },
+                    check_out_date: { gt: filterDateRange[1] },
                   },
                 ],
               },
@@ -56,8 +64,8 @@ export async function GET(
               none: {
                 OR: [
                   {
-                    check_in_date: { lt: checkOutDate },
-                    check_out_date: { gt: checkInDate },
+                    check_in_date: { lt: filterDateRange[0] },
+                    check_out_date: { gt: filterDateRange[1] },
                   },
                 ],
               },
@@ -76,11 +84,6 @@ export async function GET(
       "booking room",
       roomTypes.map((roomType) => roomType.rooms)
     );
-
-    // console.log(
-    //   "booking",
-    //   roomTypes.map((roomType) => roomType.rooms)
-    // );
 
     return NextResponse.json(roomTypes);
   } catch (error) {

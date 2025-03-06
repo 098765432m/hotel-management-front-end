@@ -2,15 +2,14 @@ import { BookingState } from "@/components/customer/hotel-page/AvailableRooms";
 import { Prisma, Status_Booking } from "@prisma/client";
 
 export interface BookingsDtoCreate {
-  check_in_date: string;
-  check_out_date: string;
-  booking_type_list: (string | number)[][];
-  hotel_id: string;
+  checkInDate: string;
+  checkOutDate: string;
+  bookingTypeList: (string | number)[][];
+  hotelId: string;
   status?: Status_Booking;
-  user_id?: string | null;
-  fullName?: string | null;
-  email?: string | null;
-  phoneNumber?: string | null;
+  userId?: string;
+  fullName: string;
+  phoneNumber: string;
 }
 
 export interface BookingsDashboardDtoCreate {
@@ -19,8 +18,8 @@ export interface BookingsDashboardDtoCreate {
   roomId: string;
   status: Status_Booking;
   userId?: string | null;
-  fullName?: string;
-  phoneNumber?: string;
+  fullName: string;
+  phoneNumber: string;
 }
 
 export interface BookingsDashboardDtoUpdate {

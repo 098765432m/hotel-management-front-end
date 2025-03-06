@@ -31,14 +31,16 @@ export default function RoomTypeList({ hotelId }: Props) {
   )
     roomTypeData = roomTypeApiResponse[sizeRoomType - 1].data;
 
+  if (!hotelId) return <>Error</>;
+
   return (
     <div className={styles.room_type_list_container}>
       <div className={styles.list_header}>Danh sách loại phòng</div>
 
       <div>
-        {isRoomTypeValidating ? (
+        {isRoomTypeValidating || !roomTypeData ? (
           <CustomSpinning></CustomSpinning>
-        ) : hotelId && roomTypeData && roomTypeData.roomTypes.length > 0 ? (
+        ) : roomTypeData.roomTypes.length > 0 ? (
           <>
             <div className={styles.room_type_list}>
               {roomTypeData.roomTypes.map((roomType, index: number) => {

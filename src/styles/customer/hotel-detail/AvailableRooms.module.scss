@@ -1,6 +1,12 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .available_rooms_container {
   display: grid;
   row-gap: 20px;
+
+  .available_rooms_heading {
+    @include global-scss.heading-text;
+  }
   .booking_control {
     display: flex;
     flex-direction: column;

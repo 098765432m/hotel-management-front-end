@@ -63,6 +63,12 @@
       @include global-scss.heading-text;
     }
   }
+
+  .profile_bill_table_container {
+    .profile_bill_table_heading {
+      @include global-scss.heading-text;
+    }
+  }
 }
 
 .edit_form_container {

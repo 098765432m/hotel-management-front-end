@@ -6,17 +6,29 @@ export async function GET(request: NextRequest) {
   // Hotel name, price range, rating,
   const { searchParams } = request.nextUrl;
 
-  const hotelName = searchParams.get("hotelName") as string;
+  const hotelName = searchParams.get("hotelName");
+  console.log(
+    "priceRange",
+    searchParams.get("ratingRange"),
+    typeof searchParams.get("ratingRange")
+  );
+
   const priceRange = searchParams
     .get("priceRange")
     ?.split("-")
-    .map(Number) as number[];
+    .map((price) => (price !== "null" ? Number(price) : null)) as
+    | [number, number]
+    | [null, null];
   const ratingRange = searchParams
     .get("ratingRange")
     ?.split("-")
-    .map(Number) as number[];
+    .map((rating) => (rating !== "null" ? Number(rating) : null)) as
+    | [number, number]
+    | [null, null];
 
-  const provinceId = searchParams.get("provinceId") as string;
+  const provinceId = searchParams.get("provinceId") ?? "";
+
+  console.log(hotelName, priceRange, ratingRange, provinceId);
 
   const params: any[] = [`%${hotelName}%`];
   let query = `
@@ -50,14 +62,14 @@ export async function GET(request: NextRequest) {
     params.push(provinceId);
   }
 
-  if (priceRange && priceRange.length === 2) {
+  if (priceRange && priceRange.length === 2 && priceRange[0]) {
     query += `AND rt.price BETWEEN $${params.length + 1} AND $${
       params.length + 2
     } `;
     params.push(priceRange[0], priceRange[1]);
   }
 
-  if (ratingRange && ratingRange.length === 2) {
+  if (ratingRange && ratingRange.length === 2 && ratingRange[0]) {
     query += `AND h.average_rating BETWEEN $${params.length + 1} AND $${
       params.length + 2
     } `;
@@ -69,7 +81,11 @@ export async function GET(request: NextRequest) {
   HAVING COUNT(r.status_room) FILTER (WHERE r.status_room = 'AVAILABLE') > 0
   ORDER BY h.name`;
 
+  // Add OFFSET and LIMIT
+
   const hotels: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+  console.log(hotels);
 
   const responseDto: HotelResultCardDto[] = hotels.map((hotel: any) => ({
     hotelId: hotel.hotel_id,

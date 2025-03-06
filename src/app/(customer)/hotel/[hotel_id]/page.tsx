@@ -4,6 +4,7 @@ import styles from "@/styles/customer/hotel-detail/HotelDetail.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import AvailableRooms from "@/components/customer/hotel-page/AvailableRooms";
+import { useScrollIntoView } from "@mantine/hooks";
 import { axiosCustomFetcher } from "@/lib/swr";
 import bookingsService from "@/services/bookings.service";
 import { UploadedHotelImage } from "@/types/dto/image.dto";
@@ -31,8 +32,8 @@ export default function HotelDetail({
 }: {
   params: { hotel_id: string };
 }) {
-  const [dateRange, setDateRange] = useState<[Dayjs, Dayjs] | null>(null);
   const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
+  const { scrollIntoView, targetRef } = useScrollIntoView<HTMLDivElement>(); // Hook scroll to target
   const cloudinary_path =
     process.env.NEXT_PUBLIC_CLOUDINARY_URL +
     "/" +
@@ -43,16 +44,6 @@ export default function HotelDetail({
     () => `/api/hotels/${params.hotel_id}`,
     axiosCustomFetcher
   );
-
-  //OnDateRangePicker
-  const onDateRangePickerChange = (
-    dates: any,
-    dateStrings: [string, string]
-  ) => {
-    setDateRange(dates);
-    console.log(dates);
-    console.log(dateStrings);
-  };
   return (
     <div className={styles.hotel}>
       {/* Card thông tin phòng*/}
@@ -147,13 +138,19 @@ export default function HotelDetail({
                 </div>
               </div>
               <div className={styles.heading_button}>
-                <MantineButton>Đặt ngay</MantineButton>
+                <MantineButton onClick={() => scrollIntoView()}>
+                  Đặt ngay
+                </MantineButton>
               </div>
             </span>
           </div>
         </CardDefault>
       </div>
-      <div>{hotel && <AvailableRooms hotel={hotel}></AvailableRooms>}</div>
+      <div>
+        {hotel && (
+          <AvailableRooms ref={targetRef} hotel={hotel}></AvailableRooms>
+        )}
+      </div>
     </div>
   );
 }

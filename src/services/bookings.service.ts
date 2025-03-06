@@ -51,9 +51,6 @@ class BookingsService {
     return (await this.api.patch(`/${bookingId}/checkIn?roomId=${roomId}`))
       .data;
   }
-  //   return (await this.api.patch(`/checkIn/${bookingId}?roomId=${roomId}`))
-  //     .data;
-  // }
 }
 
 const bookingsService = new BookingsService();

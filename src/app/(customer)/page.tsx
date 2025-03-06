@@ -17,7 +17,6 @@ export default async function Home() {
 
   const listProvince =
     transformAddressSelectInput(listProvinceResponse.data) ?? undefined;
-
   if (hotels && hotels.length > 0)
     return (
       <div className={styles.main_page_container}>
@@ -49,6 +48,7 @@ export default async function Home() {
                       name={province.label}
                       index={index}
                       key={index}
+                      provinceId={province.value}
                     ></ProvinceCard>
                   );
                 }

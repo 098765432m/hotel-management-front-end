@@ -1,10 +1,12 @@
 "use client";
+
 import { useCallback, useEffect, useState } from "react";
 import SearchPanel from "./search-panel/SearchPanel";
 import SearchResultList from "./search-result-list/SearchResultList";
 import { HotelResultCardDto } from "@/types/dto/hotel.dto";
 import { useSearchParams } from "next/navigation";
 import hotelsService from "@/services/hotels.service";
+import { DatesRangeValue } from "@mantine/dates";
 
 interface Province {
   label: string;
@@ -18,23 +20,46 @@ interface Props {
 export default function SearchResultLayout({ listProvince }: Props) {
   // Query params
   const searchParam = useSearchParams();
-  const hotelNameParam = searchParam.get("hotelName") as string;
+  const hotelNameParam = searchParam.get("hotelName");
   const rangePriceParam = searchParam.get("rangePrice")
     ? JSON.parse(searchParam.get("rangePrice") as string)
     : null;
-  const provinceIdParam = decodeURIComponent(
-    searchParam.get("provinceId") as string
-  );
+  const provinceParam = searchParam.get("provinceId");
+
+  const decondedProvinceParam: string | null = provinceParam
+    ? decodeURIComponent(provinceParam)
+    : null;
+  const filterDateRangeQuery = searchParam.get("filterDateRange");
+
+  const decondedFilterDateRangeParam: DatesRangeValue | [null, null] =
+    filterDateRangeQuery
+      ? ((
+          JSON.parse(decodeURIComponent(filterDateRangeQuery)) as [
+            string,
+            string
+          ]
+        ).map((date) => (date ? new Date(date) : null)) as DatesRangeValue)
+      : [null, null];
+
+  // console.log("hotelNameParams", searchParam.get("hotelName"));
+  // console.log("price", searchParam.get("rangePrice"));
+  // console.log("provinceId", decondedProvinceParam ?? "none");
 
   // Query params End
+
   // Input state
-  const [hotelName, setHotelName] = useState<string>(hotelNameParam);
-  const [priceRange, setPriceRange] = useState<[number, number] | null>(
+  const [hotelName, setHotelName] = useState<string>(hotelNameParam ?? "");
+  const [priceRange, setPriceRange] = useState<[number, number] | [null, null]>(
     rangePriceParam
   );
-  const [ratingRange, setRatingRange] = useState<[number, number] | null>(null);
-  const [provinceId, setProvinceId] = useState<string>(
-    provinceIdParam as string
+  const [ratingRange, setRatingRange] = useState<
+    [number, number] | [null, null]
+  >([null, null]);
+  const [filterDateRange, setFilterDateRange] = useState<
+    DatesRangeValue | [null, null]
+  >(decondedFilterDateRangeParam);
+  const [provinceId, setProvinceId] = useState<string | null>(
+    decondedProvinceParam
   );
   // Input state End
 
@@ -43,9 +68,9 @@ export default function SearchResultLayout({ listProvince }: Props) {
 
   async function searchHotel(
     hotelName: string,
-    priceRange: number[] | null,
-    ratingRange: number[] | null,
-    provinceId: string | null
+    priceRange: [number, number] | [null, null],
+    ratingRange: [number, number] | [null, null],
+    provinceId: string
   ) {
     return await hotelsService.searchHotel(
       hotelName,
@@ -61,16 +86,17 @@ export default function SearchResultLayout({ listProvince }: Props) {
       hotelName,
       priceRange,
       ratingRange,
-      provinceId
+      provinceId ?? ""
+      //Thêm filterDateRange
     );
     setResultHotel(result);
 
     setIsSearching(false);
-  }, [hotelName, priceRange, ratingRange, provinceId]);
+  }, [hotelName, priceRange, ratingRange, provinceId, filterDateRange]);
 
   useEffect(() => {
     performSearch();
-  }, [provinceId, performSearch]);
+  }, []);
 
   return (
     <>
@@ -81,12 +107,16 @@ export default function SearchResultLayout({ listProvince }: Props) {
         setPriceRange={setPriceRange}
         ratingRange={ratingRange}
         setRatingRange={setRatingRange}
+        filterDateRange={filterDateRange}
+        setFilterDateRange={setFilterDateRange}
+        provinceId={provinceId}
         setProvinceId={setProvinceId}
         listProvince={listProvince}
         performSearch={performSearch}
       ></SearchPanel>
       <SearchResultList
         isSearching={isSearching}
+        filterDateRange={filterDateRange}
         resultHotel={resultHotel}
       ></SearchResultList>
     </>

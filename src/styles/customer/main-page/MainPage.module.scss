@@ -22,6 +22,11 @@
       column-gap: 0.5rem;
       justify-content: center;
       flex-wrap: wrap;
+
+      .province_card {
+        cursor: pointer;
+        user-select: none;
+      }
     }
   }
 }

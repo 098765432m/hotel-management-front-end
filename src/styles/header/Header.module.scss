@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.25rem global-scss.$main-padding;
+  user-select: none;
 
   #logo {
     font-size: 26px;

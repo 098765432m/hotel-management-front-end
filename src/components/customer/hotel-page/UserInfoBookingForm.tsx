@@ -11,15 +11,15 @@ import { RootState } from "@/state/store";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { DatesRangeValue } from "@mantine/dates";
 
 interface Props {
-  hotel_id: string;
+  hotelId: string;
   totalPrice: number;
-  booking_rooms: {
+  bookingRooms: {
     [roomTypeId: string]: number;
   };
-  check_in_date: string;
-  check_out_date: string;
+  filterDateRange: DatesRangeValue;
 }
 
 export default function UserInfoBookingForm(props: Props) {
@@ -54,41 +54,33 @@ export default function UserInfoBookingForm(props: Props) {
     },
   });
 
-  const handleSubmit = async (values: any) => {
-    console.log("asdasd");
-
+  const handleSubmit = async () => {
     try {
       const formData = form.getValues();
 
-      const filtered_booking_rooms = Object.entries(props.booking_rooms)
+      const filteredBookingRooms = Object.entries(props.bookingRooms)
         .filter(([roomName, roomCount]) => roomCount > 0)
         .map(([roomName, roomCount]) => [roomName, roomCount]);
-
-      // console.log(filtered_booking_rooms);
       console.log("123");
 
       const body: BookingsDtoCreate = {
-        hotel_id: props.hotel_id,
-        booking_type_list: filtered_booking_rooms,
-        check_in_date: props.check_in_date,
-        check_out_date: props.check_out_date,
-        user_id: authStore.authInfo?.id ?? undefined,
+        hotelId: props.hotelId,
+        bookingTypeList: filteredBookingRooms,
+        checkInDate: props.filterDateRange[0]!.toISOString(),
+        checkOutDate: props.filterDateRange[1]!.toISOString(),
+        userId: authStore.authInfo?.id ?? undefined,
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
-        email: formData.email,
       };
 
       await bookingsService.CreateOne(body);
-
-      // form.reset();
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response!.data.message);
       } else {
         console.log(error);
       }
-
-      // form.reset();
+      form.reset();
     }
   };
   return (
