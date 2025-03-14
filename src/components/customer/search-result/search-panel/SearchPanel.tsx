@@ -58,7 +58,7 @@ export default function SearchPanel(props: Props) {
               placeholder="Chọn tỉnh thành"
             ></Select>
           </div>
-          <div>
+          <div className={styles.filter_date_range_container}>
             <div>Ngày tra cứu</div>
             <MantineDatePicker
               type="range"
@@ -83,7 +83,11 @@ export default function SearchPanel(props: Props) {
               max={8000000}
               step={500000}
               minRange={500000}
-              value={props.priceRange[0] ? props.priceRange : undefined}
+              value={
+                props.priceRange && props.priceRange[0]
+                  ? props.priceRange
+                  : undefined
+              }
               onChange={(value: [number, number]) => {
                 props.setPriceRange(value);
               }}
@@ -102,7 +106,11 @@ export default function SearchPanel(props: Props) {
             </div>
             <RangeSlider
               defaultValue={[0, 5]}
-              value={props.ratingRange[0] ? props.ratingRange : undefined}
+              value={
+                props.ratingRange && props.ratingRange[0]
+                  ? props.ratingRange
+                  : undefined
+              }
               onChange={(value: [number, number]) => {
                 props.setRatingRange(value);
               }}

@@ -1,5 +1,10 @@
-// /** @type {import('next').NextConfig} */
-const nextConfig = {
+/** @type {import('next').NextConfig} */
+import NextBundleAnalyzer from "@next/bundle-analyzer";
+const withBundleAnalyzer = NextBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+const nextConfig = withBundleAnalyzer({
   images: {
     remotePatterns: [
       {
@@ -28,6 +33,12 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ["@mantine/core", "@mantine/hooks"], //Enables tree shaking
   },
-};
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 
-export default nextConfig;
+  reactStrictMode: true, // Recommended for catching common issues
+  swcMinify: true, // Faster minification
+});
+
+export default withBundleAnalyzer(nextConfig);

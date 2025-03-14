@@ -5,4 +5,10 @@
   display: grid;
   place-items: center;
   text-align: center;
+  row-gap: 0.5rem;
+
+  .empty_data_text {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
 }

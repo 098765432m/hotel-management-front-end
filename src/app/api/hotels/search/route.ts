@@ -39,12 +39,15 @@ export async function GET(request: NextRequest) {
       h.address AS hotel_address,
       h.average_rating AS hotel_rating,
       ARRAY [MIN(rt.price), MAX(rt.price)] AS hotel_price,
-      JSONB_AGG(
-        JSONB_BUILD_OBJECT(
-          'public_id', i.public_id,
-          'format', i.format
-        )
-      ) as hotel_images
+      COALESCE(
+        JSONB_AGG(
+          JSONB_BUILD_OBJECT(
+            'public_id', i.public_id,
+            'format', i.format
+          )
+        ) FILTER (WHERE i.public_id IS NOT NULL OR i.format IS NOT NULL),
+         '[]'::JSONB
+      )  as hotel_images
     FROM 
       "Hotel" h 
     LEFT JOIN 

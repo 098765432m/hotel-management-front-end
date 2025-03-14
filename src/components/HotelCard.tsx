@@ -1,13 +1,13 @@
 "use client";
 
-import styles from "@/styles/customer/hotel-card/HotelCard.module.scss";
-import { FaMapLocationDot as MapLocation } from "react-icons/fa6";
+import styles from "@/styles/customer/main-page/hotel-card/HotelCard.module.scss";
 import { Hotel } from "@/types/hotel.interface";
-import { addressToString } from "@/utils/helpers";
 import CardDefault from "./custom-component/CardDefault";
 import NextLink from "./custom-component/NextLink";
 import MantineButton from "./custom-component/MantineButton";
 import NextImage from "./custom-component/NextImage";
+import { NumberToMoneyFormat } from "@/utils/helpers";
+import { Rating } from "@mantine/core";
 
 interface Props {
   hotel: Hotel;
@@ -29,7 +29,7 @@ export default function HotelCard({ hotel }: Props) {
               priority
               src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
               fill
-              sizes="50vw"
+              sizes="40vw"
               alt={hotel.name}
             ></NextImage>
           ) : (
@@ -37,7 +37,7 @@ export default function HotelCard({ hotel }: Props) {
               priority
               src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
               fill
-              sizes="50vw"
+              sizes="40vw"
               alt={hotel.name}
             ></NextImage>
           )}
@@ -49,7 +49,17 @@ export default function HotelCard({ hotel }: Props) {
               className={styles.card_info_address}
             >{`${hotel.address.district.name}, ${hotel.address.province.name}`}</div>
           </div>
-          <div className={styles.card_info_main}></div>
+          <div className={styles.card_info_main}>
+            <div>
+              <Rating readOnly defaultValue={5}></Rating>
+            </div>
+            <div>
+              {hotel.room_types &&
+                hotel.room_types.length > 0 &&
+                `Chỉ từ: ${NumberToMoneyFormat(hotel.room_types[0].price)}`}
+              đ
+            </div>
+          </div>
           <div className={styles.navigation_button}>
             <NextLink href={`/hotel/${hotel.id}`}>
               <MantineButton>Xem chi tiết</MantineButton>

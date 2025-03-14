@@ -128,23 +128,25 @@ export default function ProfileInfo({ user_init }: Props) {
                   {({ open }) => {
                     return (
                       <MantineButton onClick={() => open()}>
-                        Upload
+                        Tải ảnh
                       </MantineButton>
                     );
                   }}
                 </CldUploadWidget>
               </div>
             </div>
-            <div className={styles.username_container}>
-              <span className={styles.username_text}>{user.username}</span>
-              <span
-                onClick={openEditForm}
-                className={styles.edit_button_container}
-              >
-                <FaEdit size={14}></FaEdit>
-              </span>
+            <div className={styles.user_info_container}>
+              <div className={styles.username_container}>
+                <span className={styles.username_text}>{user.username}</span>
+                <span
+                  onClick={openEditForm}
+                  className={styles.edit_button_container}
+                >
+                  <FaEdit size={14}></FaEdit>
+                </span>
+              </div>
+              <div>{user.email}</div>
             </div>
-            <div>{user.email}</div>
           </div>
         </CardDefault>
         <Modal

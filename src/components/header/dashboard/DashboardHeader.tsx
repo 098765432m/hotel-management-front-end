@@ -31,7 +31,6 @@ export default async function DashboardHeader() {
           </div>
         </div>
         <div>
-          <NextLink href={"/"}>Số liệu thống kê</NextLink>
           <LogOutButton></LogOutButton>
         </div>
       </div>

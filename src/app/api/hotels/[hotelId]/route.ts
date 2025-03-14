@@ -6,7 +6,7 @@ export async function GET(
   request: Request,
   { params }: { params: { hotelId: string } }
 ) {
-  const hotel = await prisma.hotel.findFirst({
+  const hotel = await prisma.hotel.findUnique({
     where: {
       id: params.hotelId,
     },

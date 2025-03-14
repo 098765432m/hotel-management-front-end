@@ -23,9 +23,7 @@ interface Props {
 
 export default function HotelResultCard(props: Props) {
   const router = useRouter();
-  const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
-
-  console.log("hotel-result-card -- images", props.hotel.hotelImages);
+  // const [isFavorite, toggleFavorite] = useToggle<boolean>([false, true]);
 
   return (
     <CardDefault>
@@ -42,7 +40,7 @@ export default function HotelResultCard(props: Props) {
               }
               alt="pic"
               fill
-              sizes="50vw"
+              sizes="10vw"
               className="object-cover"
             ></NextImage>
           </div>
@@ -60,7 +58,7 @@ export default function HotelResultCard(props: Props) {
                 {props.hotel.hotelName}
               </NextLink>
             </div>
-            <div>
+            {/* <div>
               {isFavorite ? (
                 <FavoriteFill
                   onClick={() => toggleFavorite()}
@@ -74,7 +72,7 @@ export default function HotelResultCard(props: Props) {
                   onClick={() => toggleFavorite()}
                 ></FavoriteOutline>
               )}
-            </div>
+            </div> */}
           </div>
           <div className={styles.content}>
             {props.hotel.hotelDescription ? props.hotel.hotelDescription : ""}

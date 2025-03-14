@@ -66,10 +66,13 @@ export default function PaymentPage() {
   );
 
   //Lấy tổng số phòng
-  let roomData: { rooms: RoomHotelPayload[]; totalRoom: number } | null = null;
-  if (roomListResponse && roomListResponse[0] && roomListResponse[0].success) {
-    roomData = roomListResponse[0].data;
-  }
+  const roomData: { rooms: RoomHotelPayload[]; totalRoom: number } | null =
+    roomListResponse?.[size - 1]?.success && roomListResponse?.[size - 1]?.data
+      ? (roomListResponse[size - 1].data as {
+          rooms: RoomHotelPayload[];
+          totalRoom: number;
+        })
+      : null;
 
   console.log("rooms", roomListResponse);
 
@@ -115,7 +118,7 @@ export default function PaymentPage() {
     }
 
     return 0;
-  }, [discount, selectedRoom]);
+  }, [discount, selectedRoom, dateCount]);
 
   // Handle Start
 
@@ -173,7 +176,7 @@ export default function PaymentPage() {
           note: "",
         },
       });
-  }, [total, discount]);
+  }, [total, discount, paymentForm]);
 
   // Set giá trị mặc định cho form
   useEffect(() => {
@@ -186,7 +189,7 @@ export default function PaymentPage() {
         },
       });
     }
-  }, [selectedRoom]);
+  }, [selectedRoom, paymentForm]);
 
   return (
     <>
@@ -314,26 +317,17 @@ export default function PaymentPage() {
                         <CustomSpinning tip="Loading"></CustomSpinning>
                       </td>
                     </tr>
-                  ) : roomListResponse &&
-                    roomListResponse[size - 1] &&
-                    roomListResponse[size - 1].data.rooms.length > 0 ? (
-                    roomListResponse[size - 1].data.rooms.map(
-                      (room: RoomHotelPayload) => {
-                        return (
-                          <tr
-                            onClick={() => setSelectedRoom(room)}
-                            key={room.id}
-                          >
-                            <td>{room.name}</td>
-                            <td>{room.room_type.name}</td>
-                            <td>{room.room_type.price}</td>
-                            <td>
-                              {convertRoomStatusToLabel(room.status_room)}
-                            </td>
-                          </tr>
-                        );
-                      }
-                    )
+                  ) : roomData?.rooms && roomData.rooms.length > 0 ? (
+                    roomData.rooms.map((room: RoomHotelPayload) => {
+                      return (
+                        <tr onClick={() => setSelectedRoom(room)} key={room.id}>
+                          <td>{room.name}</td>
+                          <td>{room.room_type.name}</td>
+                          <td>{room.room_type.price}</td>
+                          <td>{convertRoomStatusToLabel(room.status_room)}</td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td rowSpan={3} colSpan={4}>

@@ -14,13 +14,17 @@
     }
     .filter_input_layout {
       display: grid;
-      gap: 10px;
+      gap: 20px;
       grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
       align-items: center;
       .filter_hotel_name_container {
       }
 
       .filter_address_container {
+      }
+
+      .filter_date_range_container {
+        grid-column: 1 / span 2;
       }
 
       .filter_slider_container {

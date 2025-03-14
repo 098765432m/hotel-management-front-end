@@ -5,19 +5,14 @@ export default function Footer() {
     <div className={styles.footer}>
       <div className={styles.footer_content_container}>
         <span className={styles.footer_content_column}>
-          <div>row 1</div>
-          <div>row 2</div>
-          <div>row 3</div>
+          <div>Trang chủ</div>
+          <div>Về chúng tôi</div>
+          <div>Lịch sử</div>
         </span>
         <span className={styles.footer_content_column}>
-          <div>row 1</div>
-          <div>row 2</div>
-          <div>row 3</div>
-        </span>
-        <span className={styles.footer_content_column}>
-          <div>row 1</div>
-          <div>row 2</div>
-          <div>row 3</div>
+          <div>Liên hệ</div>
+          <div>Facebook</div>
+          <div>Tiktok</div>
         </span>
       </div>
       <div className={styles.footer_signature_container}>

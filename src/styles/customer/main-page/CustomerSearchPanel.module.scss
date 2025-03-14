@@ -1,26 +1,41 @@
-.search_panel {
-  display: grid;
-  row-gap: 10px;
-  .upper_panel {
+@use "@/styles/global.module.scss" as global-scss;
+
+.search_panel_container {
+  .page_name_container {
     display: flex;
-    column-gap: 20px;
-    justify-content: space-around;
+    justify-content: center;
+    align-items: center;
+    line-height: 8rem;
 
-    .province_select_container {
-      flex-grow: 1;
-    }
-
-    .range_slider_container {
-      flex-grow: 1;
+    & > h1 {
+      font-size: 4rem;
     }
   }
 
-  .bottom_panel {
-    display: flex;
-    column-gap: 20px;
+  .search_panel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
+    justify-content: center;
+    gap: 20px;
 
-    .search_bar_container {
-      width: 100%;
+    & > div {
+      display: grid;
+      row-gap: 6px;
+    }
+
+    .range_slider_container {
+      align-self: flex-start;
+    }
+
+    .date_range_input_container {
+      .date_range_input_flex {
+        display: flex;
+        gap: 20px;
+
+        .date_range_input {
+          flex-grow: 1;
+        }
+      }
     }
   }
 }

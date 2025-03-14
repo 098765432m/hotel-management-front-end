@@ -1,0 +1,66 @@
+@use "@/styles/global.module.scss" as global-scss;
+
+.comment_section_container {
+  display: grid;
+
+  .comment_section_heading {
+    @include global-scss.heading-text;
+  }
+
+  .comment_section_layout {
+    display: grid;
+    row-gap: 20px;
+
+    .comment_input_container {
+      display: flex;
+      align-items: stretch;
+      column-gap: 20px;
+
+      .comment_input {
+        flex-grow: 7;
+        box-sizing: border-box;
+      }
+
+      .rating_container {
+        padding-top: 20px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        row-gap: 10px;
+      }
+    }
+
+    .comment_list_container {
+      display: grid;
+      gap: 20px;
+
+      .comment_card {
+        display: flex;
+        column-gap: 20px;
+
+        .comment_card_left_section {
+          width: 12rem;
+          display: grid;
+          justify-items: center;
+        }
+        .comment_card_right_section {
+          flex-grow: 1;
+          display: grid;
+          align-content: first baseline;
+          grid-template-rows: 1fr 18px;
+          .comment_card_right_section_bottom {
+            font-size: 0.9rem;
+            font-style: italic;
+            font-weight: 200;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+}

@@ -50,11 +50,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <AntdRegistry>
-            <ConfigProvider
-              theme={{
-                components: {},
-              }}
-            >
+            <ConfigProvider>
               <DatesProvider settings={{ locale: "vi" }}>
                 <ReduxProvider authInfo={authInfo}>
                   <MantineProvider>{children}</MantineProvider>

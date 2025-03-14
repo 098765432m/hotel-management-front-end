@@ -28,7 +28,7 @@ enum Status_Booking {
 }
 
 model User {
-  id                String    @id @unique
+  id                String    @id @unique @default(uuid())
   username          String    @unique
   password          String
   full_name         String     
@@ -53,15 +53,18 @@ model User {
 
 // Rating for Hotel
 model Rating {
-  id                    String    @id @unique @default(cuid())
+  id                    String          @id @unique @default(cuid())
   score                 Int       
-  comment               String    @db.VarChar(300)
+  comment               String?         @db.VarChar(300)
+  updateAt              DateTime        @default(now()) @updatedAt //Auto update date when update
 
   hotel_id              String
   hotel                 Hotel     @relation("HotelRatings",fields: [hotel_id], references: [id], onDelete: Cascade) // Delete Rating on Hotel has been removed
 
   guest_id              String
   guest                 User      @relation("UserRatings", fields: [guest_id], references: [id], onDelete: Cascade) // Delete Rating on Guest account has been deleted
+
+  @@unique([guest_id, hotel_id])
 }
 
 model Hotel {

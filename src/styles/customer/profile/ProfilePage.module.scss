@@ -7,6 +7,7 @@
   .profile_info_container {
     display: grid;
     justify-items: center;
+    row-gap: 20px;
 
     .profile_image_container {
       display: flex;
@@ -19,6 +20,10 @@
       overflow: hidden;
       z-index: 1;
 
+      .profile_image {
+        transition: opacity 0.5s;
+      }
+
       .edit_image_button {
         height: 100%;
         display: none;
@@ -29,6 +34,7 @@
       }
 
       &:hover .profile_image {
+        transition: opacity 0.5s;
         opacity: 50%;
       }
 
@@ -37,23 +43,29 @@
       }
     }
 
-    .username_container {
-      display: flex;
-      justify-content: center;
+    .user_info_container {
+      display: grid;
+      justify-items: center;
       align-items: center;
-      position: relative;
-      width: 40vw;
 
-      .username_text {
-        font-size: 22px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        margin-right: 15px;
-      }
+      .username_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 40vw;
 
-      .edit_button_container {
-        cursor: pointer;
+        .username_text {
+          font-size: 22px;
+          font-weight: 700;
+          white-space: nowrap;
+          overflow: hidden;
+          margin-right: 15px;
+        }
+
+        .edit_button_container {
+          cursor: pointer;
+        }
       }
     }
   }

@@ -2,13 +2,24 @@
 
 .main_page_container {
   display: grid;
-  row-gap: 1rem;
+  row-gap: 2rem;
 
   .hotel_list_container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 500px));
-    gap: 20px;
-    justify-content: space-evenly;
+    row-gap: 20px;
+    .hotel_list_heading {
+      @include global-scss.heading_text;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hotel_list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 24rem);
+      gap: 20px;
+      justify-content: space-evenly;
+    }
   }
 
   .province_card_container {

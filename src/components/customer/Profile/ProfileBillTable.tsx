@@ -36,16 +36,15 @@ export default function ProfileBillTable(props: Props) {
       : null
   );
 
-  let billData = null;
-  if (
-    billApiResponse &&
-    billApiResponse.length > 0 &&
-    billApiResponse[billSize - 1] &&
-    billApiResponse[billSize - 1].success
-  ) {
-    billData = billApiResponse[billSize - 1].data;
-    console.log("billData", billData);
-  }
+  const billData: { bills: BillCustomerPayload[]; totalBill: number } | null =
+    billApiResponse?.[billSize - 1].success &&
+    billApiResponse?.[billSize - 1]?.data
+      ? (billApiResponse[billSize - 1].data as {
+          bills: BillCustomerPayload[];
+          totalBill: number;
+        })
+      : null;
+
   return (
     <CardDefault className={styles.profile_bill_table_container}>
       <div className={styles.profile_bill_table_heading}>
@@ -68,6 +67,7 @@ export default function ProfileBillTable(props: Props) {
                     setSelectedBill(bill);
                     open();
                   }}
+                  key={bill.id}
                 >
                   <td>{bill.hotel_name}</td>
                   <td>{bill.total_price}</td>
@@ -77,7 +77,7 @@ export default function ProfileBillTable(props: Props) {
             })
           ) : (
             <tr>
-              <td>
+              <td colSpan={3}>
                 <EmptyData></EmptyData>
               </td>
             </tr>

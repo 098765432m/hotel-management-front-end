@@ -26,6 +26,7 @@ import useSWR from "swr";
 import { Carousel } from "@mantine/carousel";
 import NextImage from "@/components/custom-component/NextImage";
 import { useToggle } from "@mantine/hooks";
+import CommentSection from "@/components/customer/hotel-page/comment/CommentSection";
 
 export default function HotelDetail({
   params,
@@ -44,6 +45,7 @@ export default function HotelDetail({
     () => `/api/hotels/${params.hotel_id}`,
     axiosCustomFetcher
   );
+
   return (
     <div className={styles.hotel}>
       {/* Card thông tin phòng*/}
@@ -98,13 +100,17 @@ export default function HotelDetail({
                 <div className={styles.hotel_detail_heading}>
                   <span className={styles.hotel_name}>{hotel?.name}</span>
                   <span className={styles.button_control}>
-                    <span className={styles.hotel_heading_rating_container}>
-                      <span className={styles.rating_number}>4.6</span>
-                      <span className={styles.rating_icon_container}>
-                        <Rating defaultValue={5} readOnly></Rating>
+                    {hotel && (
+                      <span className={styles.hotel_heading_rating_container}>
+                        <span className={styles.rating_number}>
+                          {hotel.average_rating}
+                        </span>
+                        <span className={styles.rating_icon_container}>
+                          <Rating readOnly></Rating>
+                        </span>
                       </span>
-                    </span>
-                    <span className={styles.favorite_button_container}>
+                    )}
+                    {/* <span className={styles.favorite_button_container}>
                       {isFavorite ? (
                         <FavoriteFill
                           onClick={() => toggleFavorite()}
@@ -118,7 +124,7 @@ export default function HotelDetail({
                           onClick={() => toggleFavorite()}
                         ></FavoriteOutline>
                       )}
-                    </span>
+                    </span> */}
                   </span>
                 </div>
                 <div className={styles.hotel_detail_heading_description}>
@@ -151,6 +157,7 @@ export default function HotelDetail({
           <AvailableRooms ref={targetRef} hotel={hotel}></AvailableRooms>
         )}
       </div>
+      <CommentSection hotelId={params.hotel_id}></CommentSection>
     </div>
   );
 }

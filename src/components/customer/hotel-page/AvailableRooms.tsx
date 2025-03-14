@@ -21,7 +21,7 @@ import UserInfoBookingForm from "./UserInfoBookingForm";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { DatesRangeValue, DateValue } from "@mantine/dates";
+import { DatePickerType, DatesRangeValue, DateValue } from "@mantine/dates";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
 import { GetRoomTypeBookingDtoResponse } from "@/types/dto/room-types.dto";
@@ -132,7 +132,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
         NumberToMoneyFormat(
           hotel.room_types?.reduce((sum, roomType) => {
             const count =
-              bookingRooms && hotel.room_types && filterDateRange != null
+              bookingRooms && hotel.room_types != null
                 ? bookingRooms[roomType.name]
                 : 0;
             return sum + count * roomType.price * countDays;
@@ -147,6 +147,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
           <div className={styles.available_rooms_heading}>Tra cứu phòng </div>
           <div className={styles.filter_control}>
             <MantineDatePicker
+              minDate={new Date()}
               type="range"
               placeholder="Chọn ngày tra cứu"
               defaultValue={[null, null]}

@@ -5,8 +5,8 @@ import useSWRInfinite from "swr/infinite";
 export default function useCustomSWRInfinite<T extends ApiResponse<any>>(
   key: string | null
 ) {
-  const { data, size, setSize, isValidating, isLoading } = useSWRInfinite<T>(
-    (pageIndex, previousPageData) => {
+  const { data, size, setSize, isValidating, isLoading, mutate } =
+    useSWRInfinite<T>((pageIndex, previousPageData) => {
       if (key === null) return null;
 
       // Đầu trang
@@ -22,9 +22,7 @@ export default function useCustomSWRInfinite<T extends ApiResponse<any>>(
             ? ``
             : `&limit=${process.env.NEXT_PUBLIC_DEFAULT_PAGE_SIZE}`
         }`;
-    },
-    axiosCustomFetcher
-  );
+    }, axiosCustomFetcher);
 
   return {
     data,
@@ -32,5 +30,6 @@ export default function useCustomSWRInfinite<T extends ApiResponse<any>>(
     setSize,
     isLoading,
     isValidating,
+    mutate,
   };
 }

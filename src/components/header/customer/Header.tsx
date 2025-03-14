@@ -2,7 +2,7 @@
 
 import styles from "@/styles/header/Header.module.scss";
 import NextLink from "../../custom-component/NextLink";
-import Card from "../../custom-component/CardDefault";
+import CardDefault from "../../custom-component/CardDefault";
 import HeaderLoginButton from "./HeaderLoginButton";
 import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
@@ -38,32 +38,30 @@ export default function Header() {
     pathname = "/dashboard";
 
   return (
-    <Card>
-      <div className={styles.navbar}>
-        <span id={styles.logo}>
-          <NextLink href={pathname}>Trip.com</NextLink>
-        </span>
-        <span id={styles.nav_link_container}>
-          {authInfo?.role == roleEnum.ADMIN ? (
-            <span>
-              <NextLink href={"/admin"}>Something</NextLink>
-            </span>
-          ) : authInfo?.role == roleEnum.MANAGER ||
-            authInfo?.role == roleEnum.STAFF ? (
-            <>
-              <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
-              <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
-              <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
-            </>
-          ) : (
-            <span>
-              <NextLink href={"/contact"}>Liên hệ</NextLink>
-            </span>
-          )}
-          {/* <HeaderLoginButton></HeaderLoginButton> */}
-          <ProfileDropDownMenu></ProfileDropDownMenu>
-        </span>
-      </div>
-    </Card>
+    <div className={styles.navbar}>
+      <span id={styles.logo}>
+        <NextLink href={pathname}>Trip.com</NextLink>
+      </span>
+      <span id={styles.nav_link_container}>
+        {authInfo?.role == roleEnum.ADMIN ? (
+          <span>
+            <NextLink href={"/admin"}>Something</NextLink>
+          </span>
+        ) : authInfo?.role == roleEnum.MANAGER ||
+          authInfo?.role == roleEnum.STAFF ? (
+          <>
+            <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
+            <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
+            <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
+          </>
+        ) : (
+          <span>
+            <NextLink href={"/contact"}>Liên hệ</NextLink>
+          </span>
+        )}
+        {/* <HeaderLoginButton></HeaderLoginButton> */}
+        <ProfileDropDownMenu></ProfileDropDownMenu>
+      </span>
+    </div>
   );
 }

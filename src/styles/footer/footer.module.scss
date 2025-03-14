@@ -1,8 +1,9 @@
 .footer {
   .footer_content_container {
     display: grid;
+    justify-content: space-between;
     @media screen and (min-width: 700px) {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
     justify-items: center;
     padding: 40px 0px;

@@ -1,12 +1,12 @@
 export interface ApiResponse<T> {
   success: boolean;
-  data: T;
+  data?: T;
   message?: string;
 }
 
 export class ApiResponseClass<T> implements ApiResponse<T> {
   success: boolean;
-  data: T;
+  data?: T | undefined;
   message?: string | undefined;
 
   constructor({
@@ -14,8 +14,8 @@ export class ApiResponseClass<T> implements ApiResponse<T> {
     success,
     message,
   }: {
-    data: T;
-    success?: boolean;
+    data?: T;
+    success: boolean;
     message?: string;
   }) {
     (this.success = success ?? true), (this.data = data);

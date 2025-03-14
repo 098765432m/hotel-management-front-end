@@ -52,7 +52,7 @@ export default function ProfileDropDownMenu() {
             }`}
             width={50}
             height={50}
-            alt="Avatar"
+            alt="Ảnh đại diện"
             priority
           ></NextImage>
         </div>

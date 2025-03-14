@@ -25,17 +25,20 @@ export default async function Home() {
             listProvince={listProvince}
           ></CustomerSearchPanel>
         </CardDefault>
-        <div className={styles.hotel_list_container}>
-          {hotels.length > 0 ? (
-            hotels.map((hotel: Hotel, index: number) => (
-              <HotelCard key={index} hotel={hotel}></HotelCard>
-            ))
-          ) : (
-            <div>
+        <CardDefault className={styles.hotel_list_container}>
+          <div className={styles.hotel_list_heading}>
+            <h2>Khách sạn nổi bật</h2>
+          </div>
+          <div className={styles.hotel_list}>
+            {hotels.length > 0 ? (
+              hotels.map((hotel: Hotel, index) => (
+                <HotelCard key={hotel.id + index} hotel={hotel}></HotelCard>
+              ))
+            ) : (
               <EmptyData></EmptyData>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        </CardDefault>
 
         <CardDefault>
           <div className={styles.province_card_container}>

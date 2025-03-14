@@ -1,0 +1,42 @@
+.custom_popup_confirm_container {
+  display: block;
+  position: fixed;
+  width: clamp(20rem, 15vw, 20vw);
+  top: 40%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  z-index: 1001;
+
+  .image_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    user-select: none;
+  }
+
+  .title_container {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .description_container {
+    text-align: center;
+    text-justify: distribute-all-lines;
+    font-size: 0.8rem;
+  }
+
+  .control_container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+
+    user-select: none;
+
+    button {
+      width: calc(50% - 10px);
+    }
+  }
+}
