@@ -6,7 +6,7 @@ export async function GET() {
     include: {
       rooms: true,
       room_types: true,
-      staffs: true,
+      ratings: true,
       images: true,
     },
   });

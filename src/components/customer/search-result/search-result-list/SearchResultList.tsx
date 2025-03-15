@@ -19,15 +19,38 @@ export default function SearchResultList(props: Props) {
       <div className={styles.result_container_layout}>
         <div className={styles.layout_control}></div>
         <CardDefault>
-          <div className={styles.result_container}>
+          <div className={styles.heading}>Kết quả</div>
+          <div className={styles.result}>
             {!props.isSearching && props.resultHotel.length > 0 ? (
-              props.resultHotel.map((hotel, index) => {
+              props.resultHotel.map((hotel) => {
                 return (
-                  <HotelResultCard
-                    filterDateRange={props.filterDateRange}
-                    hotel={hotel}
-                    key={index}
-                  ></HotelResultCard>
+                  <>
+                    <HotelResultCard
+                      filterDateRange={props.filterDateRange}
+                      hotel={hotel}
+                      key={hotel.hotelId + 8}
+                    ></HotelResultCard>
+                    <HotelResultCard
+                      filterDateRange={props.filterDateRange}
+                      hotel={hotel}
+                      key={hotel.hotelId + 3}
+                    ></HotelResultCard>
+                    <HotelResultCard
+                      filterDateRange={props.filterDateRange}
+                      hotel={hotel}
+                      key={hotel.hotelId + 1}
+                    ></HotelResultCard>
+                    <HotelResultCard
+                      filterDateRange={props.filterDateRange}
+                      hotel={hotel}
+                      key={hotel.hotelId + "v"}
+                    ></HotelResultCard>
+                    <HotelResultCard
+                      filterDateRange={props.filterDateRange}
+                      hotel={hotel}
+                      key={hotel.hotelId + "y"}
+                    ></HotelResultCard>
+                  </>
                 );
               })
             ) : (

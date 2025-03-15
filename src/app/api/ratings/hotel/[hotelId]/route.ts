@@ -6,7 +6,6 @@ import {
   RatingCreateDtoRequest,
   RatingHotelApiResponse,
 } from "@/types/dto/rating.dto";
-import { caculateHotelAverageRating } from "@/utils/caculateAverageRating";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -116,7 +115,9 @@ export async function POST(
             id: hotelId,
           },
           data: {
-            average_rating: newAverageRating._avg.score ?? 0,
+            average_rating: newAverageRating._avg.score
+              ? parseFloat(newAverageRating._avg.score.toFixed(1))
+              : 0,
           },
         });
       });
@@ -161,7 +162,9 @@ export async function POST(
             id: hotelId,
           },
           data: {
-            average_rating: newAverageRating._avg.score ?? 0,
+            average_rating: newAverageRating._avg.score
+              ? parseFloat(newAverageRating._avg.score.toFixed(1))
+              : 0,
           },
         });
       });

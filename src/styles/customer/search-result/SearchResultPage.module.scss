@@ -17,6 +17,12 @@
       gap: 20px;
       grid-template-columns: repeat(2, minmax(18.75rem, 1fr));
       align-items: center;
+
+      & > div {
+        display: grid;
+        row-gap: 6px;
+      }
+
       .filter_hotel_name_container {
       }
 
@@ -47,15 +53,19 @@
       .layout_control {
       }
 
-      .result_container {
-        display: grid;
-        justify-content: center;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+      .heading {
+        @include global-scss.heading-text;
+      }
 
-        @media (max-width: 1000px) {
-          grid-template-columns: repeat(1, 1fr);
-        }
+      .result {
+        display: grid;
+        justify-content: space-evenly;
+        grid-template-columns: repeat(auto-fit, 32rem);
+        gap: 20px;
+
+        // @media (max-width: 1000px) {
+        //   grid-template-columns: repeat(1, 1fr);
+        // }
 
         .empty_data_container {
           grid-area: 1 / span 2;

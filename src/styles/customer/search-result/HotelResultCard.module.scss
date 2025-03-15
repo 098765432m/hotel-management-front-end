@@ -1,10 +1,12 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .result_card {
   display: grid;
   gap: 4px;
 
   .result_image_layout {
     .result_card_image_container {
-      aspect-ratio: 5/3;
+      aspect-ratio: 16/9;
       display: block;
       position: relative;
       align-items: center;
@@ -16,13 +18,37 @@
 
   .result_info_layout {
     display: grid;
-    gap: 4px;
+    row-gap: 20px;
+
     .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      .hotel_upper_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .hotel_name {
+          @include global-scss.label-text;
+          font-size: 1.4rem;
+        }
+        .hotel_rating_container {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+
+          .rating_number {
+            font-size: 1.3rem;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .hotel_address {
+        font-size: 1rem;
+        opacity: 50%;
+      }
     }
-    .content {
+
+    .navigate_button {
     }
   }
 }

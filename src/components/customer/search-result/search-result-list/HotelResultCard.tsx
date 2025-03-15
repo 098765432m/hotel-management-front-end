@@ -15,6 +15,8 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { useRouter } from "next/navigation";
 import { HotelResultCardDto } from "@/types/dto/hotel.dto";
 import { DatesRangeValue } from "@mantine/dates";
+import { Rating } from "@mantine/core";
+import { roundToNearestHalf } from "@/utils/math";
 
 interface Props {
   filterDateRange: DatesRangeValue | [null, null];
@@ -47,16 +49,36 @@ export default function HotelResultCard(props: Props) {
         </div>
         <div className={styles.result_info_layout}>
           <div className={styles.header}>
-            <div>
-              <NextLink
-                href={`/hotel/${
-                  props.hotel.hotelId
-                }?filterDateRange=${encodeURIComponent(
-                  JSON.stringify(props.filterDateRange)
-                )}`}
-              >
-                {props.hotel.hotelName}
-              </NextLink>
+            <div className={styles.hotel_upper_container}>
+              <div className={styles.hotel_name}>
+                <NextLink
+                  href={`/hotel/${
+                    props.hotel.hotelId
+                  }?filterDateRange=${encodeURIComponent(
+                    JSON.stringify(props.filterDateRange)
+                  )}`}
+                >
+                  {props.hotel.hotelName}
+                </NextLink>
+              </div>
+
+              <div className={styles.hotel_rating_container}>
+                <Rating
+                  size={"lg"}
+                  fractions={2}
+                  readOnly
+                  defaultValue={roundToNearestHalf(props.hotel.hotelRating)}
+                ></Rating>
+                <span>
+                  <span className={styles.rating_number}>
+                    {props.hotel.hotelRating}
+                  </span>
+                  /5
+                </span>
+              </div>
+            </div>
+            <div className={styles.hotel_address}>
+              {`${props.hotel.hotelAddress.district.name}, ${props.hotel.hotelAddress.province.name}`}
             </div>
             {/* <div>
               {isFavorite ? (
@@ -74,22 +96,22 @@ export default function HotelResultCard(props: Props) {
               )}
             </div> */}
           </div>
-          <div className={styles.content}>
-            {props.hotel.hotelDescription ? props.hotel.hotelDescription : ""}
+          <div className={styles.navigate_button}>
+            <MantineButton
+              fullWidth
+              onClick={() =>
+                router.push(
+                  `/hotel/${
+                    props.hotel.hotelId
+                  }?filterDateRange=${encodeURIComponent(
+                    JSON.stringify(props.filterDateRange)
+                  )}`
+                )
+              }
+            >
+              Đặt ngay
+            </MantineButton>
           </div>
-          <MantineButton
-            onClick={() =>
-              router.push(
-                `/hotel/${
-                  props.hotel.hotelId
-                }?filterDateRange=${encodeURIComponent(
-                  JSON.stringify(props.filterDateRange)
-                )}`
-              )
-            }
-          >
-            Đặt ngay
-          </MantineButton>
         </div>
       </div>
     </CardDefault>

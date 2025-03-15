@@ -7,6 +7,7 @@ export interface Hotel {
   name: string;
   address: AddressType;
   description?: string;
+  average_rating: number;
 
   rooms?: Room[];
   room_types?: RoomTypeCustomerFetchDto[];

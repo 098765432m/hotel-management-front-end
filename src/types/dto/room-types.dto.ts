@@ -15,6 +15,7 @@ export interface GetRoomTypeBookingDtoResponse
   extends Prisma.RoomTypeGetPayload<{ include: { rooms: true } }> {}
 
 export type RoomTypeCustomerFetchDto = {
+  id: string;
   name: string;
   price: number;
 };

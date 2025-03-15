@@ -26,7 +26,17 @@
       }
     }
     .card_info_main {
-      .card_info_description {
+      .card_rating_container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .card_rating_number {
+          font-size: 1.4rem;
+        }
+      }
+
+      .card_price_container {
       }
     }
 

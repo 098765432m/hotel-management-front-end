@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/client";
 import { handleNextApiError } from "@/lib/error-handler/errorHandler";
-import { caculateHotelAverageRating } from "@/utils/caculateAverageRating";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
@@ -28,7 +27,9 @@ export async function DELETE(
       await tx.hotel.update({
         where: { id: hotelId },
         data: {
-          average_rating: newAverageRating._avg.score ?? 0,
+          average_rating: newAverageRating._avg.score
+            ? parseFloat(newAverageRating._avg.score.toFixed(1))
+            : 0,
         },
       });
     });

@@ -89,6 +89,9 @@ export default function SearchResultLayout({ listProvince }: Props) {
       provinceId ?? ""
       //Thêm filterDateRange
     );
+
+    console.log("hotel", result);
+
     setResultHotel(result);
 
     setIsSearching(false);

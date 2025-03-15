@@ -6,6 +6,7 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { RangeSlider, Select, TextInput } from "@mantine/core";
 import { DatesRangeValue, DateValue } from "@mantine/dates";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
+import { useId } from "react";
 
 interface Province {
   label: string;
@@ -28,14 +29,21 @@ interface Props {
 }
 
 export default function SearchPanel(props: Props) {
+  const searchPanelId = useId();
   return (
     <CardDefault>
       <div className={styles.search_panel_container}>
         <div className={styles.search_result_heading}>Tìm kiếm</div>
         <div className={styles.filter_input_layout}>
           <div className={styles.filter_hotel_name_container}>
-            <div>Tên khách sạn</div>
+            <label
+              className={styles.label_text}
+              htmlFor={`hotelName-${searchPanelId}`}
+            >
+              Tên khách sạn
+            </label>
             <TextInput
+              id={`hotelName-${searchPanelId}`}
               value={props.hotelName ?? ""}
               onChange={(event) =>
                 props.setHotelName(event.currentTarget.value)
@@ -45,8 +53,14 @@ export default function SearchPanel(props: Props) {
             ></TextInput>
           </div>
           <div className={styles.filter_address_container}>
-            <div>Tỉnh/Thành phố</div>
+            <label
+              className={styles.label_text}
+              htmlFor={`hotelProvince-${searchPanelId}`}
+            >
+              Tỉnh/Thành phố
+            </label>
             <Select
+              id={`hotelProvince-${searchPanelId}`}
               data={[
                 { label: "Tất cả", value: "" },
                 ...(props.listProvince ?? []),
@@ -59,8 +73,14 @@ export default function SearchPanel(props: Props) {
             ></Select>
           </div>
           <div className={styles.filter_date_range_container}>
-            <div>Ngày tra cứu</div>
+            <label
+              className={styles.label_text}
+              htmlFor={`hotelFilterDateRange-${searchPanelId}`}
+            >
+              Ngày tra cứu
+            </label>
             <MantineDatePicker
+              id={`hotelFilterDateRange-${searchPanelId}`}
               type="range"
               placeholder="Chọn ngày tra cứu"
               defaultValue={props.filterDateRange} // <-- Causing Error
@@ -74,10 +94,15 @@ export default function SearchPanel(props: Props) {
             ></MantineDatePicker>
           </div>
           <div className={styles.filter_slider_container}>
-            <div>
-              <span className="">Giá</span>
-            </div>
+            <label
+              className={styles.label_text}
+              htmlFor={`hotelPriceRange-${searchPanelId}`}
+            >
+              Giá
+            </label>
+
             <RangeSlider
+              id={`hotelPriceRange-${searchPanelId}`}
               defaultValue={[0, 8000000]}
               min={0}
               max={8000000}
@@ -101,11 +126,16 @@ export default function SearchPanel(props: Props) {
             ></RangeSlider>
           </div>
           <div className={styles.filter_slider_container}>
-            <div>
-              <span>Đánh giá</span>
-            </div>
+            <label
+              className={styles.label_text}
+              htmlFor={`hotelRatingRange-${searchPanelId}`}
+            >
+              Đánh giá
+            </label>
+
             <RangeSlider
-              defaultValue={[0, 5]}
+              id={`hotelRatingRange-${searchPanelId}`}
+              defaultValue={[1, 5]}
               value={
                 props.ratingRange && props.ratingRange[0]
                   ? props.ratingRange
@@ -114,12 +144,11 @@ export default function SearchPanel(props: Props) {
               onChange={(value: [number, number]) => {
                 props.setRatingRange(value);
               }}
-              min={0}
+              min={1}
               max={5}
               minRange={0.5}
               step={0.5}
               marks={[
-                { value: 0, label: "0" },
                 { value: 1, label: "1" },
                 { value: 2, label: "2" },
                 { value: 3, label: "3" },
