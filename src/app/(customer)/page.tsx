@@ -20,11 +20,7 @@ export default async function Home() {
   if (hotels && hotels.length > 0)
     return (
       <div className={styles.main_page_container}>
-        <CardDefault>
-          <CustomerSearchPanel
-            listProvince={listProvince}
-          ></CustomerSearchPanel>
-        </CardDefault>
+        <CustomerSearchPanel listProvince={listProvince}></CustomerSearchPanel>
         <CardDefault className={styles.hotel_list_container}>
           <div className={styles.hotel_list_heading}>
             <h2>Khách sạn nổi bật</h2>

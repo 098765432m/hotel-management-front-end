@@ -50,6 +50,7 @@ export default function ProfileDropDownMenu() {
                 ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${user.image.public_id}.${user.image.format}`
                 : process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE
             }`}
+            className={styles.avatar_image}
             width={50}
             height={50}
             alt="Ảnh đại diện"

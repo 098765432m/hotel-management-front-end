@@ -3,6 +3,14 @@
 
   .menu_trigger {
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+
+    .avatar_image {
+    }
   }
 
   .dropdown_menu {

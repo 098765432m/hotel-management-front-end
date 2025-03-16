@@ -1,39 +1,56 @@
 @use "@/styles/global.module.scss" as global-scss;
 
 .search_panel_container {
-  .page_name_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 8rem;
+  display: grid;
+  align-content: center;
+  height: 70dvh;
+  background-image: url("/assets/images/main_page_background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
-    & > h1 {
-      font-size: 4rem;
-    }
-  }
-
-  .search_panel {
+  .search_panel_inner_container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
-    justify-content: center;
-    gap: 20px;
 
-    & > div {
+    align-content: center;
+    align-items: center;
+    opacity: 80;
+    background-color: #ffffff;
+    border-radius: 45px;
+    .page_name_container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 8rem;
+
+      & > h1 {
+        font-size: 4rem;
+      }
+    }
+
+    .search_panel {
       display: grid;
-      row-gap: 6px;
-    }
+      grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
+      justify-content: center;
+      gap: 20px;
 
-    .range_slider_container {
-      align-self: flex-start;
-    }
+      & > div {
+        display: grid;
+        row-gap: 6px;
+      }
 
-    .date_range_input_container {
-      .date_range_input_flex {
-        display: flex;
-        gap: 20px;
+      .range_slider_container {
+        align-self: flex-start;
+      }
 
-        .date_range_input {
-          flex-grow: 1;
+      .date_range_input_container {
+        .date_range_input_flex {
+          display: flex;
+          gap: 20px;
+
+          .date_range_input {
+            flex-grow: 1;
+          }
         }
       }
     }
