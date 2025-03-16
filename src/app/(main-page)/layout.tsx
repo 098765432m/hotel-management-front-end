@@ -11,7 +11,7 @@ export default function CustomerLayout({
       <header>
         <Header></Header>
       </header>
-      <main className={styles.main_layout}>{children}</main>
+      <main className={styles.main_page_layout}>{children}</main>
       <footer>
         <Footer></Footer>
       </footer>
