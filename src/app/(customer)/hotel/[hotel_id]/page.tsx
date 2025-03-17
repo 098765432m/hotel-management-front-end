@@ -63,8 +63,8 @@ export default function HotelDetail({
                 hotel && (
                   <NextImage
                     src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
-                    width={400}
-                    height={300}
+                    fill
+                    sizes="30vw"
                     alt={hotel.name}
                     priority
                     className={styles.carousel_image_container}
@@ -73,8 +73,8 @@ export default function HotelDetail({
               ) : (
                 <NextImage
                   src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-                  width={400}
-                  height={300}
+                  fill
+                  sizes="30vw"
                   alt={hotel?.name}
                   priority
                 ></NextImage>

@@ -10,15 +10,11 @@
     .hotel_detail_images_container {
       flex: 1;
       display: flex;
-      border-radius: 20px;
+      position: relative;
       align-items: center;
       justify-content: center;
       overflow: hidden;
-
-      .carousel_image_container {
-        object-fit: cover;
-        // width: 100%;
-      }
+      aspect-ratio: 16/9;
     }
 
     .hotel_detail_heading_container {
