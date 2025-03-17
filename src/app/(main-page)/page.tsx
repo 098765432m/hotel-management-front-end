@@ -36,7 +36,7 @@ export default async function Home() {
           </div>
         </CardDefault>
 
-        <CardDefault>
+        {/* <CardDefault>
           <div className={styles.province_card_container}>
             <div className={styles.province_card_header}>Địa điểm nổi bật</div>
             <div className={styles.province_card_body}>
@@ -54,7 +54,7 @@ export default async function Home() {
               )}
             </div>
           </div>
-        </CardDefault>
+        </CardDefault> */}
       </div>
     );
 }

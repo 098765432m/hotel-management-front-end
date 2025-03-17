@@ -2,21 +2,24 @@
 
 .search_panel_container {
   display: grid;
+  justify-content: center;
   align-content: center;
   height: 70dvh;
   background-image: url("/assets/images/main_page_background.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  padding: 3rem 20rem;
 
   .search_panel_inner_container {
+    width: clamp(40rem, 55dvw, 80rem);
+    padding: 3rem 4rem;
     display: grid;
-
     align-content: center;
     align-items: center;
     opacity: 80;
     background-color: #ffffff;
-    border-radius: 45px;
+    border-radius: 10px;
     .page_name_container {
       display: flex;
       justify-content: center;
@@ -30,9 +33,13 @@
 
     .search_panel {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 400px));
+      grid-template-columns: repeat(2, 45%);
       justify-content: center;
       gap: 20px;
+
+      @media screen and (max-width: 768px) {
+        grid-template-columns: repeat(1, 1fr);
+      }
 
       & > div {
         display: grid;

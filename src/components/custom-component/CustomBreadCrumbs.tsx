@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "@/styles/custom-component/CustomBreadCrumbs.module.scss";
 import React from "react";
 import NextLink from "./NextLink";
 import { usePathname } from "next/navigation";

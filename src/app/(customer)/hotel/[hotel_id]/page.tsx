@@ -9,9 +9,9 @@ import { axiosCustomFetcher } from "@/lib/swr";
 import bookingsService from "@/services/bookings.service";
 import { UploadedHotelImage } from "@/types/dto/image.dto";
 import { rangeISOToRangeDayJS } from "@/utils/dayjs";
-import { Button, Skeleton as MantineSkeleton } from "@mantine/core";
-import { Input, Rating, TextField } from "@mui/material";
-import { DatePicker } from "antd";
+import { Rating } from "@mantine/core";
+import { Carousel as MantineCarousel } from "@mantine/carousel";
+
 import { Dayjs } from "dayjs";
 import { CldImage } from "next-cloudinary";
 import { useEffect, useState } from "react";
@@ -23,11 +23,17 @@ import {
 } from "react-icons/ri";
 
 import useSWR from "swr";
-import { Carousel } from "@mantine/carousel";
 import NextImage from "@/components/custom-component/NextImage";
 import { useToggle } from "@mantine/hooks";
 import CommentSection from "@/components/customer/hotel-page/comment/CommentSection";
-
+import { roundToNearestHalf } from "@/utils/math";
+const contentStyle: React.CSSProperties = {
+  height: "160px",
+  color: "#fff",
+  lineHeight: "160px",
+  textAlign: "center",
+  background: "#364d79",
+};
 export default function HotelDetail({
   params,
 }: {
@@ -54,45 +60,24 @@ export default function HotelDetail({
           <div className={styles.hotel_detail}>
             <span className={styles.hotel_detail_images_container}>
               {hotel && hotel.images.length > 0 ? (
-                <Carousel withIndicators height={"100%"}>
-                  {hotel &&
-                    hotel.images.map((image: UploadedHotelImage) => {
-                      return (
-                        <Carousel.Slide key={image.public_id}>
-                          <div
-                            style={{
-                              aspectRatio: "3/2",
-                              overflow: "hidden",
-                            }}
-                          >
-                            <NextImage
-                              key={image.public_id}
-                              src={`${cloudinary_path}/${image.public_id}.${image.format}`}
-                              width={400}
-                              height={300}
-                              alt={hotel.name}
-                              priority
-                              style={{
-                                objectFit: "cover",
-                                width: "100%",
-                                height: "100%",
-                              }}
-                            ></NextImage>
-                          </div>
-                        </Carousel.Slide>
-                      );
-                    })}
-                </Carousel>
-              ) : (
-                <>
+                hotel && (
                   <NextImage
-                    src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+                    src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
                     width={400}
                     height={300}
-                    alt={hotel?.name}
+                    alt={hotel.name}
                     priority
+                    className={styles.carousel_image_container}
                   ></NextImage>
-                </>
+                )
+              ) : (
+                <NextImage
+                  src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
+                  width={400}
+                  height={300}
+                  alt={hotel?.name}
+                  priority
+                ></NextImage>
               )}
             </span>
             <span className={styles.hotel_detail_heading_container}>
@@ -106,7 +91,13 @@ export default function HotelDetail({
                           {hotel.average_rating}
                         </span>
                         <span className={styles.rating_icon_container}>
-                          <Rating readOnly></Rating>
+                          <Rating
+                            fractions={2}
+                            defaultValue={roundToNearestHalf(
+                              hotel.average_rating
+                            )}
+                            readOnly
+                          ></Rating>
                         </span>
                       </span>
                     )}

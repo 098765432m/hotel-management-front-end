@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
+import { Carousel } from "antd";
 
 export default function DashBoardPage() {
   const auInfo = useSelector((state: RootState) => state.auth.authInfo);

@@ -30,7 +30,7 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
   >([null, null]);
 
   return (
-    <CardDefault className={styles.search_panel_container}>
+    <div className={styles.search_panel_container}>
       <div className={styles.search_panel_inner_container}>
         <div className={styles.page_name_container}>
           <h1>Trip.com</h1>
@@ -61,17 +61,18 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
             <RangeSlider
               id={`priceRange_${inputId}`}
               min={0}
-              max={8000000}
-              step={500000}
+              max={500000}
+              step={50000}
               minRange={500000}
               value={priceRange ?? undefined}
               onChange={setPriceRange}
               marks={[
                 { value: 0, label: "0" },
-                { value: 2000000, label: "2" },
-                { value: 4000000, label: "4" },
-                { value: 6000000, label: "6" },
-                { value: 8000000, label: "8" },
+                { value: 100000, label: "100k" },
+                { value: 200000, label: "200k" },
+                { value: 300000, label: "300k" },
+                { value: 400000, label: "400k" },
+                { value: 500000, label: "500k" },
               ]}
             ></RangeSlider>
           </div>
@@ -135,6 +136,6 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
           </div>
         </div>
       </div>
-    </CardDefault>
+    </div>
   );
 }

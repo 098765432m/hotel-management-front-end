@@ -10,12 +10,14 @@ import { NumberToMoneyFormat } from "@/utils/helpers";
 import { Rating } from "@mantine/core";
 import { HotelCustomerPageDto } from "@/types/dto/hotel.dto";
 import { roundToNearestHalf } from "@/utils/math";
+import { useRouter } from "next/navigation";
 
 interface Props {
   hotel: HotelCustomerPageDto;
 }
 
 export default function HotelCard({ hotel }: Props) {
+  const router = useRouter();
   const cloudinary_path =
     process.env.NEXT_PUBLIC_CLOUDINARY_URL +
     "/" +
@@ -23,7 +25,10 @@ export default function HotelCard({ hotel }: Props) {
     "/image/upload/v1";
 
   return (
-    <CardDefault className={styles.hotel_card}>
+    <CardDefault
+      className={styles.hotel_card}
+      onClick={() => router.push(`/hotel/${hotel.id}`)}
+    >
       <div className={styles.card_image_container}>
         {hotel.images.length > 0 ? (
           <NextImage
@@ -75,12 +80,6 @@ export default function HotelCard({ hotel }: Props) {
               đ
             </div>
           )}
-        </div>
-        {/* Delete this */}
-        <div className={styles.navigation_button}>
-          <NextLink href={`/hotel/${hotel.id}`}>
-            <MantineButton>Xem chi tiết</MantineButton>
-          </NextLink>
         </div>
       </div>
     </CardDefault>

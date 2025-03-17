@@ -3,11 +3,11 @@
 import styles from "@/styles/custom-component/popup-confirm/CustomPopupConfirm.module.scss";
 
 import infomation from "@/../public/assets/images/information.png";
-import { ReactNode, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import CardDefault from "../CardDefault";
 import NextImage from "../NextImage";
 
-interface Props {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   opened: boolean;
   title: string;
   okText?: string;

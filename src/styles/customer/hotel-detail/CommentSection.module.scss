@@ -38,7 +38,11 @@
 
       .comment_card {
         display: flex;
+        position: relative;
         column-gap: 20px;
+        padding-right: 3rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid grey;
 
         .comment_card_left_section {
           width: 12rem;
@@ -54,11 +58,14 @@
             font-size: 0.9rem;
             font-style: italic;
             font-weight: 200;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
           }
+        }
+
+        .comment_card_delete_button_container {
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 1.25rem;
         }
       }
     }

@@ -43,14 +43,14 @@ $section-spacing: 20px;
   .main_layout {
     display: grid;
     align-items: center;
-    padding: 1.5rem $main-padding;
+    padding: 5rem $main-padding;
     background-color: $secondary-color;
   }
 
   .main_page_layout {
     display: grid;
     align-items: center;
-    padding: 1.5rem 0;
+    padding-bottom: 5rem;
     background-color: $secondary-color;
   }
 }

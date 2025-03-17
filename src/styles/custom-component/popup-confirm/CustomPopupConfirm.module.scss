@@ -1,10 +1,14 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .custom_popup_confirm_container {
   display: block;
   position: fixed;
+  background-color: global-scss.$secondary-color;
+  border: 1px solid global-scss.$primary-color;
+  padding: 2rem 2rem;
   width: clamp(20rem, 15vw, 20vw);
   top: 40%;
   left: 50%;
-
   transform: translate(-50%, -50%);
   z-index: 1001;
 

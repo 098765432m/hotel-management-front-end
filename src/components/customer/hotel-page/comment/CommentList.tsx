@@ -46,7 +46,7 @@ export default function CommentList(props: Props) {
         {ratingData &&
           ratingData.map((rating) => {
             return (
-              <CardDefault key={rating.id} className={styles.comment_card}>
+              <div key={rating.id} className={styles.comment_card}>
                 <div className={styles.comment_card_left_section}>
                   <NextImage
                     height={50}
@@ -66,25 +66,25 @@ export default function CommentList(props: Props) {
                   {rating.comment && <div>{rating.comment}</div>}
                   <div className={styles.comment_card_right_section_bottom}>
                     <div>{dayjs(rating.updateAt).format("DD/MM/YYYY")}</div>{" "}
-                    {rating.guest_id === props.userId && (
-                      <div>
-                        <MantineButton
-                          color="red"
-                          size="compact-xs"
-                          onClick={() =>
-                            setConfirmState({
-                              opened: true,
-                              ratingId: rating.id,
-                            })
-                          }
-                        >
-                          <FaTrashAlt size={8}></FaTrashAlt>
-                        </MantineButton>
-                      </div>
-                    )}
                   </div>
                 </div>
-              </CardDefault>
+                {rating.guest_id === props.userId && (
+                  <div className={styles.comment_card_delete_button_container}>
+                    <MantineButton
+                      color="red"
+                      size="compact-xs"
+                      onClick={() =>
+                        setConfirmState({
+                          opened: true,
+                          ratingId: rating.id,
+                        })
+                      }
+                    >
+                      <FaTrashAlt size={8}></FaTrashAlt>
+                    </MantineButton>
+                  </div>
+                )}
+              </div>
             );
           })}
       </div>
@@ -101,9 +101,7 @@ export default function CommentList(props: Props) {
             setConfirmState({ opened: false, ratingId: null });
             Promise.all([
               ratingMutate(),
-              // mutate(`/api/ratings/hotel/cm7nesbro0004u1xcfiy0u1xu`),
               mutate(`/api/hotels/${props.hotelId}`),
-              // mutate(`/api/ratings/hotel/${props.hotelId}`),
             ]);
           }
         }}
