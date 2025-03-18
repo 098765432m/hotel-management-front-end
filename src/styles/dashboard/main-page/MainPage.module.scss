@@ -10,23 +10,34 @@ $gap-width: 20px;
   justify-items: stretch;
 
   .hotel_brief_container {
-    display: flexbox;
+    &:hover
+      .hotel_brief_heading
+      .hotel_brief_hotel_name
+      .dashboard_hotel_edit_button {
+      visibility: visible;
+      opacity: 1;
+      transition: 200ms;
+    }
 
     .hotel_brief_heading {
       display: flex;
       justify-content: center;
-      position: relative;
+      align-items: center;
 
       .hotel_brief_hotel_name {
         font-size: xx-large;
         font-weight: 800;
-      }
+        position: relative;
 
-      .dashboard_hotel_edit_button {
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: 1;
+        .dashboard_hotel_edit_button {
+          opacity: 0;
+          visibility: hidden;
+          transition: 200ms;
+          position: absolute;
+          right: -3rem;
+          top: 0;
+          z-index: 1;
+        }
       }
     }
 
@@ -55,14 +66,29 @@ $gap-width: 20px;
     .uploaded_image {
       display: grid;
       gap: $gap-width;
-      grid-template-columns: repeat(auto-fit, 200px);
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
       justify-content: space-evenly;
 
-      .delete_button {
-        position: absolute;
-        top: 5%;
-        right: 5%;
-        z-index: 1;
+      .uploaded_image_container {
+        display: inline-block;
+        position: relative;
+        aspect-ratio: 16/9;
+
+        &:hover .delete_button {
+          opacity: 1;
+          visibility: visible;
+          transition: 0.2s;
+        }
+
+        .delete_button {
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.2s;
+          position: absolute;
+          top: 3%;
+          right: 2%;
+          z-index: 1;
+        }
       }
     }
   }

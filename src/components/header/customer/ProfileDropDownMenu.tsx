@@ -53,7 +53,7 @@ export default function ProfileDropDownMenu() {
             className={styles.avatar_image}
             width={50}
             height={50}
-            alt="Ảnh đại diện"
+            alt={user ? user.full_name : "Ảnh đại diện"}
             priority
           ></NextImage>
         </div>

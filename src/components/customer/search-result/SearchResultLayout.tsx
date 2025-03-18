@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useDeferredValue, useEffect, useState } from "react";
 import SearchPanel from "./search-panel/SearchPanel";
 import SearchResultList from "./search-result-list/SearchResultList";
 import { HotelResultCardDto } from "@/types/dto/hotel.dto";
@@ -99,7 +99,7 @@ export default function SearchResultLayout({ listProvince }: Props) {
 
   useEffect(() => {
     performSearch();
-  }, [performSearch]);
+  }, []);
 
   return (
     <>

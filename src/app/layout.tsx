@@ -24,6 +24,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { cookies } from "next/headers";
 import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
+import { mantineTheme } from "@/lib/theme";
+import MantineCustomThemeProvider from "@/components/lib/MantineCustomThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,7 +55,9 @@ export default async function RootLayout({
             <ConfigProvider>
               <DatesProvider settings={{ locale: "vi" }}>
                 <ReduxProvider authInfo={authInfo}>
-                  <MantineProvider>{children}</MantineProvider>
+                  <MantineProvider theme={mantineTheme}>
+                    {children}
+                  </MantineProvider>
                 </ReduxProvider>
               </DatesProvider>
             </ConfigProvider>

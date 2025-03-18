@@ -1,0 +1,13 @@
+.mantine_loading_container {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  align-items: baseline;
+  row-gap: 20px;
+  padding: 25px 0px;
+
+  .loading_text {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+}

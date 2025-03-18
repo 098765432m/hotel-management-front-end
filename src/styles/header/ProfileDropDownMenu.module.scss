@@ -1,3 +1,5 @@
+@use "@/styles/header/Header.module.scss" as header-scss;
+
 .menu_container {
   position: relative;
 
@@ -6,10 +8,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
+
     overflow: hidden;
+    border: 1px solid black;
+    border-radius: 50%;
+    transition: 0.2s;
 
     .avatar_image {
+    }
+
+    &:hover {
+      @include header-scss.nav-item-hover;
     }
   }
 
@@ -31,10 +40,13 @@
       display: grid;
       justify-items: center;
 
-      & > h3 {
-      }
       & > span {
         font-weight: 300;
+      }
+
+      & > *:hover {
+        transition: 0.5s;
+        transform: scale(1.1);
       }
     }
 
@@ -45,6 +57,10 @@
 
     li {
       cursor: pointer;
+      &:hover {
+        transition: 0.5s;
+        font-weight: 800;
+      }
     }
   }
 }

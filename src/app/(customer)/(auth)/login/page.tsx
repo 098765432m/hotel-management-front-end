@@ -83,51 +83,49 @@ export default function LoginPage() {
     }
   };
   return (
-    <div className={styles.login_form_container}>
-      <CardDefault>
-        <Box pos={"relative"}>
-          <LoadingOverlay
-            visible={loginStatus?.status === "LOADING"}
-          ></LoadingOverlay>
-          <div className={styles.login_form_heading}>Đăng nhập</div>
-          <form
-            className={styles.login_form}
-            onSubmit={form.onSubmit((values) =>
-              handleSubmit(values.username, values.password)
-            )}
-          >
-            <TextInput
+    <CardDefault className={styles.login_form_container}>
+      <Box pos={"relative"}>
+        <LoadingOverlay
+          visible={loginStatus?.status === "LOADING"}
+        ></LoadingOverlay>
+        <div className={styles.login_form_heading}>Đăng nhập</div>
+        <form
+          className={styles.login_form}
+          onSubmit={form.onSubmit((values) =>
+            handleSubmit(values.username, values.password)
+          )}
+        >
+          <TextInput
+            withAsterisk
+            label="Tên đăng nhập"
+            placeholder="Tên đăng nhập"
+            key={form.key("username")}
+            {...form.getInputProps("username")}
+          ></TextInput>
+          <div>
+            <PasswordInput
               withAsterisk
-              label="Tên đăng nhập"
-              placeholder="Tên đăng nhập"
-              key={form.key("username")}
-              {...form.getInputProps("username")}
-            ></TextInput>
-            <div>
-              <PasswordInput
-                withAsterisk
-                label="Mật khẩu"
-                placeholder="Mật khẩu"
-                key={form.key("password")}
-                {...form.getInputProps("password")}
-              ></PasswordInput>
-              <div className={styles.register_link}>
-                <NextLink href={`/register`}>Chưa có tài khoản</NextLink>
-              </div>
+              label="Mật khẩu"
+              placeholder="Mật khẩu"
+              key={form.key("password")}
+              {...form.getInputProps("password")}
+            ></PasswordInput>
+            <div className={styles.register_link}>
+              <NextLink href={`/register`}>Chưa có tài khoản</NextLink>
+            </div>
 
-              {/* Báo lỗi cho khách hàng */}
-              {loginStatus?.status === "ERROR" && (
-                <ErrorCustomNotify
-                  message={loginStatus.message}
-                ></ErrorCustomNotify>
-              )}
-            </div>
-            <div className={styles.login_form_control}>
-              <MantineButton type="submit">Đăng nhập</MantineButton>
-            </div>
-          </form>
-        </Box>
-      </CardDefault>
-    </div>
+            {/* Báo lỗi cho khách hàng */}
+            {loginStatus?.status === "ERROR" && (
+              <ErrorCustomNotify
+                message={loginStatus.message}
+              ></ErrorCustomNotify>
+            )}
+          </div>
+          <div className={styles.login_form_control}>
+            <MantineButton type="submit">Đăng nhập</MantineButton>
+          </div>
+        </form>
+      </Box>
+    </CardDefault>
   );
 }

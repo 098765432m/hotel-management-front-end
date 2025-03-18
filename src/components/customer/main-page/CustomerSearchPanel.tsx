@@ -22,7 +22,7 @@ interface Props {
 export default function CustomerSearchPanel({ listProvince }: Props) {
   const inputId = useId();
   const router = useRouter();
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 8000000]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [hotelName, setHotelName] = useState("");
   const [selectedProvince, setSelectedProvince] = useState<string | null>("");
   const [filterDateRange, setFilterDateRange] = useState<
@@ -63,9 +63,9 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
               min={0}
               max={500000}
               step={50000}
-              minRange={500000}
-              value={priceRange ?? undefined}
-              onChange={setPriceRange}
+              minRange={50000}
+              defaultValue={priceRange ?? undefined}
+              onChange={(value: [number, number]) => setPriceRange(value)}
               marks={[
                 { value: 0, label: "0" },
                 { value: 100000, label: "100k" },

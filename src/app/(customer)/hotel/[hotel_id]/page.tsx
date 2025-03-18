@@ -96,6 +96,7 @@ export default function HotelDetail({
                             defaultValue={roundToNearestHalf(
                               hotel.average_rating
                             )}
+                            size="lg"
                             readOnly
                           ></Rating>
                         </span>

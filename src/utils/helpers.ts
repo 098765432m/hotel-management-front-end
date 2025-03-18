@@ -1,6 +1,7 @@
 import { AddressType } from "@/types/address.interface";
 import { Role, Status_Booking, Status_Room } from "@prisma/client";
 
+//Chuyen dia chi type JSON sang kieu string
 export function addressToString(address: AddressType) {
   return `Đường ${address.street as string}, ${address.ward.name as string}, ${
     address.district.name
@@ -39,6 +40,7 @@ export function transformAddressSelectInput<T extends Entity>(
     : null;
 }
 
+// Chuyen so thanh format tien vd: 40000 -> 40.000
 export function NumberToMoneyFormat(number?: number): string {
   let resultString = "",
     mod;

@@ -2,8 +2,6 @@
 
 import styles from "@/styles/header/Header.module.scss";
 import NextLink from "../../custom-component/NextLink";
-import CardDefault from "../../custom-component/CardDefault";
-import HeaderLoginButton from "./HeaderLoginButton";
 import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
@@ -44,18 +42,11 @@ export default function Header() {
       </span>
       <span id={styles.nav_link_container}>
         {authInfo?.role == roleEnum.ADMIN ? (
-          <span>
+          <span className={styles.nav_item}>
             <NextLink href={"/admin"}>Something</NextLink>
           </span>
-        ) : authInfo?.role == roleEnum.MANAGER ||
-          authInfo?.role == roleEnum.STAFF ? (
-          <>
-            <NextLink href={"/dashboard/roomType"}>Loại phòng</NextLink>
-            <NextLink href={"/dashboard/room"}>Phòng đặt</NextLink>
-            <NextLink href={"/dashboard/staff"}>Nhân viên</NextLink>
-          </>
         ) : (
-          <span>
+          <span className={styles.nav_item}>
             <NextLink href={"/contact"}>Liên hệ</NextLink>
           </span>
         )}

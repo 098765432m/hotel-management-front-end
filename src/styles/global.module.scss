@@ -57,7 +57,7 @@ $section-spacing: 20px;
 
 #dashboard_layout {
   display: grid;
-  grid-template-columns: 1fr 5fr;
+  grid-template-columns: 10% calc(90% - 20px);
   column-gap: 20px;
 
   .main_layout {

@@ -107,7 +107,7 @@ export default function SearchPanel(props: Props) {
               min={0}
               max={500000}
               step={50000}
-              minRange={500000}
+              minRange={50000}
               value={
                 props.priceRange && props.priceRange[0]
                   ? props.priceRange

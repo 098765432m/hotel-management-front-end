@@ -1,5 +1,10 @@
 @use "../global.module.scss" as global-scss;
 
+@mixin nav-item-hover {
+  transition: 0.2s;
+  transform: scale(1.05);
+}
+
 .navbar {
   height: 6rem;
   display: flex;
@@ -12,6 +17,11 @@
   #logo {
     font-size: 1.7rem;
     font-weight: 700;
+    transition: 0.2s;
+
+    &:hover {
+      @include nav-item-hover();
+    }
   }
 
   #nav_link_container {
@@ -20,6 +30,13 @@
     font-size: 1.3rem;
     font-weight: 600;
     gap: 30px;
+
+    & > span {
+      transition: 0.2s;
+      &:hover {
+        @include nav-item-hover();
+      }
+    }
 
     .mantine-Tree-subtree {
       position: absolute;

@@ -55,8 +55,8 @@
           .hotel_heading_rating_container {
             display: flex;
             column-gap: 10px;
+            align-items: center;
             .rating_number {
-              line-height: 26px;
               font-size: 24px;
             }
 

@@ -1,14 +1,14 @@
 @use "@/styles/global.module.scss" as global-scss;
 
 .hotel_card {
-  transition: 0.5s;
+  transition: 0.2s;
   box-shadow: 13px 13px 8px 1px rgba(224, 217, 210, 0.4);
   cursor: pointer;
 
   &:hover {
     transform: scale(1.1);
     box-shadow: 13px 13px 8px 1px rgba(224, 217, 210, 1);
-    transition: 0.5s;
+    transition: 0.2s;
   }
 
   .card_image_container {

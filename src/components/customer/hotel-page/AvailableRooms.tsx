@@ -13,7 +13,7 @@ import {
   RemoveScroll,
   TextInput,
 } from "@mantine/core";
-import { forwardRef, useMemo, useReducer, useState } from "react";
+import { forwardRef, useEffect, useMemo, useReducer, useState } from "react";
 import { NumberToMoneyFormat } from "@/utils/helpers";
 import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
@@ -68,7 +68,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
   ({ hotel }: Props, ref) => {
     const [opened, { open, close }] = useDisclosure(false);
 
-    // get query params
+    // Get query params
     const filterDateRangeQuery = useSearchParams().get("filterDateRange");
     const initialFilterDateRange: DatesRangeValue | [null, null] =
       filterDateRangeQuery
@@ -84,7 +84,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     >(initialFilterDateRange);
     console.log(filterDateRange);
 
-    // Fetch Available room
+    // Fetch Nhung phong AVAILABLE
     const {
       data: availableRoomTypes,
       isValidating: isAvailableRoomTypesValidating,
@@ -116,17 +116,21 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
           {}
         )
       : null;
+
+    //Quan ly State cua cac phong duoc booking
     const [bookingRooms, dispatchBookingRooms] = useReducer(
       bookingReducer,
       initialBookingState
     );
 
+    //Tinh so ngay
     const countDays = useMemo(() => {
       return filterDateRange && filterDateRange[0] && filterDateRange[1]
         ? dayjs(filterDateRange[1]).diff(dayjs(filterDateRange[0]), "day")
         : 0;
     }, [filterDateRange]);
 
+    //Tinh tong gia tien voi so phong, loai phong va so ngay
     const totalPrice = useMemo(
       () =>
         NumberToMoneyFormat(

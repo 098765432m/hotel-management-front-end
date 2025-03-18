@@ -13,7 +13,7 @@ export default function MantineButton({
   ...props
 }: CustomComponentProps) {
   return (
-    <Button color="cyan" type={type} {...props}>
+    <Button type={type} {...props}>
       {children}
     </Button>
   );

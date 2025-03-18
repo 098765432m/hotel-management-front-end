@@ -3,6 +3,18 @@
 .result_card {
   display: grid;
   gap: 4px;
+  transition: 0.2s;
+  cursor: pointer;
+  user-select: none;
+
+  box-shadow: 0px 4px 4px 3px rgba(224, 217, 210, 0.6);
+
+  &:hover {
+    transform: scale(1.05);
+
+    box-shadow: 0px 4px 4px 3px rgba(255, 183, 0, 0.6);
+    transition: 0.2s;
+  }
 
   .result_image_layout {
     .result_card_image_container {
@@ -16,39 +28,46 @@
     }
   }
 
-  .result_info_layout {
-    display: grid;
-    row-gap: 20px;
+  .hotel_info_layout {
+    padding: 0.8rem 0.4rem;
+    .hotel_upper_container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
 
-    .header {
-      .hotel_upper_container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .hotel_name {
-          @include global-scss.label-text;
-          font-size: 1.4rem;
-        }
-        .hotel_rating_container {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-
-          .rating_number {
-            font-size: 1.3rem;
-            font-weight: 500;
-          }
-        }
+      .hotel_name {
+        @include global-scss.label-text;
+        font-size: 1.4rem;
       }
 
-      .hotel_address {
-        font-size: 1rem;
-        opacity: 50%;
+      .hotel_rating_container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .rating_number {
+          font-size: 1.3rem;
+          font-weight: 500;
+        }
       }
     }
 
-    .navigate_button {
+    .hotel_address {
+      font-size: 1rem;
+      opacity: 50%;
+      display: flex;
+      align-items: center;
+      column-gap: 3px;
+
+      .icon_location {
+      }
+    }
+
+    .hotel_price_container {
+      .price_number {
+        font-size: 1.4rem;
+        color: global-scss.$primary-color;
+      }
     }
   }
 }
