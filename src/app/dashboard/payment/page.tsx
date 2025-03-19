@@ -36,6 +36,7 @@ import {
 } from "@/types/dto/room.dto";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import CustomSpinning from "@/components/custom-component/CustomSpinning";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 //Type Prisma include relation
 
@@ -199,7 +200,8 @@ export default function PaymentPage() {
           <Form form={paymentForm} onFinish={handlePayment}>
             <div className={styles.payment_panel_container}>
               <div className={styles.payment_panel_heading}>Thanh toán</div>
-              Phòng<Input readOnly value={selectedRoom?.name}></Input>
+              <label htmlFor="">Phòng</label>
+              <Input readOnly value={selectedRoom?.name}></Input>
               Loại<Input readOnly value={selectedRoom?.room_type.name}></Input>
               Khách hàng
               <Input
@@ -314,7 +316,7 @@ export default function PaymentPage() {
                         colSpan={4}
                         className={styles.loading_state}
                       >
-                        <CustomSpinning tip="Loading"></CustomSpinning>
+                        <MantineLoading></MantineLoading>
                       </td>
                     </tr>
                   ) : roomData?.rooms && roomData.rooms.length > 0 ? (

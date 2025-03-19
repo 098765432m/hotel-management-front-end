@@ -1,35 +1,42 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .dashboard_header_container {
-  min-height: 100dvh;
-  height: 100%;
+  height: 100dvh;
 
   display: grid;
   align-content: start;
   justify-items: stretch;
-  row-gap: 20px;
-  padding: 0px 20px;
-  background-color: #f5f5f5;
-
-  .header_user_avatar_container {
-    display: grid;
-    height: 10rem;
-    justify-items: center;
-    align-items: center;
-  }
+  row-gap: 40px;
+  padding-top: 50px;
+  background-color: global-scss.$primary-color;
 
   .header_staff_info {
+    min-height: 100px;
     display: grid;
     justify-items: center;
     align-items: center;
 
-    padding: 40px 0px;
+    .header_avatar_container {
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .header_username {
+      font-size: 1.2rem;
+    }
   }
 
   .header_hotel_management_menu {
     display: grid;
-    row-gap: 20px;
+    padding-left: 20px;
 
-    .log_out_button {
-      cursor: pointer;
+    & > div {
+      font-size: 18px;
+      font-weight: 500;
+
+      :hover {
+        color: white;
+      }
     }
   }
 }

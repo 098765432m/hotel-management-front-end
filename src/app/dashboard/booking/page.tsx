@@ -18,7 +18,7 @@ import {
   Select,
 } from "antd";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import useSWR from "swr";
 import { Prisma, Status_Booking } from "@prisma/client";
@@ -28,6 +28,7 @@ import { FaTrashAlt, FaCheck } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import { AxiosError } from "axios";
 import { convertBookingStatusToLabel } from "@/utils/helpers";
+import EmptyData from "@/components/custom-component/EmptyData";
 
 interface ModalBookingForm
   extends Prisma.BookingGetPayload<{
@@ -105,24 +106,23 @@ export default function BookingPage() {
         <CardDefault>
           <div className={styles.booking_table_container}>
             <div className={styles.booking_table_heading}>Đặt phòng</div>
-            <div className="w-64">
+            <div className={styles.booking_control_panel}>
               <MantineDatePicker
                 valueFormat="DD/MM/YYYY"
                 placeholder="DD/MM/YYYY"
                 value={filterDate as DateValue}
                 onChange={(value) => {
                   setFilterDate(value as DateValue);
-                  console.log(value);
                 }}
+                className={styles.date_picker_input}
               />
-              {/* <Button type="primary">Tìm kiếm</Button> */}
+              <Button
+                type="primary"
+                onClick={() => setModalState(modal_form_state.ADD)}
+              >
+                Thêm
+              </Button>
             </div>
-            <Button
-              type="primary"
-              onClick={() => setModalState(modal_form_state.ADD)}
-            >
-              +
-            </Button>
             <CustomTable>
               <thead>
                 <tr>
@@ -228,7 +228,11 @@ export default function BookingPage() {
                     </tr>
                   ))
                 ) : (
-                  <></>
+                  <tr>
+                    <td rowSpan={3} colSpan={7}>
+                      <EmptyData></EmptyData>
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </CustomTable>

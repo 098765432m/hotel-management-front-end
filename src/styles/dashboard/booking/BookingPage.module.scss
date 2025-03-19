@@ -8,5 +8,16 @@
     .booking_table_heading {
       @include global-scss.heading-text;
     }
+
+    .booking_control_panel {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+
+      .date_picker_input {
+        flex: 1 1 400px;
+        max-width: 400px;
+      }
+    }
   }
 }

@@ -15,18 +15,20 @@ export default function DashboardUserInfoHeader() {
 
   if (user)
     return (
-      <div className={styles.header_staff_info}>
-        <NextImage
-          width={50}
-          height={50}
-          alt="User Avatar"
-          src={
-            user && user.image
-              ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${user.image.public_id}.${user.image.format}`
-              : (process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string)
-          }
-        ></NextImage>
-        <div>{user.username}</div>
-      </div>
+      <>
+        <div className={styles.header_avatar_container}>
+          <NextImage
+            width={70}
+            height={70}
+            alt={user.username}
+            src={
+              user && user.image
+                ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${user.image.public_id}.${user.image.format}`
+                : (process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string)
+            }
+          ></NextImage>
+        </div>
+        <div className={styles.header_username}>{user.username}</div>
+      </>
     );
 }

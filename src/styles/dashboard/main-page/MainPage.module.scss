@@ -48,29 +48,29 @@ $gap-width: 20px;
   }
 
   .uploaded_image_container {
+    width: 100%;
     display: grid;
+    justify-items: center;
     row-gap: 18px;
+    grid-template-rows: auto auto 100%;
 
     .uploaded_image_heading {
-      display: flex;
-      justify-content: center;
       font-size: 28px;
       font-weight: 600;
     }
 
     .upload_button {
-      display: flex;
-      justify-content: center;
     }
 
     .uploaded_image {
+      width: 100%;
       display: grid;
       gap: $gap-width;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       justify-content: space-evenly;
 
       .uploaded_image_container {
-        display: inline-block;
+        // display: inline-block;
         position: relative;
         aspect-ratio: 16/9;
 

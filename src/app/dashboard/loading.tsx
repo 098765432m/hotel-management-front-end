@@ -1,5 +1,10 @@
-import { Spin } from "antd";
+import styles from "@/styles/customer/CustomerLoading.module.scss";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
-export default function DashboardLoading() {
-  return <Spin size="large"></Spin>;
+export default function CustomerLoading() {
+  return (
+    <div className={styles.customer_loading_container}>
+      <MantineLoading></MantineLoading>
+    </div>
+  );
 }
