@@ -207,150 +207,68 @@ export default function HotelForm() {
           opened={isEditFormOpen}
           onClose={closeEditForm}
         >
-          <div className={styles.main_page_form_container}>
-            <Form
-              onFinish={handleUpdateFinish}
-              form={form}
-              labelAlign="left"
-              labelCol={{ span: 10 }}
-              wrapperCol={{ span: 14 }}
-            >
-              <div>
-                <Form.Item
-                  name={"name"}
-                  label="Tên khách sạn"
-                  initialValue={hotel.name}
-                  required
+          <Form
+            className={styles.main_page_form_container}
+            onFinish={handleUpdateFinish}
+            form={form}
+            labelAlign="left"
+            labelCol={{ span: 10 }}
+            wrapperCol={{ span: 14 }}
+          >
+            <div>
+              <Form.Item
+                name={"name"}
+                label="Tên khách sạn"
+                initialValue={hotel.name}
+                required
+              >
+                <Input></Input>
+              </Form.Item>
+            </div>
+            <div>
+              <Form.Item
+                label="Đường"
+                name="street"
+                initialValue={
+                  hotel && hotel.address ? hotel.address.street : ""
+                }
+                rules={[
+                  {
+                    required: true,
+                    message: "Vị trí đường khách sạn bị trống",
+                  },
+                ]}
+                required
+              >
+                <Input></Input>
+              </Form.Item>
+            </div>
+            <div>
+              <Form.Item
+                label="Xã/Phường"
+                name="ward"
+                initialValue={
+                  hotel && hotel.address
+                    ? JSON.stringify({
+                        id: hotel.address.ward.id,
+                        name: hotel.address.ward.name,
+                      })
+                    : JSON.stringify({ id: null, name: null })
+                }
+              >
+                <Select
+                  placeholder="Chọn Xã/Phường"
+                  onChange={handleWardChange}
+                  value={JSON.stringify(address.ward)}
                 >
-                  <Input></Input>
-                </Form.Item>
-              </div>
-              <div>
-                <Form.Item
-                  label="Đường"
-                  name="street"
-                  initialValue={
-                    hotel && hotel.address ? hotel.address.street : ""
-                  }
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vị trí đường khách sạn bị trống",
-                    },
-                  ]}
-                  required
-                >
-                  <Input></Input>
-                </Form.Item>
-              </div>
-              <div>
-                <Form.Item
-                  label="Xã/Phường"
-                  name="ward"
-                  initialValue={
-                    hotel && hotel.address
-                      ? JSON.stringify({
-                          id: hotel.address.ward.id,
-                          name: hotel.address.ward.name,
-                        })
-                      : JSON.stringify({ id: null, name: null })
-                  }
-                >
-                  <Select
-                    placeholder="Chọn Xã/Phường"
-                    onChange={handleWardChange}
-                    value={JSON.stringify(address.ward)}
+                  <Select.Option
+                    value={JSON.stringify({ id: null, name: null })}
                   >
-                    <Select.Option
-                      value={JSON.stringify({ id: null, name: null })}
-                    >
-                      Chọn Xã/Phường
-                    </Select.Option>
-                    {ward_options &&
-                      ward_options.map(
-                        (option: { name: string; value: string }) => (
-                          <Select.Option
-                            key={option.value}
-                            value={JSON.stringify({
-                              id: option.value,
-                              name: option.name,
-                            })}
-                          >
-                            {option.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                </Form.Item>
-              </div>
-              <div>
-                <Form.Item
-                  label="Quận/Huyện"
-                  name="district"
-                  initialValue={
-                    hotel && hotel.address
-                      ? JSON.stringify({
-                          id: hotel.address.district.id,
-                          name: hotel.address.district.name,
-                        })
-                      : JSON.stringify({ id: null, name: null })
-                  }
-                  required
-                >
-                  <Select
-                    placeholder="Chọn Quận/Huyện"
-                    onChange={handleDistrictChange}
-                    value={JSON.stringify(address.district)}
-                  >
-                    <Select.Option
-                      value={JSON.stringify({ id: null, name: null })}
-                    >
-                      Chọn Quận/Huyện
-                    </Select.Option>
-                    {district_options &&
-                      district_options.map(
-                        (option: { name: string; value: string }) => (
-                          <Select.Option
-                            key={option.value}
-                            value={JSON.stringify({
-                              id: option.value,
-                              name: option.name,
-                            })}
-                          >
-                            {option.name}
-                          </Select.Option>
-                        )
-                      )}
-                  </Select>
-                </Form.Item>
-              </div>
-              <div>
-                {" "}
-                <Form.Item
-                  label="Tỉnh/Thành phố"
-                  name="province"
-                  initialValue={
-                    hotel && hotel.address
-                      ? JSON.stringify({
-                          id: hotel.address.province.id,
-                          name: hotel.address.province.name,
-                        })
-                      : JSON.stringify({ id: null, name: null })
-                  }
-                  required
-                >
-                  <Select
-                    placeholder="Chọn Tỉnh/Thành phố"
-                    onChange={handleProvinceChange}
-                    value={JSON.stringify(address.province)}
-                  >
-                    <Select.Option
-                      value={JSON.stringify({ id: null, name: null })}
-                    >
-                      Chọn Tỉnh/Thành phố
-                    </Select.Option>
-                    {province_options &&
-                      province_options.map((option: any) => (
+                    Chọn Xã/Phường
+                  </Select.Option>
+                  {ward_options &&
+                    ward_options.map(
+                      (option: { name: string; value: string }) => (
                         <Select.Option
                           key={option.value}
                           value={JSON.stringify({
@@ -360,23 +278,104 @@ export default function HotelForm() {
                         >
                           {option.name}
                         </Select.Option>
-                      ))}
-                  </Select>
-                </Form.Item>
-              </div>
+                      )
+                    )}
+                </Select>
+              </Form.Item>
+            </div>
+            <div>
+              <Form.Item
+                label="Quận/Huyện"
+                name="district"
+                initialValue={
+                  hotel && hotel.address
+                    ? JSON.stringify({
+                        id: hotel.address.district.id,
+                        name: hotel.address.district.name,
+                      })
+                    : JSON.stringify({ id: null, name: null })
+                }
+                required
+              >
+                <Select
+                  placeholder="Chọn Quận/Huyện"
+                  onChange={handleDistrictChange}
+                  value={JSON.stringify(address.district)}
+                >
+                  <Select.Option
+                    value={JSON.stringify({ id: null, name: null })}
+                  >
+                    Chọn Quận/Huyện
+                  </Select.Option>
+                  {district_options &&
+                    district_options.map(
+                      (option: { name: string; value: string }) => (
+                        <Select.Option
+                          key={option.value}
+                          value={JSON.stringify({
+                            id: option.value,
+                            name: option.name,
+                          })}
+                        >
+                          {option.name}
+                        </Select.Option>
+                      )
+                    )}
+                </Select>
+              </Form.Item>
+            </div>
+            <div>
+              {" "}
+              <Form.Item
+                label="Tỉnh/Thành phố"
+                name="province"
+                initialValue={
+                  hotel && hotel.address
+                    ? JSON.stringify({
+                        id: hotel.address.province.id,
+                        name: hotel.address.province.name,
+                      })
+                    : JSON.stringify({ id: null, name: null })
+                }
+                required
+              >
+                <Select
+                  placeholder="Chọn Tỉnh/Thành phố"
+                  onChange={handleProvinceChange}
+                  value={JSON.stringify(address.province)}
+                >
+                  <Select.Option
+                    value={JSON.stringify({ id: null, name: null })}
+                  >
+                    Chọn Tỉnh/Thành phố
+                  </Select.Option>
+                  {province_options &&
+                    province_options.map((option: any) => (
+                      <Select.Option
+                        key={option.value}
+                        value={JSON.stringify({
+                          id: option.value,
+                          name: option.name,
+                        })}
+                      >
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                </Select>
+              </Form.Item>
+            </div>
 
-              <div className={styles.submit_button}>
-                <Form.Item>
-                  <Button type="primary" htmlType="submit">
-                    <IoMdCheckmarkCircleOutline
-                      size={20}
-                    ></IoMdCheckmarkCircleOutline>{" "}
-                    Lưu
-                  </Button>
-                </Form.Item>
-              </div>
-            </Form>
-          </div>
+            <div className={styles.submit_button}>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  <IoMdCheckmarkCircleOutline
+                    size={20}
+                  ></IoMdCheckmarkCircleOutline>{" "}
+                  Lưu
+                </Button>
+              </Form.Item>
+            </div>
+          </Form>
         </Modal>
       </>
     );

@@ -8,9 +8,14 @@
       @include global-scss.heading-text;
     }
 
-    .staff_form_submit_button {
-      display: flex;
-      justify-content: center;
+    .add_staff_form {
+      display: grid;
+      gap: 24px;
+
+      .staff_form_submit_button {
+        display: flex;
+        justify-content: center;
+      }
     }
   }
   .staff_list_container {

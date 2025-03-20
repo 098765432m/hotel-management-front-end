@@ -24,13 +24,19 @@ import CardDefault from "@/components/custom-component/CardDefault";
 
 import { Button } from "@mantine/core";
 import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
+import { NumberToMoneyFormat } from "@/utils/helpers";
 
 interface Props {
   hotelId: string;
   RoomType: RoomTypeHotelPayload;
+  roomTypeMutate: () => void;
 }
 
-export default function RoomTypeCard({ hotelId, RoomType }: Props) {
+export default function RoomTypeCard({
+  hotelId,
+  RoomType,
+  roomTypeMutate,
+}: Props) {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isConfirmRmOpen, setConfirmRmOpen] = useState(false);
   const [name, setName] = useState(RoomType.name);
@@ -48,34 +54,32 @@ export default function RoomTypeCard({ hotelId, RoomType }: Props) {
       images: uploadedImage,
     });
 
-    mutateGlobal(`/api/roomTypes/hotel/${hotelId}`); // Tại sao mutate không được
-
     setUploadedImage([]);
+
+    roomTypeMutate();
   };
 
   //Handle Remove a Single Image
   const handleRemoveImage = async (imageId: string, public_id: string) => {
     await imagesService.removeOne(imageId, public_id);
 
-    mutateGlobal(`/api/roomTypes/hotel/${hotelId}`); // Tại sao mutate không được
+    roomTypeMutate();
   };
 
   return (
     <div>
-      <CardDefault>
-        <div className={styles.room_type_card}>
-          <div className={styles.room_type_card_header}>
-            <div>{RoomType.name}</div>
-            <Button
-              color="yellow"
-              size="compact-sm"
-              onClick={() => setIsEditOpen(true)}
-            >
-              <FaEdit></FaEdit>
-            </Button>
-          </div>{" "}
-          <span>Giá loại phòng: {RoomType.price}</span>{" "}
-        </div>
+      <CardDefault className={styles.room_type_card}>
+        <div className={styles.room_type_card_header}>
+          <div>{RoomType.name}</div>
+          <Button
+            color="yellow"
+            size="compact-sm"
+            onClick={() => setIsEditOpen(true)}
+          >
+            <FaEdit></FaEdit>
+          </Button>
+        </div>{" "}
+        <span>Giá loại phòng: {NumberToMoneyFormat(RoomType.price)}đ</span>{" "}
       </CardDefault>
       <Modal
         title="Chỉnh sửa"
@@ -91,6 +95,7 @@ export default function RoomTypeCard({ hotelId, RoomType }: Props) {
           labelAlign="left"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
+          className={styles.edit_room_type_form_layout}
         >
           <Form.Item label="Tên loại phòng" initialValue={name} required>
             <Input
@@ -106,42 +111,44 @@ export default function RoomTypeCard({ hotelId, RoomType }: Props) {
               onChange={(value: number | null) => setPrice(value ?? 1000)}
             ></InputNumber>
           </Form.Item>
-          <div>
-            {/* this button on top-right image */}
+          <div className={styles.room_type_list_image}>
             {RoomType.images && RoomType.images.length > 0 ? (
               RoomType.images.map((image, index) => {
                 return (
-                  <div className="" key={index}>
+                  <div
+                    className={styles.room_type_image_group_container}
+                    key={index}
+                  >
                     <Popconfirm
-                      title="Xac Nhan"
-                      description="Ban co muon xoa hinh anh khong"
+                      title="Xác nhận"
+                      okText="Xóa"
+                      cancelText={"Hủy"}
+                      description="Bạn có muốn xóa hình ảnh không ?"
                       onConfirm={() =>
                         handleRemoveImage(image.id, image.public_id)
                       }
                       onCancel={() => setConfirmRmOpen(false)}
                     >
                       <AntdButton
+                        size="small"
                         type="primary"
                         danger
                         onClick={() => setConfirmRmOpen(true)}
-                        style={{
-                          position: "absolute",
-                          top: 10,
-                          right: 10,
-                          zIndex: 1,
-                        }}
+                        className={styles.delete_image_button}
                       >
-                        <FaRegTrashAlt></FaRegTrashAlt>
+                        <FaRegTrashAlt size={12}></FaRegTrashAlt>
                       </AntdButton>
                     </Popconfirm>
-                    <CldImage
-                      key={index}
-                      src={`${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${image.public_id}.${image.format}`}
-                      alt="123"
-                      height={200}
-                      width={200}
-                      priority //LCP
-                    ></CldImage>
+                    <div className={styles.room_type_image_container}>
+                      <CldImage
+                        key={index}
+                        src={`${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${image.public_id}.${image.format}`}
+                        alt={"Ảnh loại phòng"}
+                        fill
+                        priority
+                        className={styles.room_type_image}
+                      ></CldImage>
+                    </div>
                   </div>
                 );
               })
@@ -191,7 +198,10 @@ export default function RoomTypeCard({ hotelId, RoomType }: Props) {
             {({ open }) => {
               return (
                 <Button onClick={() => open()}>
-                  <UploadIcon size={25}></UploadIcon>
+                  <div className={styles.upload_image_button}>
+                    <div className={styles.upload_text}>Upload</div>{" "}
+                    <UploadIcon size={20}></UploadIcon>
+                  </div>
                 </Button>
               );
             }}

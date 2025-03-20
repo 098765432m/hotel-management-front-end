@@ -16,6 +16,7 @@ import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import EmptyData from "@/components/custom-component/EmptyData";
 import CustomSpinning from "@/components/custom-component/CustomSpinning";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 export default function RoomList() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -24,7 +25,7 @@ export default function RoomList() {
     data: roomsApiResponse,
     size: sizeRoom,
     setSize: setSizeRoom,
-    isValidating: isRoomValidating,
+    mutate: roomMutate,
   } = useCustomSWRInfinite<RoomHotelListApiResponse>(
     authInfo?.hotelId ? `/api/rooms/hotel/${authInfo!.hotelId}?limit=6` : null
   );
@@ -45,21 +46,20 @@ export default function RoomList() {
       <div className={styles.room_list_container}>
         <div className={styles.room_list_heading}>Danh sách phòng</div>
 
-        {isRoomValidating || !roomCurrentData ? (
-          <CustomSpinning></CustomSpinning>
+        {!roomCurrentData ? (
+          <MantineLoading></MantineLoading>
         ) : roomCurrentData.rooms.length > 0 ? (
           <>
             <div className={styles.room_list}>
-              {roomCurrentData.rooms.map(
-                (room: RoomHotelPayload, index: number) => (
-                  <RoomCard
-                    hotelId={room.hotel_id}
-                    roomId={room.id}
-                    roomTypes={roomTypeApiResponse?.data.roomTypes ?? null}
-                    key={index}
-                  ></RoomCard>
-                )
-              )}
+              {roomCurrentData.rooms.map((room: RoomHotelPayload) => (
+                <RoomCard
+                  roomMutate={roomMutate}
+                  hotelId={room.hotel_id}
+                  roomId={room.id}
+                  roomTypes={roomTypeApiResponse?.data?.roomTypes ?? null}
+                  key={room.id}
+                ></RoomCard>
+              ))}
             </div>
             <AntdPagination
               current={sizeRoom}

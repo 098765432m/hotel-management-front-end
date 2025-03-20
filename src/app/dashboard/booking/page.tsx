@@ -262,10 +262,9 @@ export default function BookingPage() {
           labelAlign="left"
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
+          className={styles.book_form_layout}
           onFinish={async () => {
             const formData = form.getFieldsValue();
-            console.log("formData", formData);
-
             switch (modalState) {
               case modal_form_state.ADD:
                 await bookingsService.createOneDashboard(

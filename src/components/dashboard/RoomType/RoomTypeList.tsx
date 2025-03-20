@@ -8,6 +8,7 @@ import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
 import CustomSpinning from "@/components/custom-component/CustomSpinning";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 interface Props {
   hotelId: string | null;
@@ -18,7 +19,8 @@ export default function RoomTypeList({ hotelId }: Props) {
     data: roomTypeApiResponse,
     size: sizeRoomType,
     setSize: setRoomTypeSize,
-    isValidating: isRoomTypeValidating,
+    mutate: roomTypeMutate,
+    // isValidating: isRoomTypeValidating,
   } = useCustomSWRInfinite<RoomTypeHotelApiResponse>(
     hotelId ? `/api/roomTypes/hotel/${hotelId}?limit=6` : null
   );
@@ -38,8 +40,8 @@ export default function RoomTypeList({ hotelId }: Props) {
       <div className={styles.list_header}>Danh sách loại phòng</div>
 
       <div>
-        {isRoomTypeValidating || !roomTypeData ? (
-          <CustomSpinning></CustomSpinning>
+        {!roomTypeData ? (
+          <MantineLoading></MantineLoading>
         ) : roomTypeData.roomTypes.length > 0 ? (
           <>
             <div className={styles.room_type_list}>
@@ -49,6 +51,7 @@ export default function RoomTypeList({ hotelId }: Props) {
                     <RoomTypeCard
                       hotelId={hotelId}
                       RoomType={roomType}
+                      roomTypeMutate={roomTypeMutate}
                     ></RoomTypeCard>
                   </div>
                 );
@@ -66,7 +69,6 @@ export default function RoomTypeList({ hotelId }: Props) {
           <EmptyData></EmptyData>
         )}
       </div>
-      <div></div>
     </div>
   );
 }

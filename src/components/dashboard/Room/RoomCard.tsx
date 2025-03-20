@@ -20,10 +20,16 @@ import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
 interface Props {
   hotelId: string;
   roomId: string;
+  roomMutate: () => void;
   roomTypes: RoomTypeHotelPayload[] | null;
 }
 
-export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
+export default function RoomCard({
+  hotelId,
+  roomId,
+  roomTypes,
+  roomMutate,
+}: Props) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const { data: room } = useSWR(
@@ -33,12 +39,12 @@ export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
 
   async function handleSubmit(id: string, body: RoomDtoUpdateRequest) {
     await roomsServices.UpdateOne(id, body);
-    mutate(`/api/rooms/hotel/${hotelId}`);
+    roomMutate();
   }
 
   async function handleDelete(id: string) {
     await roomsServices.DeleteOne(id);
-    mutate(`/api/rooms/hotel/${hotelId}`);
+    roomMutate();
   }
 
   if (room)
@@ -62,12 +68,7 @@ export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
             {room.room_type.name}
           </div>
         </CardDefault>
-        <Modal
-          title="Chỉnh sửa"
-          opened={opened}
-          onClose={close}
-          className={styles.edit_form_container}
-        >
+        <Modal title="Chỉnh sửa" opened={opened} onClose={close}>
           <Form<{
             roomName: string;
             roomDescription: string;
@@ -76,7 +77,7 @@ export default function RoomCard({ hotelId, roomId, roomTypes }: Props) {
             labelAlign="left"
             labelCol={{ span: 6 }}
             wrapperCol={{ span: 18 }}
-            className={styles.edit_form}
+            className={styles.edit_form_container}
             initialValues={{
               roomName: room.name,
               roomDescription: room.description ?? "",

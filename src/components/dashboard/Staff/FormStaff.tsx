@@ -37,71 +37,70 @@ export default function FormStaff() {
   };
 
   return (
-    <CardDefault>
-      <div className={styles.staff_form_container}>
-        <div className={styles.staff_form_heading}>Thêm tài khoản</div>
-        <Form
-          // action={createDashboardUser}
-          onFinish={onFinish}
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 18 }}
-          labelAlign="left"
+    <CardDefault className={styles.staff_form_container}>
+      <div className={styles.staff_form_heading}>Thêm tài khoản</div>
+      <Form
+        // action={createDashboardUser}
+        onFinish={onFinish}
+        labelCol={{ span: 6 }}
+        wrapperCol={{ span: 18 }}
+        labelAlign="left"
+        className={styles.add_staff_form}
+      >
+        <Form.Item
+          name={"username_add"}
+          label="Tên tài khoản"
+          rules={[{ required: true }]}
         >
-          <Form.Item
-            name={"username_add"}
-            label="Tên tài khoản"
-            rules={[{ required: true }]}
-          >
-            <Input></Input>
-          </Form.Item>
-          <Form.Item
-            name={"fullName_add"}
-            label="Họ và tên"
-            rules={[{ required: true }]}
-          >
-            <Input></Input>
-          </Form.Item>
-          <Form.Item
-            name={"email_add"}
-            label="Địa chỉ email"
-            rules={[{ required: true }]}
-          >
-            <Input></Input>
-          </Form.Item>
-          <Form.Item
-            name={"phoneNumber_add"}
-            label="Số điện thoại"
-            rules={[{ required: true }]}
-          >
-            <Input></Input>
-          </Form.Item>
-          <Form.Item
-            name={"role_add"}
-            label="Vai trò"
-            initialValue={roleEnum.STAFF}
-            rules={[{ required: true }]}
-          >
-            <Radio.Group
-              options={[
-                {
-                  label: "Nhân viên",
-                  value: roleEnum.STAFF,
-                },
-                {
-                  label: "Quản lý",
-                  value: roleEnum.MANAGER,
-                },
-              ]}
-              optionType="button"
-            ></Radio.Group>
-          </Form.Item>
-          <Form.Item className={styles.staff_form_submit_button}>
-            <Button type="primary" shape="round" htmlType="submit">
-              Tạo tài khoản
-            </Button>
-          </Form.Item>
-        </Form>
-      </div>
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"fullName_add"}
+          label="Họ và tên"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"email_add"}
+          label="Địa chỉ email"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"phoneNumber_add"}
+          label="Số điện thoại"
+          rules={[{ required: true }]}
+        >
+          <Input></Input>
+        </Form.Item>
+        <Form.Item
+          name={"role_add"}
+          label="Vai trò"
+          initialValue={roleEnum.STAFF}
+          rules={[{ required: true }]}
+        >
+          <Radio.Group
+            options={[
+              {
+                label: "Nhân viên",
+                value: roleEnum.STAFF,
+              },
+              {
+                label: "Quản lý",
+                value: roleEnum.MANAGER,
+              },
+            ]}
+            optionType="button"
+          ></Radio.Group>
+        </Form.Item>
+        <Form.Item className={styles.staff_form_submit_button}>
+          <Button type="primary" shape="round" htmlType="submit">
+            Tạo tài khoản
+          </Button>
+        </Form.Item>
+      </Form>
     </CardDefault>
   );
 }

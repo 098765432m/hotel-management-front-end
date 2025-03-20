@@ -1,13 +1,38 @@
 @use "@/styles/global.module.scss" as global-scss;
 
+.ant-form-item {
+  margin-bottom: 0px !important;
+}
+
 .payment_page_container {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 3fr 2fr;
   column-gap: global-scss.$section-spacing;
 
   .payment_panel_container {
+    user-select: none;
+
     .payment_panel_heading {
       @include global-scss.heading-text;
+    }
+
+    .payment_input_group {
+      display: grid;
+      row-gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .price_group {
+      display: flex;
+
+      & > div {
+        flex-grow: 1;
+      }
+    }
+
+    .submit_button {
+      display: flex;
+      justify-content: center;
     }
   }
 

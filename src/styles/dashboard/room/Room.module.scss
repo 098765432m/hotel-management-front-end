@@ -12,6 +12,16 @@
       display: flex;
       justify-content: center;
     }
+
+    .add_room_form_layout {
+      display: grid;
+      justify-content: center;
+      gap: 24px;
+
+      & > * {
+        width: 40vw;
+      }
+    }
   }
 
   .room_list_container {
@@ -21,8 +31,9 @@
 
     .room_list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, minmax(300px, 1fr));
       gap: 20px;
+
       .room_card {
         .room_card_header {
           display: flex;
@@ -34,10 +45,11 @@
 }
 
 .edit_form_container {
-  .edit_form {
-    .edit_form_control {
-      display: flex;
-      justify-content: space-around;
-    }
+  display: grid;
+  gap: 24px;
+
+  .edit_form_control {
+    display: flex;
+    justify-content: space-around;
   }
 }

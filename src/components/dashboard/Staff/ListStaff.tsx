@@ -15,7 +15,7 @@ import StaffCard from "./StaffCard";
 import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import EmptyData from "@/components/custom-component/EmptyData";
-import CustomSpinning from "@/components/custom-component/CustomSpinning";
+import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 export default function ListStaff() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -24,7 +24,7 @@ export default function ListStaff() {
     data: staffApiResponse,
     size: staffSize,
     setSize: setStaffSize,
-    isValidating: isStaffValidating,
+    mutate: staffMutate,
   } = useCustomSWRInfinite<StaffHotelApiResponse>(
     authInfo ? `/api/users/hotel/${authInfo!.hotelId}` : null
   );
@@ -51,15 +51,19 @@ export default function ListStaff() {
             <FaMagnifyingGlass></FaMagnifyingGlass>
           </MantineButton>
         </div>
-        {isStaffValidating ? (
-          <CustomSpinning size="default"></CustomSpinning>
+        {!staffData ? (
+          <MantineLoading></MantineLoading>
         ) : (
           <>
             <div className={styles.staff_list}>
               {staffData && staffData.staffs.length > 0 ? (
                 staffData.staffs.map((staff) => {
                   return (
-                    <StaffCard userId={staff.id} key={staff.id}></StaffCard>
+                    <StaffCard
+                      staffMutate={staffMutate}
+                      userId={staff.id}
+                      key={staff.id}
+                    ></StaffCard>
                   );
                 })
               ) : (

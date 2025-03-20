@@ -95,9 +95,12 @@ $gap-width: 20px;
 }
 
 .main_page_form_container {
-  display: grid;
-  // grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  justify-items: center;
+  // display: grid;
+  // justify-items: center;
+
+  & > div {
+    margin-bottom: 20px;
+  }
 
   .submit_button {
     display: flex;

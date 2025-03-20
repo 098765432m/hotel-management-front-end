@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "@/styles/dashboard/room/Room.module.scss";
-import { RoomType } from "@/types/roomTypes.interface";
 
 import CardDefault from "@/components/custom-component/CardDefault";
 import { Button, Form, Input, Select } from "antd";
@@ -44,8 +43,8 @@ export default function RoomForm() {
           add_room_type_id: string;
         }>
           labelAlign="left"
+          className={styles.add_room_form_layout}
           labelCol={{ span: 6 }}
-          wrapperCol={{ span: 18 }}
           onFinish={(values) =>
             handleSubmit({
               name: values.add_room_name,

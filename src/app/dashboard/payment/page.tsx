@@ -5,27 +5,12 @@ import CardDefault from "@/components/custom-component/CardDefault";
 import CustomTable from "@/components/custom-component/CustomTable";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
-import useSWR from "swr";
-import useSWRInfinite from "swr/infinite";
-import { axiosCustomFetcher, getSWRInfiniteKey } from "@/lib/swr";
 import EmptyData from "@/components/custom-component/EmptyData";
 import { Prisma, Status_Room } from "@prisma/client";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  message,
-  Modal,
-  Pagination,
-  PaginationProps,
-  Select,
-  Spin,
-} from "antd";
-import { useEffect, useMemo, useState } from "react";
+import { Button, Form, Input, InputNumber, message } from "antd";
+import { useEffect, useId, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { convertRoomStatusToLabel } from "@/utils/helpers";
-import { BillDtoDashboardCreate } from "@/types/dto/bill.dto";
 import billsService from "@/services/bills.service";
 import usersService from "@/services/users.service";
 import { AxiosError } from "axios";
@@ -35,12 +20,12 @@ import {
   RoomHotelPayload,
 } from "@/types/dto/room.dto";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
-import CustomSpinning from "@/components/custom-component/CustomSpinning";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 //Type Prisma include relation
 
 export default function PaymentPage() {
+  const paymentId = useId();
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
   const [paymentForm] = Form.useForm<{
     payment: {
@@ -197,100 +182,150 @@ export default function PaymentPage() {
       {contextHolder}
       <div className={styles.payment_page_container}>
         <CardDefault>
-          <Form form={paymentForm} onFinish={handlePayment}>
+          <Form form={paymentForm} onFinish={handlePayment} layout="vertical">
             <div className={styles.payment_panel_container}>
               <div className={styles.payment_panel_heading}>Thanh toán</div>
-              <label htmlFor="">Phòng</label>
-              <Input readOnly value={selectedRoom?.name}></Input>
-              Loại<Input readOnly value={selectedRoom?.room_type.name}></Input>
-              Khách hàng
-              <Input
-                readOnly
-                value={selectedRoom?.current_booking?.full_name as string}
-              ></Input>
-              Giá<Input readOnly value={selectedRoom?.room_type.price}></Input>
-              Nhận phòng
-              <Input
-                readOnly
-                value={
-                  selectedRoom?.current_booking?.check_in_date
-                    ? dayjs(selectedRoom.current_booking.check_in_date).format(
-                        "DD-MM-YYYY"
-                      )
-                    : ""
-                }
-              ></Input>
-              Trả phòng
-              <Input
-                readOnly
-                value={
-                  selectedRoom?.current_booking?.check_in_date
-                    ? dayjs(selectedRoom.current_booking.check_in_date).format(
-                        "DD-MM-YYYY"
-                      )
-                    : ""
-                }
-              ></Input>
-              Trạng thái
-              <Input
-                readOnly
-                value={
-                  selectedRoom
-                    ? (convertRoomStatusToLabel(
-                        selectedRoom.status_room
-                      ) as string)
-                    : ""
-                }
-              ></Input>
-              <div className="flex justify-around">
-                <Form.Item
-                  name={["payment", "discount"]}
-                  label="Giảm giá"
-                  initialValue={0}
-                >
-                  <InputNumber
-                    min={0}
-                    max={
-                      selectedRoom &&
-                      selectedRoom.status_room === Status_Room.OCCUPIED
-                        ? selectedRoom.room_type.price * dateCount
-                        : undefined
-                    }
-                    step={1000}
-                    value={discount}
-                    onChange={(value) => setDiscount(value as number)}
-                    disabled={
-                      (selectedRoom &&
-                        !(selectedRoom.status_room === Status_Room.OCCUPIED)) ??
-                      true
-                    }
-                  ></InputNumber>
-                </Form.Item>
-                <Form.Item
-                  name={["payment", "total"]}
-                  label="Tổng tiền"
-                  initialValue={0}
-                >
-                  <InputNumber readOnly min={0}></InputNumber>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`room-payment-${paymentId}`}>Phòng</label>
+                <Input
+                  readOnly
+                  value={selectedRoom?.name}
+                  id={`room-payment-${paymentId}`}
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`room-type-payment-${paymentId}`}>Loại</label>
+                <Input
+                  readOnly
+                  value={selectedRoom?.room_type.name}
+                  id={`room-type-payment-${paymentId}`}
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`client-full-name-payment-${paymentId}`}>
+                  Khách hàng
+                </label>
+                <Input
+                  id={`client-full-name-payment-${paymentId}`}
+                  readOnly
+                  value={selectedRoom?.current_booking?.full_name as string}
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`price-payment-${paymentId}`}>Giá</label>
+                <Input
+                  readOnly
+                  value={selectedRoom?.room_type.price}
+                  id={`price-payment-${paymentId}`}
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`check-in-date-${paymentId}`}>Nhận phòng</label>
+                <Input
+                  id={`check-in-date-${paymentId}`}
+                  readOnly
+                  value={
+                    selectedRoom?.current_booking?.check_in_date
+                      ? dayjs(
+                          selectedRoom.current_booking.check_in_date
+                        ).format("DD-MM-YYYY")
+                      : ""
+                  }
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`check-out-date-${paymentId}`}>Trả phòng</label>
+                <Input
+                  id={`check-out-date-${paymentId}`}
+                  readOnly
+                  value={
+                    selectedRoom?.current_booking?.check_in_date
+                      ? dayjs(
+                          selectedRoom.current_booking.check_in_date
+                        ).format("DD-MM-YYYY")
+                      : ""
+                  }
+                ></Input>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`room-status-${paymentId}`}>Trạng thái</label>
+                <Input
+                  id={`room-status-${paymentId}`}
+                  readOnly
+                  value={
+                    selectedRoom
+                      ? (convertRoomStatusToLabel(
+                          selectedRoom.status_room
+                        ) as string)
+                      : ""
+                  }
+                ></Input>
+              </div>
+
+              <div className={styles.price_group}>
+                <div className={styles.payment_input_group}>
+                  <label htmlFor={`discount-payment-${paymentId}`}>
+                    Giảm giá
+                  </label>
+                  <Form.Item name={["payment", "discount"]} initialValue={0}>
+                    <InputNumber
+                      id={`discount-payment-${paymentId}`}
+                      min={0}
+                      max={
+                        selectedRoom &&
+                        selectedRoom.status_room === Status_Room.OCCUPIED
+                          ? selectedRoom.room_type.price * dateCount
+                          : undefined
+                      }
+                      step={1000}
+                      value={discount}
+                      onChange={(value) => setDiscount(value as number)}
+                      disabled={
+                        (selectedRoom &&
+                          !(
+                            selectedRoom.status_room === Status_Room.OCCUPIED
+                          )) ??
+                        true
+                      }
+                    ></InputNumber>
+                  </Form.Item>
+                </div>
+                <div className={styles.payment_input_group}>
+                  <label htmlFor={`payment-total-price-${paymentId}`}>
+                    Tổng tiền
+                  </label>
+                  <Form.Item name={["payment", "total"]} initialValue={0}>
+                    <InputNumber
+                      id={`payment-total-price-${paymentId}`}
+                      readOnly
+                      min={0}
+                    ></InputNumber>
+                  </Form.Item>
+                </div>
+              </div>
+              <div className={styles.payment_input_group}>
+                <label htmlFor={`payment-note-${paymentId}`}>Ghi chú</label>
+                <Form.Item name={["payment", "note"]}>
+                  <Input.TextArea
+                    id={`payment-note-${paymentId}`}
+                    placeholder="Ghi chú"
+                    autoSize={{ minRows: 2 }}
+                  ></Input.TextArea>
                 </Form.Item>
               </div>
-              <Form.Item name={["payment", "note"]} label="Ghi chú">
-                <Input.TextArea
-                  placeholder="Ghi chú"
-                  autoSize={{ minRows: 2 }}
-                ></Input.TextArea>
-              </Form.Item>
-              <Button
-                htmlType="submit"
-                type="primary"
-                disabled={
-                  (selectedRoom &&
-                    !(selectedRoom.status_room === Status_Room.OCCUPIED)) ??
-                  true
-                }
-              >
-                Thanh toán
-              </Button>
+              <div className={styles.submit_button}>
+                <Button
+                  htmlType="submit"
+                  type="primary"
+                  disabled={
+                    (selectedRoom &&
+                      !(selectedRoom.status_room === Status_Room.OCCUPIED)) ??
+                    true
+                  }
+                >
+                  Thanh toán
+                </Button>
+              </div>
             </div>
           </Form>
         </CardDefault>

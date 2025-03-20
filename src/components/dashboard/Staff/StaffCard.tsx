@@ -19,9 +19,10 @@ import useSWR from "swr";
 
 interface Props {
   userId: string;
+  staffMutate: () => void;
 }
 
-export default function StaffCard({ userId }: Props) {
+export default function StaffCard({ userId, staffMutate }: Props) {
   const [isActive, setIsActive] = useState(false);
   const [isEditFormOpened, { open: openEditForm, close: closeEditForm }] =
     useDisclosure(false);
@@ -36,13 +37,17 @@ export default function StaffCard({ userId }: Props) {
   const handleSubmit = async (body: UserUpdateDto) => {
     await usersService.UpdateOne(userId, { ...body });
     userMutate();
+    staffMutate();
   };
 
   async function handleDeleteUser(id: string) {
     await usersService.DeleteOne(id);
     userMutate();
+    staffMutate();
     closeEditForm();
   }
+
+  console.log("user", user);
 
   if (user)
     return (
@@ -78,11 +83,11 @@ export default function StaffCard({ userId }: Props) {
           </div>
           <div>
             <span className={styles.label_text}>Họ tên: </span>
-            {user.fullName}
+            {user.full_name}
           </div>
           <div>
             <span className={styles.label_text}>Số điện thoại: </span>
-            {user.phoneNumber}
+            {user.phone_number}
           </div>
           <div>
             <span className={styles.label_text}>Email: </span>

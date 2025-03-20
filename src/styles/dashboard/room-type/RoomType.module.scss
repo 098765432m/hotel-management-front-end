@@ -13,10 +13,13 @@
 
     .room_type_add_form_input {
       min-width: 200px;
+      display: grid;
+      gap: 24px;
     }
     .room_type_add_form_submit_button {
       display: flex;
       justify-content: center;
+      margin-top: 20px;
     }
   }
 
@@ -29,7 +32,7 @@
 
     .room_type_list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      grid-template-columns: repeat(3, minmax(300px, 1fr));
       align-items: center;
       gap: 20px;
 
@@ -44,6 +47,63 @@
           text-align: center;
         }
       }
+    }
+  }
+}
+
+.edit_room_type_form_layout {
+  display: grid;
+  row-gap: 24px;
+
+  .room_type_list_image {
+    min-height: 10rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    .room_type_image_group_container {
+      min-width: 30%;
+      display: inline-block;
+      position: relative;
+
+      aspect-ratio: 16/9;
+
+      &:hover .delete_image_button {
+        transition: 200ms;
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .room_type_image_container {
+        position: relative;
+        height: 100px;
+
+        .room_type_image {
+        }
+      }
+
+      .delete_image_button {
+        display: block;
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        z-index: 1;
+
+        transition: 200ms;
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
+
+  .upload_image_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .upload_text {
+      font-size: 1.15rem;
     }
   }
 }
