@@ -1,6 +1,6 @@
 $main-padding: 15rem;
-$primary-color: #ffb700;
-$secondary-color: #fffdf7;
+$primary-color: #ffb700; //#ffb700
+$secondary-color: rgba(255, 253, 247, 1);
 $neutral-color: blanchedalmond; // blanchedalmond //for text, border, dividers
 $back-ground: #f5f5f4; // For background of cards, modals
 $card-backgroud: #ffffff;
@@ -14,6 +14,11 @@ $section-spacing: 20px;
   line-height: 5.5rem;
   font-weight: bold;
   user-select: none;
+}
+
+@mixin border-card() {
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 @mixin description-text() {
@@ -69,4 +74,8 @@ $section-spacing: 20px;
 
 .label_text {
   font-weight: 700;
+}
+
+.mark_label_text {
+  color: black;
 }

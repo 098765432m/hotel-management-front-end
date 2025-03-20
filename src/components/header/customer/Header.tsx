@@ -6,6 +6,7 @@ import { roleEnum } from "@/types/enum/role.enum";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import ProfileDropDownMenu from "./ProfileDropDownMenu";
+import { playfairDisplay } from "@/lib/font/playfair-display";
 
 const data = [
   {
@@ -37,7 +38,7 @@ export default function Header() {
 
   return (
     <div className={styles.navbar}>
-      <span id={styles.logo}>
+      <span id={styles.logo} className={playfairDisplay.className}>
         <NextLink href={pathname}>Trip.com</NextLink>
       </span>
       <span id={styles.nav_link_container}>

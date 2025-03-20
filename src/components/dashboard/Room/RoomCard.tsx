@@ -50,18 +50,16 @@ export default function RoomCard({
   if (room)
     return (
       <>
-        <CardDefault>
-          <div className={styles.room_card}>
-            <div className={styles.room_card_header}>
-              <span>
-                <span className={styles.label_text}>Phòng:</span> {room.name}
-              </span>
-              <span>
-                <MantineButton color="yellow" size="compact-sm" onClick={open}>
-                  <FaEdit></FaEdit>
-                </MantineButton>
-              </span>
-            </div>
+        <CardDefault className={styles.room_card}>
+          <div className={styles.room_card_header}>
+            <span>
+              <span className={styles.label_text}>Phòng:</span> {room.name}
+            </span>
+            <span>
+              <MantineButton color="yellow" size="compact-sm" onClick={open}>
+                <FaEdit></FaEdit>
+              </MantineButton>
+            </span>
           </div>
           <div>
             <span className={styles.label_text}>Loại phòng:</span>{" "}

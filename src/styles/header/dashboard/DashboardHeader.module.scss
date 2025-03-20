@@ -29,14 +29,19 @@
   .header_hotel_management_menu {
     display: grid;
     padding-left: 20px;
+    user-select: none;
 
     & > div {
       font-size: 18px;
       font-weight: 500;
 
       :hover {
-        color: white;
+        opacity: 0.6;
       }
+    }
+
+    .log_out_button {
+      cursor: pointer;
     }
   }
 }

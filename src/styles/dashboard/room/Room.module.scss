@@ -35,6 +35,8 @@
       gap: 20px;
 
       .room_card {
+        @include global-scss.border-card;
+
         .room_card_header {
           display: flex;
           justify-content: space-between;

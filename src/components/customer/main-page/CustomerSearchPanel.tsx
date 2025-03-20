@@ -1,12 +1,13 @@
 "use client";
 
-import CardDefault from "@/components/custom-component/CardDefault";
+import styles from "@/styles/customer/main-page/CustomerSearchPanel.module.scss";
+import globalStyle from "@/styles/global.module.scss";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
 import MantineButton from "@/components/custom-component/MantineButton";
-import styles from "@/styles/customer/main-page/CustomerSearchPanel.module.scss";
+import { playfairDisplay } from "@/lib/font/playfair-display";
 import { RangeSlider, Select, TextInput } from "@mantine/core";
 import { DatesRangeValue, DateValue } from "@mantine/dates";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
@@ -33,7 +34,7 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
     <div className={styles.search_panel_container}>
       <div className={styles.search_panel_inner_container}>
         <div className={styles.page_name_container}>
-          <h1>Trip.com</h1>
+          <h1 className={playfairDisplay.className}>Trip.com</h1>
         </div>
         <div className={styles.search_panel}>
           <div className={styles.province_select_container}>
@@ -67,12 +68,40 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
               defaultValue={priceRange ?? undefined}
               onChange={(value: [number, number]) => setPriceRange(value)}
               marks={[
-                { value: 0, label: "0" },
-                { value: 100000, label: "100k" },
-                { value: 200000, label: "200k" },
-                { value: 300000, label: "300k" },
-                { value: 400000, label: "400k" },
-                { value: 500000, label: "500k" },
+                {
+                  value: 0,
+                  label: <span className={globalStyle.mark_label_text}>0</span>,
+                },
+                {
+                  value: 100000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>100k</span>
+                  ),
+                },
+                {
+                  value: 200000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>200k</span>
+                  ),
+                },
+                {
+                  value: 300000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>300k</span>
+                  ),
+                },
+                {
+                  value: 400000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>400k</span>
+                  ),
+                },
+                {
+                  value: 500000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>500k</span>
+                  ),
+                },
               ]}
             ></RangeSlider>
           </div>

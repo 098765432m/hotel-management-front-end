@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "@/styles/customer/search-result/SearchResultPage.module.scss";
+import globalStyle from "@/styles/global.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { RangeSlider, Select, TextInput } from "@mantine/core";
@@ -117,12 +118,40 @@ export default function SearchPanel(props: Props) {
                 props.setPriceRange(value);
               }}
               marks={[
-                { value: 0, label: "0" },
-                { value: 100000, label: "100k" },
-                { value: 200000, label: "200k" },
-                { value: 300000, label: "300k" },
-                { value: 400000, label: "400k" },
-                { value: 500000, label: "500k" },
+                {
+                  value: 0,
+                  label: <span className={globalStyle.mark_label_text}>0</span>,
+                },
+                {
+                  value: 100000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>100k</span>
+                  ),
+                },
+                {
+                  value: 200000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>200k</span>
+                  ),
+                },
+                {
+                  value: 300000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>300k</span>
+                  ),
+                },
+                {
+                  value: 400000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>400k</span>
+                  ),
+                },
+                {
+                  value: 500000,
+                  label: (
+                    <span className={globalStyle.mark_label_text}>500k</span>
+                  ),
+                },
               ]}
             ></RangeSlider>
           </div>
@@ -150,11 +179,26 @@ export default function SearchPanel(props: Props) {
               minRange={0.5}
               step={0.5}
               marks={[
-                { value: 1, label: "1" },
-                { value: 2, label: "2" },
-                { value: 3, label: "3" },
-                { value: 4, label: "4" },
-                { value: 5, label: "5" },
+                {
+                  value: 1,
+                  label: <span className={globalStyle.mark_label_text}>1</span>,
+                },
+                {
+                  value: 2,
+                  label: <span className={globalStyle.mark_label_text}>2</span>,
+                },
+                {
+                  value: 3,
+                  label: <span className={globalStyle.mark_label_text}>3</span>,
+                },
+                {
+                  value: 4,
+                  label: <span className={globalStyle.mark_label_text}>4</span>,
+                },
+                {
+                  value: 5,
+                  label: <span className={globalStyle.mark_label_text}>5</span>,
+                },
               ]}
             ></RangeSlider>
           </div>
