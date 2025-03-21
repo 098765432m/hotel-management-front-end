@@ -34,8 +34,8 @@ $gap-width: 20px;
           visibility: hidden;
           transition: 200ms;
           position: absolute;
-          right: -3rem;
-          top: 0;
+          right: -6rem;
+          top: -0.5rem;
           z-index: 1;
         }
       }
@@ -60,6 +60,8 @@ $gap-width: 20px;
     }
 
     .upload_button {
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     .uploaded_image {
@@ -70,9 +72,10 @@ $gap-width: 20px;
       justify-content: space-evenly;
 
       .uploaded_image_container {
-        // display: inline-block;
         position: relative;
         aspect-ratio: 16/9;
+        overflow: hidden;
+        @include global-scss.border-card;
 
         &:hover .delete_button {
           opacity: 1;

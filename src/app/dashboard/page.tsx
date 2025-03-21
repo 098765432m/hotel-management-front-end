@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
-import { useId } from "react";
 
 export default function DashBoardPage() {
   const auInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -22,7 +21,7 @@ export default function DashBoardPage() {
 
   if (hotel)
     return (
-      <div className={styles.dashboard_container}>
+      <CardDefault className={styles.dashboard_container}>
         <CardDefault>
           <div className={styles.hotel_brief_container}>
             <span className={styles.hotel_brief_heading}>
@@ -56,6 +55,6 @@ export default function DashBoardPage() {
           </div>
         </CardDefault>
         <UploadedImage></UploadedImage>
-      </div>
+      </CardDefault>
     );
 }

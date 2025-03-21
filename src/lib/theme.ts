@@ -1,4 +1,4 @@
-import { Button, createTheme, RangeSlider } from "@mantine/core";
+import { Button, createTheme, RangeSlider, TextInput } from "@mantine/core";
 
 export const mantineTheme = createTheme({
   colors: {
@@ -16,6 +16,12 @@ export const mantineTheme = createTheme({
     ],
   },
   components: {
+    TextInput: {
+      defaultProps: {
+        color: "amber",
+      },
+    },
+
     Button: {
       defaultProps: {
         color: "amber",

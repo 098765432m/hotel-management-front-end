@@ -49,35 +49,35 @@ export default function FormStaff() {
       >
         <Form.Item
           name={"username_add"}
-          label="Tên tài khoản"
+          label={<span className={styles.label_text}>Tên tài khoản</span>}
           rules={[{ required: true }]}
         >
           <Input></Input>
         </Form.Item>
         <Form.Item
           name={"fullName_add"}
-          label="Họ và tên"
+          label={<span className={styles.label_text}>Họ và tên</span>}
           rules={[{ required: true }]}
         >
           <Input></Input>
         </Form.Item>
         <Form.Item
           name={"email_add"}
-          label="Địa chỉ email"
+          label={<span className={styles.label_text}>Địa chỉ email</span>}
           rules={[{ required: true }]}
         >
           <Input></Input>
         </Form.Item>
         <Form.Item
           name={"phoneNumber_add"}
-          label="Số điện thoại"
+          label={<span className={styles.label_text}>Số điện thoại</span>}
           rules={[{ required: true }]}
         >
           <Input></Input>
         </Form.Item>
         <Form.Item
           name={"role_add"}
-          label="Vai trò"
+          label={<span className={styles.label_text}>Vai trò</span>}
           initialValue={roleEnum.STAFF}
           rules={[{ required: true }]}
         >

@@ -53,9 +53,15 @@ export default async function RootLayout({
           <AntdRegistry>
             <ConfigProvider
               theme={{
+                token: {
+                  colorPrimary: "#faad14",
+                },
                 components: {
                   Form: {
                     itemMarginBottom: 0,
+                  },
+                  Button: {
+                    // colorBgBase: "#ffb700",
                   },
                 },
               }}

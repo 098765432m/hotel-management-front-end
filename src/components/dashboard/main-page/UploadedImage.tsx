@@ -30,33 +30,37 @@ export default function UploadedImage() {
       <div className={styles.uploaded_image_container}>
         <div className={styles.uploaded_image_container}>
           <div className={styles.uploaded_image_heading}>Ảnh khách sạn</div>
-          <div className={styles.upload_button}>
-            <CldUploadWidget
-              signatureEndpoint={`/api/sign-cloudinary-params`}
-              onSuccess={(result) => {
-                if (result && result.info && typeof result.info == "object") {
-                  const info = result.info as {
-                    public_id: string;
-                    format: string;
-                  };
 
-                  imagesService.uploadOne({
-                    ...info,
-                    hotel_id: authStore.authInfo!.hotelId as string,
-                  });
-                }
-              }}
-            >
-              {({ open }) => {
-                return (
-                  <Button type="primary" onClick={() => open()}>
-                    {/* <MdAddToPhotos size={30}></MdAddToPhotos> */}
-                    Upload ảnh
-                  </Button>
-                );
-              }}
-            </CldUploadWidget>
-          </div>
+          <CldUploadWidget
+            signatureEndpoint={`/api/sign-cloudinary-params`}
+            onSuccess={(result) => {
+              if (result && result.info && typeof result.info == "object") {
+                const info = result.info as {
+                  public_id: string;
+                  format: string;
+                };
+
+                imagesService.uploadOne({
+                  ...info,
+                  hotel_id: authStore.authInfo!.hotelId as string,
+                });
+              }
+            }}
+          >
+            {({ open }) => {
+              return (
+                <Button
+                  className={styles.upload_button}
+                  type="primary"
+                  onClick={() => open()}
+                >
+                  <MdAddToPhotos size={20}></MdAddToPhotos>
+                  Upload ảnh
+                </Button>
+              );
+            }}
+          </CldUploadWidget>
+
           <div className={styles.uploaded_image}>
             {hotel && hotel.images && hotel.images.length > 0 ? (
               hotel.images.map(

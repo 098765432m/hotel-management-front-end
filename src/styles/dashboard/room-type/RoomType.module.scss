@@ -40,6 +40,8 @@
         display: grid;
         place-items: left;
 
+        @include global-scss.border-card;
+
         .room_type_card_header {
           display: flex;
           justify-content: space-between;
@@ -55,6 +57,14 @@
   display: grid;
   row-gap: 24px;
 
+  .list_image_heading {
+    display: flex;
+    justify-content: center;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
   .room_type_list_image {
     min-height: 10rem;
     display: flex;
@@ -62,11 +72,9 @@
     gap: 15px;
 
     .room_type_image_group_container {
-      min-width: 30%;
+      width: 30%;
       display: inline-block;
       position: relative;
-
-      aspect-ratio: 16/9;
 
       &:hover .delete_image_button {
         transition: 200ms;
@@ -76,8 +84,8 @@
 
       .room_type_image_container {
         position: relative;
-        height: 100px;
-
+        @include global-scss.border-card;
+        aspect-ratio: 16/9;
         .room_type_image {
         }
       }

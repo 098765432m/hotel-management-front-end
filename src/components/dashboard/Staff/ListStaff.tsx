@@ -3,19 +3,16 @@
 import styles from "@/styles/dashboard/staff/StaffPage.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
-import { axiosCustomFetcher } from "@/lib/swr";
 import { RootState } from "@/state/store";
 import { StaffHotelApiResponse, StaffOfHotelDto } from "@/types/dto/user.dto";
-import { TextInput } from "@mantine/core";
 import { FaMagnifyingGlass } from "react-icons/fa6";
-
 import { useSelector } from "react-redux";
-import useSWR from "swr";
 import StaffCard from "./StaffCard";
 import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import EmptyData from "@/components/custom-component/EmptyData";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
+import { Input } from "antd";
 
 export default function ListStaff() {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
@@ -43,10 +40,11 @@ export default function ListStaff() {
       <div className={styles.staff_list_container}>
         <div className={styles.staff_list_heading}>Danh sách tài khoản</div>
         <div className={styles.staff_list_search_bar}>
-          <TextInput
+          <Input
+            color="amber"
             className={styles.staff_list_search_bar_input}
             placeholder="Tìm kiếm tên tài khoản, họ tên, số điện thoại, địa chỉ email"
-          ></TextInput>
+          ></Input>
           <MantineButton>
             <FaMagnifyingGlass></FaMagnifyingGlass>
           </MantineButton>

@@ -51,8 +51,8 @@ export default function StaffCard({ userId, staffMutate }: Props) {
 
   if (user)
     return (
-      <CardDefault>
-        <div className={styles.staff_card_container}>
+      <>
+        <CardDefault className={styles.staff_card_container}>
           <div className={styles.staff_avatar_container}>
             <div className={styles.round_border}>
               <NextImage
@@ -97,19 +97,20 @@ export default function StaffCard({ userId, staffMutate }: Props) {
             <span className={styles.label_text}>Vai trò: </span>
             {roleToLabel[user.role as keyof typeof roleEnum]}
           </div>
-        </div>
+        </CardDefault>
         <Modal
           title="Chỉnh sửa"
           opened={isEditFormOpened}
           onClose={closeEditForm}
           className={styles.edit_modal_form}
+          size="lg"
         >
           <Form
             form={form}
             labelAlign="left"
             labelCol={{ span: 6 }}
-            wrapperCol={{ span: 18 }}
             onFinish={handleSubmit}
+            className={styles.edit_staff_form_layout}
           >
             <Form.Item
               name={"username"}
@@ -139,14 +140,14 @@ export default function StaffCard({ userId, staffMutate }: Props) {
             <Form.Item
               name={"fullName"}
               label="Họ tên"
-              initialValue={user.fullName}
+              initialValue={user.full_name}
             >
               <Input></Input>
             </Form.Item>
             <Form.Item
               name={"phoneNumber"}
               label="Số điện thoại"
-              initialValue={user.phoneNumber}
+              initialValue={user.phone_number}
             >
               <Input></Input>
             </Form.Item>
@@ -199,6 +200,6 @@ export default function StaffCard({ userId, staffMutate }: Props) {
             </div>
           </Form>
         </Modal>
-      </CardDefault>
+      </>
     );
 }

@@ -1,22 +1,17 @@
 "use client";
 
 import styles from "@/styles/dashboard/main-page/MainPage.module.scss";
-import { Button, Form, Input, Popconfirm, Select } from "antd";
-import CardDefault from "../../custom-component/CardDefault";
+import { Button, Form, Input, Select } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
-import { useEffect, useMemo, useReducer, useState } from "react";
-import { CldImage, CldUploadWidget } from "next-cloudinary";
-import { UploadedImageDto } from "@/types/dto/image.dto";
+import { useEffect, useMemo, useReducer } from "react";
 import hotelsService from "@/services/hotels.service";
 import {
   DispatchType,
   null_address,
 } from "@/types/vietnamese-location-api/address";
-import { FaEdit, FaRegTrashAlt } from "react-icons/fa";
-import { MdAddToPhotos } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
-import imagesService from "@/services/images.service";
 import { useSelector } from "react-redux";
 import { RootState } from "@/state/store";
 import { AddressType } from "@/types/address.interface";
@@ -26,6 +21,7 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
+import { MdEdit } from "react-icons/md";
 
 const initialInfo = { id: "", name: "" };
 
@@ -194,13 +190,16 @@ export default function HotelForm() {
     return (
       <>
         <span className={styles.dashboard_hotel_edit_button}>
-          <MantineButton
+          {/* <MantineButton
             size="compact-sm"
             color="yellow"
             onClick={openEditForm}
           >
-            <FaEdit></FaEdit>
-          </MantineButton>
+            <MdEdit></MdEdit>
+          </MantineButton> */}
+          <Button type="primary" onClick={openEditForm}>
+            <MdEdit></MdEdit>
+          </Button>
         </span>
         <Modal
           title="Chỉnh sửa"

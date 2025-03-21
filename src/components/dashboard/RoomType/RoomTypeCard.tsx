@@ -25,6 +25,7 @@ import CardDefault from "@/components/custom-component/CardDefault";
 import { Button } from "@mantine/core";
 import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
 import { NumberToMoneyFormat } from "@/utils/helpers";
+import { MdEdit } from "react-icons/md";
 
 interface Props {
   hotelId: string;
@@ -76,7 +77,7 @@ export default function RoomTypeCard({
             size="compact-sm"
             onClick={() => setIsEditOpen(true)}
           >
-            <FaEdit></FaEdit>
+            <MdEdit></MdEdit>
           </Button>
         </div>{" "}
         <span>Giá loại phòng: {NumberToMoneyFormat(RoomType.price)}đ</span>{" "}
@@ -111,6 +112,7 @@ export default function RoomTypeCard({
               onChange={(value: number | null) => setPrice(value ?? 1000)}
             ></InputNumber>
           </Form.Item>
+          <div className={styles.list_image_heading}>Ảnh</div>
           <div className={styles.room_type_list_image}>
             {RoomType.images && RoomType.images.length > 0 ? (
               RoomType.images.map((image, index) => {
@@ -143,7 +145,7 @@ export default function RoomTypeCard({
                       <CldImage
                         key={index}
                         src={`${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${image.public_id}.${image.format}`}
-                        alt={"Ảnh loại phòng"}
+                        alt={RoomType.name}
                         fill
                         priority
                         className={styles.room_type_image}
@@ -153,21 +155,17 @@ export default function RoomTypeCard({
                 );
               })
             ) : (
-              <div>
-                <CldImage
-                  src={
-                    process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
-                  }
-                  height={200}
-                  width={200}
-                  alt={"as"}
-                  style={{
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    borderRadius: 8,
-                  }}
-                  priority
-                ></CldImage>
+              <div className={styles.room_type_image_group_container}>
+                <div className={styles.room_type_image_container}>
+                  <CldImage
+                    src={
+                      process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
+                    }
+                    fill
+                    alt={"Ảnh loại phòng"}
+                    priority
+                  ></CldImage>
+                </div>
               </div>
             )}
           </div>

@@ -1,14 +1,16 @@
 @use "@/styles/global.module.scss" as global-scss;
 
 .dashboard_header_container {
-  height: 100dvh;
-
+  min-height: 100dvh;
+  height: 100%;
   display: grid;
   align-content: start;
   justify-items: stretch;
   row-gap: 40px;
   padding-top: 50px;
   background-color: global-scss.$primary-color;
+  box-shadow: 6px 0px 5px 0px rgba(255, 183, 0, 0.4);
+  overflow: hidden;
 
   .header_staff_info {
     min-height: 100px;
@@ -17,26 +19,39 @@
     align-items: center;
 
     .header_avatar_container {
+      border: 2px solid black;
       border-radius: 50%;
       overflow: hidden;
     }
 
     .header_username {
       font-size: 1.2rem;
+      font-weight: 500;
     }
   }
 
   .header_hotel_management_menu {
     display: grid;
+    row-gap: 20px;
     padding-left: 20px;
     user-select: none;
 
     & > div {
+      display: flex;
+      justify-content: center;
+      height: 2.4rem;
       font-size: 18px;
       font-weight: 500;
+      border-top-left-radius: 7px;
+      border-bottom-left-radius: 7px;
+      background-color: rgba(227, 163, 0, 1);
 
-      :hover {
-        opacity: 0.6;
+      box-shadow: 0px 4px 4px 3px rgba(224, 217, 210, 0.6);
+
+      &:hover {
+        transition: 200ms;
+        opacity: 1.1;
+        transform: translate(3px, -3px);
       }
     }
 
