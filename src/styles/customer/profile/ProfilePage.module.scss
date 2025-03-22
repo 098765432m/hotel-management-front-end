@@ -49,11 +49,10 @@
       align-items: center;
 
       .username_container {
-        display: flex;
+        display: inline-flex;
         justify-content: center;
         align-items: center;
         position: relative;
-        width: 40vw;
 
         .username_text {
           font-size: 22px;
@@ -61,10 +60,35 @@
           white-space: nowrap;
           overflow: hidden;
           margin-right: 15px;
+          transition: 200ms;
+
+          &:hover {
+            transform: scale(1.05);
+            transition: 200ms;
+          }
+        }
+
+        &:hover .edit_button_container {
+          opacity: 1;
+          transition: 200ms;
         }
 
         .edit_button_container {
+          position: absolute;
+          top: 1;
+          right: -2rem;
+          opacity: 0;
+          transition: 200ms;
           cursor: pointer;
+        }
+      }
+
+      .email_text {
+        transition: 200ms;
+
+        &:hover {
+          transform: scale(1.05);
+          transition: 200ms;
         }
       }
     }

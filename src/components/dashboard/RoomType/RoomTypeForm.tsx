@@ -34,10 +34,19 @@ export default function RoomTypeForm() {
       <div className={styles.room_type_add_form_heading}>Loại phòng</div>
 
       <div className={styles.room_type_add_form_input}>
-        <Form.Item name="name" label="Tên loại phòng" required>
+        <Form.Item
+          name="name"
+          label={<span className={styles.label_text}>Tên loại phòng</span>}
+          required
+        >
           <Input></Input>
         </Form.Item>
-        <Form.Item name="price" label="Giá (đ/đêm)" initialValue={0} required>
+        <Form.Item
+          name="price"
+          label={<span className={styles.label_text}>Giá (đ/đêm)</span>}
+          initialValue={0}
+          required
+        >
           <InputNumber step={1000}></InputNumber>
         </Form.Item>
       </div>

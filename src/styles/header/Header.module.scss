@@ -24,7 +24,7 @@
     }
   }
 
-  #nav_link_container {
+  .nav_link_container {
     display: inline-flex;
     align-items: center;
     font-size: 1.3rem;
@@ -40,6 +40,14 @@
 
     .mantine-Tree-subtree {
       position: absolute;
+    }
+  }
+
+  .nav_login_button {
+    transition: 0.2s;
+
+    &:hover {
+      @include nav-item-hover();
     }
   }
 }

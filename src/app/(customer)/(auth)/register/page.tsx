@@ -11,6 +11,8 @@ import { useForm } from "@mantine/form";
 import { useState } from "react";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
 import { AxiosError } from "axios";
+import { RiLoginBoxLine } from "react-icons/ri";
+import { FaUserPlus } from "react-icons/fa6";
 
 interface RegisterForm {
   username: string;
@@ -157,7 +159,11 @@ export default function RegisterPage() {
               )}
             </div>
             <div className={styles.register_form_control}>
-              <MantineButton type="submit">Đăng ký</MantineButton>
+              <MantineButton type="submit">
+                <div className={styles.register_button_text}>
+                  <span>Đăng ký</span> <FaUserPlus size={20}></FaUserPlus>
+                </div>
+              </MantineButton>
             </div>
           </form>
         </Box>

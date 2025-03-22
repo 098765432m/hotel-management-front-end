@@ -26,6 +26,7 @@ import useSWR, { mutate } from "swr";
 import usersService from "@/services/users.service";
 import { UserGetResponseDto } from "@/types/dto/user.dto";
 import { useRouter } from "next/navigation";
+import { MdEdit } from "react-icons/md";
 
 interface Props {
   user_init: UserGetResponseDto;
@@ -138,14 +139,15 @@ export default function ProfileInfo({ user_init }: Props) {
             <div className={styles.user_info_container}>
               <div className={styles.username_container}>
                 <span className={styles.username_text}>{user.username}</span>
-                <span
+                <MantineButton
+                  size="compact-sm"
                   onClick={openEditForm}
                   className={styles.edit_button_container}
                 >
-                  <FaEdit size={14}></FaEdit>
-                </span>
+                  <MdEdit></MdEdit>
+                </MantineButton>
               </div>
-              <div>{user.email}</div>
+              <div className={styles.email_text}>{user.email}</div>
             </div>
           </div>
         </CardDefault>

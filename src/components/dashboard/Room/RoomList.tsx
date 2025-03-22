@@ -14,7 +14,6 @@ import {
 import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import EmptyData from "@/components/custom-component/EmptyData";
-import CustomSpinning from "@/components/custom-component/CustomSpinning";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 

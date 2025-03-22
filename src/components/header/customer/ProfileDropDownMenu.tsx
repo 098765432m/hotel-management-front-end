@@ -83,7 +83,12 @@ export default function ProfileDropDownMenu() {
         )}
       </div>
     );
-  else return <NextLink href={"/login"}>Đăng nhập</NextLink>;
+  else
+    return (
+      <span className={styles.nav_login_button}>
+        <NextLink href={"/login"}>Đăng nhập</NextLink>
+      </span>
+    );
 }
 
 interface DropDownItemProps {

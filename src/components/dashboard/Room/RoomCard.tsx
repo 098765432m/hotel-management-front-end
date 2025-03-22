@@ -73,8 +73,8 @@ export default function RoomCard({
             roomTypeId: string;
           }>
             labelAlign="left"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 18 }}
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
             className={styles.edit_form_container}
             initialValues={{
               roomName: room.name,
@@ -89,13 +89,24 @@ export default function RoomCard({
               })
             }
           >
-            <Form.Item name={"roomName"} label="Phòng" required>
+            <Form.Item
+              name={"roomName"}
+              label={<span className={styles.label_text}>Phòng</span>}
+              required
+            >
               <Input></Input>
             </Form.Item>
-            <Form.Item name={"roomDescription"} label="Miêu tả">
+            <Form.Item
+              name={"roomDescription"}
+              label={<span className={styles.label_text}>Miêu tả</span>}
+            >
               <Input></Input>
             </Form.Item>
-            <Form.Item name={"roomTypeId"} label="Loại phòng" required>
+            <Form.Item
+              name={"roomTypeId"}
+              label={<span className={styles.label_text}>Loại phòng</span>}
+              required
+            >
               <Select>
                 {roomTypes &&
                   roomTypes.map((roomType: RoomType, index: number) => (

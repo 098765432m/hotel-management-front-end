@@ -54,13 +54,24 @@ export default function RoomForm() {
             })
           }
         >
-          <Form.Item name={"add_room_name"} label="Tên phòng" required>
+          <Form.Item
+            name={"add_room_name"}
+            label={<span className={styles.label_text}>Tên phòng</span>}
+            required
+          >
             <Input></Input>
           </Form.Item>
-          <Form.Item name={"add_room_description"} label="Miêu tả">
+          <Form.Item
+            name={"add_room_description"}
+            label={<span className={styles.label_text}>Miêu tả</span>}
+          >
             <Input></Input>
           </Form.Item>
-          <Form.Item name={"add_room_type_id"} label="Loại phòng" required>
+          <Form.Item
+            name={"add_room_type_id"}
+            label={<span className={styles.label_text}>Loại phòng</span>}
+            required
+          >
             <Select>
               {roomTypeData &&
                 roomTypeData.roomTypes.map((roomType) => (

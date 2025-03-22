@@ -27,6 +27,7 @@ export const mantineTheme = createTheme({
         color: "amber",
       },
     },
+
     RangeSlider: {
       defaultProps: {
         color: "amber",

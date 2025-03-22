@@ -71,7 +71,9 @@ export default function RoomTypeCard({
     <div>
       <CardDefault className={styles.room_type_card}>
         <div className={styles.room_type_card_header}>
-          <div>{RoomType.name}</div>
+          <div>
+            <span className={styles.label_text}>Tên:</span> {RoomType.name}
+          </div>
           <Button
             color="yellow"
             size="compact-sm"
@@ -80,7 +82,10 @@ export default function RoomTypeCard({
             <MdEdit></MdEdit>
           </Button>
         </div>{" "}
-        <span>Giá loại phòng: {NumberToMoneyFormat(RoomType.price)}đ</span>{" "}
+        <span>
+          <span className={styles.label_text}>Giá loại phòng:</span>{" "}
+          {NumberToMoneyFormat(RoomType.price)}đ
+        </span>{" "}
       </CardDefault>
       <Modal
         title="Chỉnh sửa"
@@ -98,13 +103,21 @@ export default function RoomTypeCard({
           wrapperCol={{ span: 18 }}
           className={styles.edit_room_type_form_layout}
         >
-          <Form.Item label="Tên loại phòng" initialValue={name} required>
+          <Form.Item
+            label={<span className={styles.label_text}>Tên loại phòng</span>}
+            initialValue={name}
+            required
+          >
             <Input
               defaultValue={name}
               onChange={(e) => setName(e.currentTarget.value)}
             ></Input>
           </Form.Item>
-          <Form.Item label="Giá loại phòng" initialValue={price} required>
+          <Form.Item
+            label={<span className={styles.label_text}>Giá loại phòng</span>}
+            initialValue={price}
+            required
+          >
             <InputNumber
               defaultValue={price}
               step={1000}

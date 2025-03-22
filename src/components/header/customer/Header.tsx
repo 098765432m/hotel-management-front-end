@@ -41,7 +41,7 @@ export default function Header() {
       <span id={styles.logo} className={playfairDisplay.className}>
         <NextLink href={pathname}>Trip.com</NextLink>
       </span>
-      <span id={styles.nav_link_container}>
+      <span className={styles.nav_link_container}>
         {authInfo?.role == roleEnum.ADMIN ? (
           <span className={styles.nav_item}>
             <NextLink href={"/admin"}>Something</NextLink>

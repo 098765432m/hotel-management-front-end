@@ -186,7 +186,12 @@ export default function PaymentPage() {
             <div className={styles.payment_panel_container}>
               <div className={styles.payment_panel_heading}>Thanh toán</div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`room-payment-${paymentId}`}>Phòng</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`room-payment-${paymentId}`}
+                >
+                  Phòng
+                </label>
                 <Input
                   readOnly
                   value={selectedRoom?.name}
@@ -194,7 +199,12 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`room-type-payment-${paymentId}`}>Loại</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`room-type-payment-${paymentId}`}
+                >
+                  Loại
+                </label>
                 <Input
                   readOnly
                   value={selectedRoom?.room_type.name}
@@ -202,7 +212,10 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`client-full-name-payment-${paymentId}`}>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`client-full-name-payment-${paymentId}`}
+                >
                   Khách hàng
                 </label>
                 <Input
@@ -212,7 +225,12 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`price-payment-${paymentId}`}>Giá</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`price-payment-${paymentId}`}
+                >
+                  Giá
+                </label>
                 <Input
                   readOnly
                   value={selectedRoom?.room_type.price}
@@ -220,7 +238,12 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`check-in-date-${paymentId}`}>Nhận phòng</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`check-in-date-${paymentId}`}
+                >
+                  Nhận phòng
+                </label>
                 <Input
                   id={`check-in-date-${paymentId}`}
                   readOnly
@@ -234,7 +257,12 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`check-out-date-${paymentId}`}>Trả phòng</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`check-out-date-${paymentId}`}
+                >
+                  Trả phòng
+                </label>
                 <Input
                   id={`check-out-date-${paymentId}`}
                   readOnly
@@ -248,7 +276,12 @@ export default function PaymentPage() {
                 ></Input>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`room-status-${paymentId}`}>Trạng thái</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`room-status-${paymentId}`}
+                >
+                  Trạng thái
+                </label>
                 <Input
                   id={`room-status-${paymentId}`}
                   readOnly
@@ -264,7 +297,10 @@ export default function PaymentPage() {
 
               <div className={styles.price_group}>
                 <div className={styles.payment_input_group}>
-                  <label htmlFor={`discount-payment-${paymentId}`}>
+                  <label
+                    className={styles.label_text}
+                    htmlFor={`discount-payment-${paymentId}`}
+                  >
                     Giảm giá
                   </label>
                   <Form.Item name={["payment", "discount"]} initialValue={0}>
@@ -291,7 +327,10 @@ export default function PaymentPage() {
                   </Form.Item>
                 </div>
                 <div className={styles.payment_input_group}>
-                  <label htmlFor={`payment-total-price-${paymentId}`}>
+                  <label
+                    className={styles.label_text}
+                    htmlFor={`payment-total-price-${paymentId}`}
+                  >
                     Tổng tiền
                   </label>
                   <Form.Item name={["payment", "total"]} initialValue={0}>
@@ -304,7 +343,12 @@ export default function PaymentPage() {
                 </div>
               </div>
               <div className={styles.payment_input_group}>
-                <label htmlFor={`payment-note-${paymentId}`}>Ghi chú</label>
+                <label
+                  className={styles.label_text}
+                  htmlFor={`payment-note-${paymentId}`}
+                >
+                  Ghi chú
+                </label>
                 <Form.Item name={["payment", "note"]}>
                   <Input.TextArea
                     id={`payment-note-${paymentId}`}

@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "@/styles/header/Header.module.scss";
 import { FaCircleUser } from "react-icons/fa6";
 import NextLink from "../../custom-component/NextLink";
 import React, { useState } from "react";
@@ -71,7 +72,7 @@ export default function HeaderLoginButton() {
           </Menu>
         </div>
       ) : (
-        <span>
+        <span className={styles.nav_login_button}>
           <NextLink href={"/login"}>Đăng nhập</NextLink>
         </span>
       )}

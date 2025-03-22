@@ -298,13 +298,22 @@ export default function BookingPage() {
             form.resetFields();
           }}
         >
-          <Form.Item name={`fullName`} label="Tên khách hàng">
+          <Form.Item
+            name={`fullName`}
+            label={<span className={styles.label_text}>Tên khách hàng</span>}
+          >
             <Input disabled={modalState === modal_form_state.EDIT}></Input>
           </Form.Item>
-          <Form.Item name={`phoneNumber`} label="Số điện thoại">
+          <Form.Item
+            name={`phoneNumber`}
+            label={<span className={styles.label_text}>Số điện thoại</span>}
+          >
             <Input disabled={modalState === modal_form_state.EDIT}></Input>
           </Form.Item>
-          <Form.Item name={`roomTypeId`} label="Loại phòng">
+          <Form.Item
+            name={`roomTypeId`}
+            label={<span className={styles.label_text}>Loại phòng</span>}
+          >
             <Select
               onChange={(value) => {
                 setSelectedRoomTypeId(value);
@@ -322,7 +331,10 @@ export default function BookingPage() {
                 : null}
             </Select>
           </Form.Item>
-          <Form.Item name={`roomId`} label="Phòng">
+          <Form.Item
+            name={`roomId`}
+            label={<span className={styles.label_text}>Phòng</span>}
+          >
             <Select>
               {rooms && rooms.length > 0
                 ? rooms.map((room) => (
@@ -333,12 +345,18 @@ export default function BookingPage() {
                 : null}
             </Select>
           </Form.Item>
-          <Form.Item name={`dates`} label="Ngày đặt">
+          <Form.Item
+            name={`dates`}
+            label={<span className={styles.label_text}>Ngày đặt</span>}
+          >
             <DatePicker.RangePicker
               format={{ format: "DD-MM-YYYY", type: "mask" }}
             ></DatePicker.RangePicker>
           </Form.Item>
-          <Form.Item name={`status`} label="Trạng thái">
+          <Form.Item
+            name={`status`}
+            label={<span className={styles.label_text}>Trạng thái</span>}
+          >
             <Select disabled={modalState === modal_form_state.EDIT}>
               {Object.values(Status_Booking).map((status) => {
                 return (

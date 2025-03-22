@@ -7,6 +7,9 @@
   & > div {
     width: 500px;
     padding: 70px 50px;
+
+    border: 2px solid global-scss.$primary-color;
+    border-radius: 7px;
   }
 
   .register_form_heading {
@@ -31,6 +34,13 @@
     .register_form_control {
       display: flex;
       justify-content: center;
+
+      .register_button_text {
+        display: flex;
+        align-items: center;
+        font-size: 1rem;
+        column-gap: 8px;
+      }
     }
   }
 }

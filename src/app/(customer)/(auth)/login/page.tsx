@@ -17,6 +17,7 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import NextLink from "@/components/custom-component/NextLink";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
 import { AxiosError } from "axios";
+import { RiLoginBoxLine } from "react-icons/ri";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -122,7 +123,12 @@ export default function LoginPage() {
             )}
           </div>
           <div className={styles.login_form_control}>
-            <MantineButton type="submit">Đăng nhập</MantineButton>
+            <MantineButton type="submit">
+              <div className={styles.login_button_text}>
+                <span>Đăng nhập</span>{" "}
+                <RiLoginBoxLine size={20}></RiLoginBoxLine>
+              </div>
+            </MantineButton>
           </div>
         </form>
       </Box>
