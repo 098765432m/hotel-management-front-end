@@ -36,46 +36,44 @@ export default function ListStaff() {
   }
 
   return (
-    <CardDefault>
-      <div className={styles.staff_list_container}>
-        <div className={styles.staff_list_heading}>Danh sách tài khoản</div>
-        <div className={styles.staff_list_search_bar}>
-          <Input
-            color="amber"
-            className={styles.staff_list_search_bar_input}
-            placeholder="Tìm kiếm tên tài khoản, họ tên, số điện thoại, địa chỉ email"
-          ></Input>
-          <MantineButton>
-            <FaMagnifyingGlass></FaMagnifyingGlass>
-          </MantineButton>
-        </div>
-        {!staffData ? (
-          <MantineLoading></MantineLoading>
-        ) : (
-          <>
-            <div className={styles.staff_list}>
-              {staffData && staffData.staffs.length > 0 ? (
-                staffData.staffs.map((staff) => {
-                  return (
-                    <StaffCard
-                      staffMutate={staffMutate}
-                      userId={staff.id}
-                      key={staff.id}
-                    ></StaffCard>
-                  );
-                })
-              ) : (
-                <EmptyData></EmptyData>
-              )}
-            </div>
-            <AntdPagination
-              current={staffSize}
-              onChange={(value: number) => setStaffSize(value)}
-              total={staffData?.total ?? 0}
-            ></AntdPagination>
-          </>
-        )}
+    <CardDefault className={styles.staff_list_container}>
+      <div className={styles.staff_list_heading}>Danh sách tài khoản</div>
+      <div className={styles.staff_list_search_bar}>
+        <Input
+          color="amber"
+          className={styles.staff_list_search_bar_input}
+          placeholder="Tìm kiếm tên tài khoản, họ tên, số điện thoại, địa chỉ email"
+        ></Input>
+        <MantineButton>
+          <FaMagnifyingGlass></FaMagnifyingGlass>
+        </MantineButton>
       </div>
+      {!staffData ? (
+        <MantineLoading></MantineLoading>
+      ) : (
+        <>
+          <div className={styles.staff_list}>
+            {staffData && staffData.staffs.length > 0 ? (
+              staffData.staffs.map((staff) => {
+                return (
+                  <StaffCard
+                    staffMutate={staffMutate}
+                    userId={staff.id}
+                    key={staff.id}
+                  ></StaffCard>
+                );
+              })
+            ) : (
+              <EmptyData></EmptyData>
+            )}
+          </div>
+          <AntdPagination
+            current={staffSize}
+            onChange={(value: number) => setStaffSize(value)}
+            total={staffData?.total ?? 0}
+          ></AntdPagination>
+        </>
+      )}
     </CardDefault>
   );
 }

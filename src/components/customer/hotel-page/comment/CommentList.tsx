@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import ratingsService from "@/services/ratings.service";
 import useSWR, { useSWRConfig } from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
+import { IoTrashBin } from "react-icons/io5";
 
 interface Props {
   hotelId: string;
@@ -48,14 +49,17 @@ export default function CommentList(props: Props) {
             return (
               <div key={rating.id} className={styles.comment_card}>
                 <div className={styles.comment_card_left_section}>
-                  <NextImage
-                    height={50}
-                    width={50}
-                    src={
-                      process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
-                    }
-                    alt={rating.guest.full_name ?? "Ảnh đại diện"}
-                  ></NextImage>
+                  <div className={styles.comment_card_avatar}>
+                    <NextImage
+                      height={50}
+                      width={50}
+                      src={
+                        process.env
+                          .NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
+                      }
+                      alt={rating.guest.full_name ?? "Ảnh đại diện"}
+                    ></NextImage>
+                  </div>
                   <div>{rating.guest.username}</div>
                   <div>
                     <Rating readOnly defaultValue={rating.score}></Rating>
@@ -72,7 +76,7 @@ export default function CommentList(props: Props) {
                   <div className={styles.comment_card_delete_button_container}>
                     <MantineButton
                       color="red"
-                      size="compact-xs"
+                      size="compact-md"
                       onClick={() =>
                         setConfirmState({
                           opened: true,
@@ -80,7 +84,7 @@ export default function CommentList(props: Props) {
                         })
                       }
                     >
-                      <FaTrashAlt size={8}></FaTrashAlt>
+                      <IoTrashBin size={16}></IoTrashBin>
                     </MantineButton>
                   </div>
                 )}

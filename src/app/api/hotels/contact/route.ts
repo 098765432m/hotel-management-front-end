@@ -11,7 +11,6 @@ import ShortUniqueId from "short-unique-id";
 
 export async function POST(request: Request) {
   try {
-    time("error handling");
     const body: HotelContactCreateDto = await request.json();
 
     const result = await prisma.$transaction(async (prisma) => {
@@ -48,11 +47,8 @@ export async function POST(request: Request) {
   } catch (error) {
     console.log(error);
 
-    timeEnd("error handling");
     return handleNextApiError(error);
   }
-
-  timeEnd("error handling");
 
   return NextResponse.json({ success: true }, { status: 201 });
 }

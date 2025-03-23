@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/styles/dashboard/main-page/MainPage.module.scss";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
 import { useEffect, useMemo, useReducer } from "react";
@@ -17,7 +17,6 @@ import { RootState } from "@/state/store";
 import { AddressType } from "@/types/address.interface";
 import { reducerAddress } from "@/utils/vietnamese-address/helpers";
 import { transformAddressEntity } from "@/utils/helpers";
-import MantineButton from "@/components/custom-component/MantineButton";
 import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
@@ -33,6 +32,7 @@ const initialAddress: AddressType = {
 };
 
 export default function HotelForm() {
+  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [form] = Form.useForm();
   const authStore = useSelector((state: RootState) => state.auth);
@@ -150,18 +150,24 @@ export default function HotelForm() {
       values.district != undefined &&
       values.province != undefined
     ) {
-      await hotelsService.updateOne(authStore.authInfo?.hotelId as string, {
-        name: values.name,
-        address: {
-          street: values.street,
-          ward: address.ward,
-          district: address.district,
-          province: address.province,
-        },
-      });
-      hotelMutate();
-
-      router.refresh(); // Cập nhật lại dữ liệu mới
+      try {
+        await hotelsService.updateOne(authStore.authInfo?.hotelId as string, {
+          name: values.name,
+          address: {
+            street: values.street,
+            ward: address.ward,
+            district: address.district,
+            province: address.province,
+          },
+        });
+        hotelMutate();
+        messageApi.success("Cập nhật thành công");
+        closeEditForm();
+        router.refresh(); // Cập nhật lại dữ liệu mới
+      } catch (error) {
+        messageApi.error("Lỗi cập nhật thông tin khách sạn");
+        console.error(error);
+      }
     }
   };
 
@@ -189,6 +195,7 @@ export default function HotelForm() {
   if (hotel)
     return (
       <>
+        {contextHolder}
         <span className={styles.dashboard_hotel_edit_button}>
           {/* <MantineButton
             size="compact-sm"

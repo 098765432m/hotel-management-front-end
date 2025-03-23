@@ -35,7 +35,13 @@ export async function PUT(
   const updatedUser = await prisma.user.update({
     where: { id: params.user_id },
     data: {
-      ...body,
+      // ...body,
+      username: body.username,
+      full_name: body.fullName,
+      email: body.email,
+      phone_number: body.phoneNumber,
+      is_active: body.isActive ?? false,
+      ...(body.role && { role: body.role }),
       ...(password && { password: await hashedPassword(password) }),
     },
   });
@@ -47,33 +53,36 @@ export async function DELETE(
   req: Request,
   { params }: { params: { user_id: string } }
 ) {
-  console.time("DELETE OPERATION");
-
   try {
-    await prisma.$transaction(async (tx) => {
-      const deletedImage = await tx.image.delete({
-        where: {
-          user_id: params.user_id,
-        },
-      });
-
-      await Promise.all([
-        cloudinary.uploader.destroy(deletedImage.public_id),
-        tx.user.delete({
-          where: {
-            id: params.user_id,
-          },
-        }),
-      ]);
+    const userId = params.user_id;
+    const image = await prisma.image.findUnique({
+      where: {
+        user_id: userId,
+      },
     });
 
-    console.timeEnd("DELETE OPERATION");
+    await prisma.$transaction(async (tx) => {
+      if (image) {
+        const deletedImage = await tx.image.delete({
+          where: {
+            user_id: userId,
+          },
+        });
+
+        await cloudinary.uploader.destroy(deletedImage.public_id);
+      }
+
+      await tx.user.delete({
+        where: {
+          id: userId,
+        },
+      });
+    });
 
     return NextResponse.json(
       `Xóa tài khoản với id ${params.user_id} thành công!`
     );
   } catch (error) {
-    console.timeEnd("DELETE OPERATION");
     console.error(error);
     return NextResponse.json("Error deleting user", { status: 500 });
   }

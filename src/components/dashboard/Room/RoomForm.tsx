@@ -3,7 +3,7 @@
 import styles from "@/styles/dashboard/room/Room.module.scss";
 
 import CardDefault from "@/components/custom-component/CardDefault";
-import { Button, Form, Input, Select } from "antd";
+import { Button, Form, Input, message, Select } from "antd";
 import { axiosFetcher } from "@/lib/swr";
 import useSWR, { mutate } from "swr";
 import roomsServices from "@/services/rooms.services";
@@ -12,7 +12,12 @@ import { RootState } from "@/state/store";
 import { RoomDtoCreate } from "@/types/dto/room.dto";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 
-export default function RoomForm() {
+interface Props {
+  roomMutate: () => void;
+}
+
+export default function RoomForm(props: Props) {
+  const [messageApi, contextHolder] = message.useMessage();
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
   const { data: roomTypeApiResponse } = useSWR<RoomTypeHotelApiResponse>(
@@ -30,12 +35,15 @@ export default function RoomForm() {
 
   async function handleSubmit(body: RoomDtoCreate) {
     await roomsServices.CreateOne(body);
-    mutate(`/api/rooms/hotel/${authInfo!.hotelId}`);
+    props.roomMutate();
+
+    messageApi.success("Tạo phòng thành công");
   }
 
   return (
-    <CardDefault>
-      <div className={styles.room_form_container}>
+    <>
+      {contextHolder}
+      <CardDefault className={styles.room_form_container}>
         <div className={styles.room_form_heading}>Phòng đặt</div>
         <Form<{
           add_room_name: string;
@@ -87,7 +95,7 @@ export default function RoomForm() {
             </Button>
           </Form.Item>
         </Form>
-      </div>
-    </CardDefault>
+      </CardDefault>
+    </>
   );
 }

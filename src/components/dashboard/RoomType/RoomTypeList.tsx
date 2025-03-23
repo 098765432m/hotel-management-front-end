@@ -7,7 +7,6 @@ import EmptyData from "@/components/custom-component/EmptyData";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 import AntdPagination from "@/components/custom-component/pagination/AntdPagination";
-import CustomSpinning from "@/components/custom-component/CustomSpinning";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
 interface Props {

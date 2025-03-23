@@ -1,3 +1,5 @@
+@use "@/styles/global.module.scss" as global-scss;
+
 .hotel {
   & > div + div {
     margin-top: 10px;
@@ -15,6 +17,8 @@
       justify-content: center;
       overflow: hidden;
       aspect-ratio: 16/9;
+
+      @include global-scss.border-card;
     }
 
     .hotel_detail_heading_container {

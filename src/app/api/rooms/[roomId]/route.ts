@@ -39,11 +39,11 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { room_id: string } }
+  { params }: { params: { roomId: string } }
 ) {
   const deletedRoom = await prisma.room.delete({
     where: {
-      id: params.room_id,
+      id: params.roomId,
     },
   });
 

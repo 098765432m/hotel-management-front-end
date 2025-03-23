@@ -35,18 +35,11 @@ export default function PaymentPage() {
     };
   }>();
 
-  const getKey = (pageIndex: number, previousPageData: any | null) => {
-    if (previousPageData && !previousPageData.length) return null; // reached the end
-    console.log("pageIndex: ", pageIndex);
-
-    return `/api/rooms/hotel/${authInfo!.hotelId}?page=${pageIndex}&limit=${5}`; // SWR key
-  };
-
   const {
     data: roomListResponse,
     size,
     setSize,
-    isValidating: isRoomListValidating,
+    mutate: roomListMutate,
   } = useCustomSWRInfinite<RoomHotelListApiResponse>(
     `/api/rooms/hotel/${authInfo?.hotelId}?limit=${5}`
   );
@@ -88,9 +81,11 @@ export default function PaymentPage() {
   // Tính số ngày thuê phòng
   const dateCount = useMemo(() => {
     if (selectedRoom && selectedRoom.status_room === Status_Room.OCCUPIED) {
-      return dayjs(selectedRoom.current_booking!.check_out_date).diff(
-        selectedRoom.current_booking!.check_in_date,
-        "day"
+      return (
+        dayjs(selectedRoom.current_booking!.check_out_date).diff(
+          selectedRoom.current_booking!.check_in_date,
+          "day"
+        ) + 1
       );
     }
 
@@ -140,6 +135,8 @@ export default function PaymentPage() {
         if (result.success) {
           successPopUp(`Thanh toán phòng ${selectedRoom.name} thành công!`);
           setSelectedRoom(null);
+
+          roomListMutate();
           paymentForm.resetFields();
         }
       }
@@ -162,7 +159,7 @@ export default function PaymentPage() {
           note: "",
         },
       });
-  }, [total, discount, paymentForm]);
+  }, [total, discount, paymentForm, selectedRoom]);
 
   // Set giá trị mặc định cho form
   useEffect(() => {
@@ -388,7 +385,7 @@ export default function PaymentPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {isRoomListValidating ? ( //Hiển thị loading state
+                  {!roomData ? ( //Hiển thị loading state
                     <tr>
                       <td
                         rowSpan={6}
@@ -398,7 +395,7 @@ export default function PaymentPage() {
                         <MantineLoading></MantineLoading>
                       </td>
                     </tr>
-                  ) : roomData?.rooms && roomData.rooms.length > 0 ? (
+                  ) : roomData.rooms && roomData.rooms.length > 0 ? (
                     roomData.rooms.map((room: RoomHotelPayload) => {
                       return (
                         <tr onClick={() => setSelectedRoom(room)} key={room.id}>

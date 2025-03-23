@@ -1,4 +1,5 @@
 @use "@/styles/header/Header.module.scss" as header-scss;
+@use "@/styles/global.module.scss" as global-scss;
 
 .menu_container {
   position: relative;
@@ -30,7 +31,8 @@
     z-index: 99;
     top: 4rem;
     right: -1.3rem;
-    background-color: white;
+
+    background-color: global-scss.$secondary-color;
     border: 1.8px solid black;
     border-radius: 10px;
     padding: 1rem 1.5rem;

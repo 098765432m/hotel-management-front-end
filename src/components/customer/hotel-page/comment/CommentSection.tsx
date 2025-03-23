@@ -67,6 +67,7 @@ export default function CommentSection(props: Props) {
             ></Textarea>
             <div className={styles.rating_container}>
               <Rating
+                size="lg"
                 value={rating}
                 {...ratingForm.getInputProps("addRatingScore")}
                 onChange={(value: number) => {

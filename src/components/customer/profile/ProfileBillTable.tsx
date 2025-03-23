@@ -15,6 +15,7 @@ import { Modal } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useState } from "react";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
+import { message } from "antd";
 
 interface Props {
   user_fullName: string;
@@ -22,19 +23,16 @@ interface Props {
 
 export default function ProfileBillTable(props: Props) {
   const [opened, { open, close }] = useDisclosure(false);
+
   const [selectedBill, setSelectedBill] = useState<BillCustomerPayload | null>(
     null
   );
-  const {
-    data: billApiResponse,
-    size: billSize,
-    setSize: setBillSize,
-    isValidating: isBillValidating,
-  } = useCustomSWRInfinite<BillCustomerApiResponse>(
-    props.user_fullName
-      ? `/api/bills/customer?fullName=${props.user_fullName}`
-      : null
-  );
+  const { data: billApiResponse, size: billSize } =
+    useCustomSWRInfinite<BillCustomerApiResponse>(
+      props.user_fullName
+        ? `/api/bills/customer?fullName=${props.user_fullName}`
+        : null
+    );
 
   const billData: { bills: BillCustomerPayload[]; totalBill: number } | null =
     billApiResponse?.[billSize - 1].success &&

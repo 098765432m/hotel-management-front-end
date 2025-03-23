@@ -26,6 +26,7 @@ export async function GET(
 
   const response: GetBookingsByUserDtoResponse[] = bookings.map((booking) => ({
     id: booking.id,
+    hotel_id: booking.room.hotel_id,
     hotel_name: booking.room.hotel.name,
     room_type_name: booking.room.room_type.name,
     room_id: booking.room_id,

@@ -39,7 +39,7 @@ class RoomsService {
   }
 
   async DeleteOne(id: string) {
-    return (await this.api.delete(`${id}`)).data;
+    return (await this.api.delete(`/${id}`)).data;
   }
 }
 

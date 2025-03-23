@@ -7,7 +7,7 @@ export default function EmptyData() {
   return (
     <div className={styles.empty_data}>
       <Image src={no_result} alt="Empty data" priority></Image>
-      <div className={styles.empty_data_text}>Dữ liệu không tồn tại</div>
+      <div className={styles.empty_data_text}>Không có dữ liệu</div>
     </div>
   );
 }

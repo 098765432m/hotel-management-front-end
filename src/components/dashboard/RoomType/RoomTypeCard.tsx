@@ -10,6 +10,7 @@ import {
   Form,
   Input,
   InputNumber,
+  message,
   Modal,
   Popconfirm,
 } from "antd";
@@ -26,6 +27,7 @@ import { Button } from "@mantine/core";
 import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
 import { NumberToMoneyFormat } from "@/utils/helpers";
 import { MdEdit } from "react-icons/md";
+import EmptyData from "@/components/custom-component/EmptyData";
 
 interface Props {
   hotelId: string;
@@ -38,6 +40,8 @@ export default function RoomTypeCard({
   RoomType,
   roomTypeMutate,
 }: Props) {
+  // Hiển thị message
+  const [messageApi, contextHolder] = message.useMessage();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isConfirmRmOpen, setConfirmRmOpen] = useState(false);
   const [name, setName] = useState(RoomType.name);
@@ -49,15 +53,23 @@ export default function RoomTypeCard({
   // Handle Update Submit
   const handleOk = async () => {
     // Cap nhat RoomType va cap nhat hinh
-    await roomTypesServices.updateOne(RoomType.id, {
-      name: name,
-      price: price,
-      images: uploadedImage,
-    });
+    try {
+      await roomTypesServices.updateOne(RoomType.id, {
+        name: name,
+        price: price,
+        images: uploadedImage,
+      });
 
-    setUploadedImage([]);
+      setUploadedImage([]);
 
-    roomTypeMutate();
+      roomTypeMutate();
+      messageApi.success("Cập nhật thành công");
+      setIsEditOpen(false);
+    } catch (error) {
+      console.error(error);
+
+      messageApi.error("Có lỗi xảy ra");
+    }
   };
 
   //Handle Remove a Single Image
@@ -65,10 +77,12 @@ export default function RoomTypeCard({
     await imagesService.removeOne(imageId, public_id);
 
     roomTypeMutate();
+    messageApi.success("Xóa hình ảnh thành công");
   };
 
   return (
-    <div>
+    <>
+      {contextHolder}
       <CardDefault className={styles.room_type_card}>
         <div className={styles.room_type_card_header}>
           <div>
@@ -126,9 +140,11 @@ export default function RoomTypeCard({
             ></InputNumber>
           </Form.Item>
           <div className={styles.list_image_heading}>Ảnh</div>
-          <div className={styles.room_type_list_image}>
-            {RoomType.images && RoomType.images.length > 0 ? (
-              RoomType.images.map((image, index) => {
+
+          {RoomType.images && RoomType.images.length > 0 ? (
+            <div className={styles.room_type_list_image}>
+              {" "}
+              {RoomType.images.map((image, index) => {
                 return (
                   <div
                     className={styles.room_type_image_group_container}
@@ -166,22 +182,11 @@ export default function RoomTypeCard({
                     </div>
                   </div>
                 );
-              })
-            ) : (
-              <div className={styles.room_type_image_group_container}>
-                <div className={styles.room_type_image_container}>
-                  <CldImage
-                    src={
-                      process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
-                    }
-                    fill
-                    alt={"Ảnh loại phòng"}
-                    priority
-                  ></CldImage>
-                </div>
-              </div>
-            )}
-          </div>
+              })}
+            </div>
+          ) : (
+            <EmptyData></EmptyData>
+          )}
           <CldUploadWidget
             signatureEndpoint={`/api/sign-cloudinary-params`}
             onSuccess={(result) => {
@@ -219,6 +224,6 @@ export default function RoomTypeCard({
           </CldUploadWidget>
         </Form>
       </Modal>
-    </div>
+    </>
   );
 }

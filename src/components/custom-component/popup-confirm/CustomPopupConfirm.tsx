@@ -35,7 +35,7 @@ export default function CustomPopupConfirm({
     return () => {
       document.removeEventListener("mousedown", clickOutSideHandler);
     };
-  }, []);
+  }, [onCancel]);
 
   if (opened)
     return (

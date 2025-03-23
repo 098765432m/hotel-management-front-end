@@ -13,6 +13,7 @@ import {
   DatePicker,
   Form,
   Input,
+  message,
   Modal,
   Popconfirm,
   Select,
@@ -29,6 +30,8 @@ import { MdEdit } from "react-icons/md";
 import { AxiosError } from "axios";
 import { convertBookingStatusToLabel } from "@/utils/helpers";
 import EmptyData from "@/components/custom-component/EmptyData";
+import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
+import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 
 interface ModalBookingForm
   extends Prisma.BookingGetPayload<{
@@ -60,9 +63,10 @@ enum modal_form_state {
 }
 
 export default function BookingPage() {
-  console.log("date", dayjs().toDate() as DateValue);
-
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
+  // Display Message
+  const [messageApi, contextHolder] = message.useMessage();
+
   const [form] = Form.useForm();
   const [modalState, setModalState] = useState<modal_form_state | null>(null);
   const [filterDate, setFilterDate] = useState<DateValue | null>(
@@ -80,16 +84,20 @@ export default function BookingPage() {
       }?date=${filterDate?.toISOString()}`,
     axiosCustomFetcher
   );
-  console.log("filterDate", "authINfo", filterDate, authInfo);
-  console.log("bookings", bookings);
 
-  const { data: roomTypes } = useSWR<
-    Prisma.RoomTypeGetPayload<{
-      include: null;
-    }>[]
-  >(() => `/api/roomTypes/hotel/${authInfo?.hotelId}`, axiosCustomFetcher);
+  const { data: roomTypeApiResponse } = useSWR<RoomTypeHotelApiResponse>(
+    () => `/api/roomTypes/hotel/${authInfo?.hotelId}`,
+    axiosCustomFetcher
+  );
 
-  console.log("room type: ", roomTypes);
+  const roomTypeData =
+    roomTypeApiResponse &&
+    roomTypeApiResponse?.success &&
+    roomTypeApiResponse.data
+      ? roomTypeApiResponse.data
+      : null;
+
+  console.log("room type: ", roomTypeApiResponse);
 
   const { data: rooms, mutate: roomsMutate } = useSWR<
     Prisma.RoomGetPayload<{ select: { id: true; name: true } }>[]
@@ -100,8 +108,11 @@ export default function BookingPage() {
     axiosCustomFetcher
   );
 
+  console.log("room: ", rooms);
+
   return (
     <>
+      {contextHolder}
       <div className={styles.booking_page_container}>
         <CardDefault>
           <div className={styles.booking_table_container}>
@@ -164,12 +175,15 @@ export default function BookingPage() {
                                 booking.id,
                                 booking.room_id
                               );
+                              messageApi.success("Nhận phòng thành công");
+
+                              bookingsMutate();
                             } catch (error) {
                               if (error instanceof AxiosError) {
                                 alert(error.response?.data.message);
                               }
+                              messageApi.error("Nhận phòng thất bại");
                             }
-                            bookingsMutate();
                           }}
                           okText="Nhận"
                           cancelText="Không"
@@ -201,6 +215,8 @@ export default function BookingPage() {
                             await roomsMutate();
 
                             form.setFieldValue(["roomId"], booking.room_id);
+
+                            bookingsMutate();
                           }}
                           disabled={booking.status === Status_Booking.PAID}
                           className="bg-yellow-400 border-0 rounded-md text-white cursor-pointer disabled:bg-slate-300 hover:bg-yellow-500 flex items-center py-2"
@@ -216,6 +232,7 @@ export default function BookingPage() {
                               booking.room_id
                             );
                             bookingsMutate();
+                            messageApi.success("Xóa thành công");
                           }}
                           okText="Có"
                           cancelText="Không"
@@ -266,7 +283,7 @@ export default function BookingPage() {
           onFinish={async () => {
             const formData = form.getFieldsValue();
             switch (modalState) {
-              case modal_form_state.ADD:
+              case modal_form_state.ADD: {
                 await bookingsService.createOneDashboard(
                   authInfo!.hotelId as string,
                   {
@@ -280,9 +297,11 @@ export default function BookingPage() {
                     status: formData.status,
                   }
                 );
+                messageApi.success("Đặt phòng thành công");
                 break;
+              }
 
-              case modal_form_state.EDIT:
+              case modal_form_state.EDIT: {
                 await bookingsService.updateOneDashboard(
                   editedBookingId as string,
                   {
@@ -291,7 +310,9 @@ export default function BookingPage() {
                     checkOutDate: formData.dates[1].toISOString(),
                   }
                 );
+                messageApi.success("Cập nhật thành công");
                 break;
+              }
             }
 
             bookingsMutate();
@@ -320,8 +341,8 @@ export default function BookingPage() {
                 form.setFieldValue("roomId", undefined);
               }}
             >
-              {roomTypes && roomTypes.length > 0
-                ? roomTypes.map((roomType) => {
+              {roomTypeData && roomTypeData.roomTypes.length > 0
+                ? roomTypeData.roomTypes.map((roomType) => {
                     return (
                       <Select.Option key={roomType.id} value={roomType.id}>
                         {roomType.name}

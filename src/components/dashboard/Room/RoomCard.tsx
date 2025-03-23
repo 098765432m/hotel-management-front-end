@@ -6,7 +6,7 @@ import { Room } from "@/types/room.interface";
 import { Modal, Button } from "@mantine/core";
 import { FaEdit } from "react-icons/fa";
 import { useDisclosure } from "@mantine/hooks";
-import { Form, Input, Select, Button as AntdButton } from "antd";
+import { Form, Input, Select, Button as AntdButton, message } from "antd";
 import { RoomType } from "@/types/roomTypes.interface";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import { IoTrashBinOutline } from "react-icons/io5";
@@ -24,32 +24,37 @@ interface Props {
   roomTypes: RoomTypeHotelPayload[] | null;
 }
 
-export default function RoomCard({
-  hotelId,
-  roomId,
-  roomTypes,
-  roomMutate,
-}: Props) {
+export default function RoomCard({ roomId, roomTypes, roomMutate }: Props) {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { data: room } = useSWR(
+  // Hiển thị thông báo
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { data: room, mutate } = useSWR(
     () => `/api/rooms/${roomId}`,
     axiosCustomFetcher
   );
 
   async function handleSubmit(id: string, body: RoomDtoUpdateRequest) {
     await roomsServices.UpdateOne(id, body);
+    mutate();
     roomMutate();
+    close();
+    messageApi.success("Cập nhật phòng thành công");
   }
 
   async function handleDelete(id: string) {
     await roomsServices.DeleteOne(id);
+    mutate();
     roomMutate();
+    close();
+    messageApi.success("Xóa phòng thành công");
   }
 
   if (room)
     return (
       <>
+        {contextHolder}
         <CardDefault className={styles.room_card}>
           <div className={styles.room_card_header}>
             <span>

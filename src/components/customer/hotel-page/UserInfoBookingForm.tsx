@@ -12,8 +12,15 @@ import ErrorCustomNotify from "@/components/custom-component/notification/ErrorC
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { DatesRangeValue } from "@mantine/dates";
+import { message } from "antd";
 
 interface Props {
+  user: {
+    id: string;
+    full_name: string;
+    phone_number: string;
+    email: string;
+  } | null;
   hotelId: string;
   totalPrice: number;
   bookingRooms: {
@@ -23,7 +30,6 @@ interface Props {
 }
 
 export default function UserInfoBookingForm(props: Props) {
-  const authStore = useSelector((state: RootState) => state.auth);
   const [bookingState, setBookingState] = useState<{
     status: "ERROR";
     message: string;
@@ -36,9 +42,9 @@ export default function UserInfoBookingForm(props: Props) {
   }>({
     mode: "uncontrolled",
     initialValues: {
-      fullName: "",
-      phoneNumber: "",
-      email: "",
+      fullName: props.user?.full_name ?? "",
+      phoneNumber: props.user?.phone_number ?? "",
+      email: props.user?.email ?? "",
     },
     validate: {
       fullName: (value) =>
@@ -54,6 +60,9 @@ export default function UserInfoBookingForm(props: Props) {
     },
   });
 
+  // display message
+  const [messageApi, contextHolder] = message.useMessage();
+
   const handleSubmit = async () => {
     try {
       const formData = form.getValues();
@@ -61,20 +70,21 @@ export default function UserInfoBookingForm(props: Props) {
       const filteredBookingRooms = Object.entries(props.bookingRooms)
         .filter(([roomName, roomCount]) => roomCount > 0)
         .map(([roomName, roomCount]) => [roomName, roomCount]);
-      console.log("123");
 
       const body: BookingsDtoCreate = {
         hotelId: props.hotelId,
         bookingTypeList: filteredBookingRooms,
         checkInDate: props.filterDateRange[0]!.toISOString(),
         checkOutDate: props.filterDateRange[1]!.toISOString(),
-        userId: authStore.authInfo?.id ?? undefined,
+        userId: props.user?.id ?? undefined,
         fullName: formData.fullName,
         phoneNumber: formData.phoneNumber,
       };
 
       await bookingsService.CreateOne(body);
+      messageApi.success("Đặt phòng thành công!");
     } catch (error) {
+      messageApi.error("Đặt phòng thất bại!");
       if (error instanceof AxiosError) {
         console.log(error.response!.data.message);
       } else {
@@ -84,48 +94,54 @@ export default function UserInfoBookingForm(props: Props) {
     }
   };
   return (
-    <form className={styles.modal_form} onSubmit={form.onSubmit(handleSubmit)}>
-      <TextInput
-        disabled={props.totalPrice == 0}
-        withAsterisk
-        label="Họ và tên"
-        placeholder="Họ và tên"
-        key={form.key("fullName")}
-        {...form.getInputProps("fullName")}
-      ></TextInput>
-      <TextInput
-        disabled={props.totalPrice == 0}
-        withAsterisk
-        label="Số điện thoại"
-        placeholder="Số điện thoại"
-        key={form.key("phoneNumber")}
-        {...form.getInputProps("phoneNumber")}
-      ></TextInput>
-      <TextInput
-        disabled={props.totalPrice == 0}
-        withAsterisk
-        label="Email"
-        placeholder="Email"
-        key={form.key("email")}
-        {...form.getInputProps("email")}
-      ></TextInput>
+    <>
+      {contextHolder}
+      <form
+        className={styles.modal_form}
+        onSubmit={form.onSubmit(handleSubmit)}
+      >
+        <TextInput
+          disabled={props.totalPrice == 0}
+          withAsterisk
+          label="Họ và tên"
+          placeholder="Họ và tên"
+          key={form.key("fullName")}
+          {...form.getInputProps("fullName")}
+        ></TextInput>
+        <TextInput
+          disabled={props.totalPrice == 0}
+          withAsterisk
+          label="Số điện thoại"
+          placeholder="Số điện thoại"
+          key={form.key("phoneNumber")}
+          {...form.getInputProps("phoneNumber")}
+        ></TextInput>
+        <TextInput
+          disabled={props.totalPrice == 0}
+          withAsterisk
+          label="Email"
+          placeholder="Email"
+          key={form.key("email")}
+          {...form.getInputProps("email")}
+        ></TextInput>
 
-      {props.totalPrice == 0 ? (
-        <ErrorCustomNotify message="Hãy chọn phòng để đặt!"></ErrorCustomNotify>
-      ) : (
-        ""
-      )}
+        {props.totalPrice == 0 ? (
+          <ErrorCustomNotify message="Hãy chọn phòng để đặt!"></ErrorCustomNotify>
+        ) : (
+          ""
+        )}
 
-      {bookingState?.status === "ERROR" ? (
-        <ErrorCustomNotify message={bookingState.message}></ErrorCustomNotify>
-      ) : (
-        ""
-      )}
-      <div className={styles.modal_form_container_button}>
-        <MantineButton type="submit" disabled={props.totalPrice == 0}>
-          Đặt ngay
-        </MantineButton>
-      </div>
-    </form>
+        {bookingState?.status === "ERROR" ? (
+          <ErrorCustomNotify message={bookingState.message}></ErrorCustomNotify>
+        ) : (
+          ""
+        )}
+        <div className={styles.modal_form_container_button}>
+          <MantineButton type="submit" disabled={props.totalPrice == 0}>
+            Đặt ngay
+          </MantineButton>
+        </div>
+      </form>
+    </>
   );
 }

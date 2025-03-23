@@ -10,7 +10,14 @@ import { UserUpdateDto } from "@/types/dto/user.dto";
 import { roleEnum, roleToLabel } from "@/types/enum/role.enum";
 import { Modal, Switch } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Button, Form, Input, Radio, Switch as AntdSwitch } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Radio,
+  Switch as AntdSwitch,
+  message,
+} from "antd";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { IoTrashBinOutline } from "react-icons/io5";
@@ -23,12 +30,14 @@ interface Props {
 }
 
 export default function StaffCard({ userId, staffMutate }: Props) {
-  const [isActive, setIsActive] = useState(false);
   const [isEditFormOpened, { open: openEditForm, close: closeEditForm }] =
     useDisclosure(false);
+  //Hiển thị thông báo
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [isPasswordDisabled, setIsPasswordDisabled] = useState(true);
 
+  const [isActive, setIsActive] = useState(false);
   const { data: user, mutate: userMutate } = useSWR(
     () => `/api/users/${userId}`,
     axiosCustomFetcher
@@ -38,6 +47,8 @@ export default function StaffCard({ userId, staffMutate }: Props) {
     await usersService.UpdateOne(userId, { ...body });
     userMutate();
     staffMutate();
+    closeEditForm();
+    messageApi.success("Cập nhật thành công");
   };
 
   async function handleDeleteUser(id: string) {
@@ -45,13 +56,13 @@ export default function StaffCard({ userId, staffMutate }: Props) {
     userMutate();
     staffMutate();
     closeEditForm();
+    messageApi.success("Xóa thành công");
   }
-
-  console.log("user", user);
 
   if (user)
     return (
       <>
+        {contextHolder}
         <CardDefault className={styles.staff_card_container}>
           <div className={styles.staff_avatar_container}>
             <div className={styles.round_border}>

@@ -13,25 +13,32 @@ import dayjs from "dayjs";
 import { FaTrashCan } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import useSWR from "swr";
+import { message } from "antd";
+import NextLink from "@/components/custom-component/NextLink";
+import { NumberToMoneyFormat } from "@/utils/helpers";
 
 export default function ProfileBookingTable() {
   const authStore = useSelector((state: RootState) => state.auth);
 
+  // Display Message
+  const [messageApi, contextHolder] = message.useMessage();
+
   // Get Booking Data Table
   const { data: bookings, mutate: bookingsMutate } = useSWR(
-    () =>
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/bookings/user/${authStore.authInfo?.id}`,
+    () => `/api/bookings/user/${authStore.authInfo?.id}`,
     axiosCustomFetcher
   );
 
   // Handle Customer Remove Booking
   async function handleRemove(bookingId: string, roomId: string) {
     await bookingsService.unBookingOne(bookingId, roomId);
+    messageApi.success("Hủy đặt phòng thành công!");
   }
 
   return (
-    <CardDefault>
-      <div className={styles.profile_table_container}>
+    <>
+      {contextHolder}
+      <CardDefault className={styles.profile_table_container}>
         <div className={styles.profile_table_heading}>Phòng đặt trước</div>
         <div>
           <CustomTable>
@@ -52,7 +59,11 @@ export default function ProfileBookingTable() {
                   (booking: GetBookingsByUserDtoResponse, index: number) => {
                     return (
                       <tr key={index}>
-                        <td>{booking.hotel_name}</td>
+                        <td>
+                          <NextLink href={`/hotel/${booking.hotel_id}`}>
+                            {booking.hotel_name}
+                          </NextLink>
+                        </td>
                         <td>{booking.room_type_name}</td>
                         <td>{booking.room_name}</td>
                         <td>
@@ -61,7 +72,18 @@ export default function ProfileBookingTable() {
                         <td>
                           {dayjs(booking.check_out_date).format("DD-MM-YYYY")}
                         </td>
-                        <td>{booking.price}</td>
+
+                        <td>
+                          {NumberToMoneyFormat(
+                            booking.price *
+                              (dayjs(booking.check_out_date).diff(
+                                dayjs(booking.check_in_date),
+                                "day"
+                              ) +
+                                1)
+                          )}
+                          đ
+                        </td>
                         <td>
                           {
                             <MantineButton
@@ -91,7 +113,7 @@ export default function ProfileBookingTable() {
             </tbody>
           </CustomTable>
         </div>
-      </div>
-    </CardDefault>
+      </CardDefault>
+    </>
   );
 }

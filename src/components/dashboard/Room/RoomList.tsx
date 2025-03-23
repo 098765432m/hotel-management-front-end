@@ -17,7 +17,11 @@ import EmptyData from "@/components/custom-component/EmptyData";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 
-export default function RoomList() {
+interface Props {
+  hotelId: string | null;
+}
+
+export default function RoomList(props: Props) {
   const authInfo = useSelector((state: RootState) => state.auth.authInfo);
 
   const {
@@ -26,7 +30,7 @@ export default function RoomList() {
     setSize: setSizeRoom,
     mutate: roomMutate,
   } = useCustomSWRInfinite<RoomHotelListApiResponse>(
-    authInfo?.hotelId ? `/api/rooms/hotel/${authInfo!.hotelId}?limit=6` : null
+    props.hotelId ? `/api/rooms/hotel/${props.hotelId}?limit=6` : null
   );
 
   const roomCurrentData = roomsApiResponse
@@ -41,37 +45,35 @@ export default function RoomList() {
   );
 
   return (
-    <CardDefault>
-      <div className={styles.room_list_container}>
-        <div className={styles.room_list_heading}>Danh sách phòng</div>
+    <CardDefault className={styles.room_list_container}>
+      <div className={styles.room_list_heading}>Danh sách phòng</div>
 
-        {!roomCurrentData ? (
-          <MantineLoading></MantineLoading>
-        ) : roomCurrentData.rooms.length > 0 ? (
-          <>
-            <div className={styles.room_list}>
-              {roomCurrentData.rooms.map((room: RoomHotelPayload) => (
-                <RoomCard
-                  roomMutate={roomMutate}
-                  hotelId={room.hotel_id}
-                  roomId={room.id}
-                  roomTypes={roomTypeApiResponse?.data?.roomTypes ?? null}
-                  key={room.id}
-                ></RoomCard>
-              ))}
-            </div>
-            <AntdPagination
-              current={sizeRoom}
-              onChange={(value: number) => setSizeRoom(value)}
-              pageSize={6}
-              total={roomCurrentData ? roomCurrentData.totalRoom : 0}
-              size="default"
-            ></AntdPagination>
-          </>
-        ) : (
-          <EmptyData></EmptyData>
-        )}
-      </div>
+      {!roomCurrentData ? (
+        <MantineLoading></MantineLoading>
+      ) : roomCurrentData.rooms.length > 0 ? (
+        <>
+          <div className={styles.room_list}>
+            {roomCurrentData.rooms.map((room: RoomHotelPayload) => (
+              <RoomCard
+                roomMutate={roomMutate}
+                hotelId={room.hotel_id}
+                roomId={room.id}
+                roomTypes={roomTypeApiResponse?.data?.roomTypes ?? null}
+                key={room.id}
+              ></RoomCard>
+            ))}
+          </div>
+          <AntdPagination
+            current={sizeRoom}
+            onChange={(value: number) => setSizeRoom(value)}
+            pageSize={6}
+            total={roomCurrentData ? roomCurrentData.totalRoom : 0}
+            size="default"
+          ></AntdPagination>
+        </>
+      ) : (
+        <EmptyData></EmptyData>
+      )}
     </CardDefault>
   );
 }

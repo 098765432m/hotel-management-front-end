@@ -27,12 +27,14 @@ import usersService from "@/services/users.service";
 import { UserGetResponseDto } from "@/types/dto/user.dto";
 import { useRouter } from "next/navigation";
 import { MdEdit } from "react-icons/md";
+import { message } from "antd";
 
 interface Props {
-  user_init: UserGetResponseDto;
+  user_init: any; //UserGetResponseDto
 }
 
 export default function ProfileInfo({ user_init }: Props) {
+  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [openedEditForm, { open: openEditForm, close: closeEditForm }] =
     useDisclosure(false);
@@ -47,9 +49,9 @@ export default function ProfileInfo({ user_init }: Props) {
     mode: "uncontrolled",
     initialValues: {
       username: user_init.username,
-      fullName: user_init.fullName,
+      fullName: user_init.full_name,
       email: user_init.email,
-      phoneNumber: user_init.phoneNumber,
+      phoneNumber: user_init.phone_number,
     },
   });
 
@@ -62,6 +64,7 @@ export default function ProfileInfo({ user_init }: Props) {
       phoneNumber: data.phoneNumber,
     });
     userMutate();
+    messageApi.success("Cập nhật thông tin thành công");
     router.refresh();
     closeEditForm();
   }
@@ -75,6 +78,7 @@ export default function ProfileInfo({ user_init }: Props) {
   if (user)
     return (
       <>
+        {contextHolder}
         <CardDefault>
           <div className={styles.profile_info_container}>
             <div className={styles.profile_image_container}>

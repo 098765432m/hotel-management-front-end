@@ -22,13 +22,12 @@
       }
 
       .rating_container {
-        padding-top: 20px;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        row-gap: 10px;
+        row-gap: 15px;
       }
     }
 
@@ -48,6 +47,12 @@
           width: 12rem;
           display: grid;
           justify-items: center;
+
+          .comment_card_avatar {
+            @include global-scss.border-card;
+            border-radius: 50%;
+            overflow: hidden;
+          }
         }
         .comment_card_right_section {
           flex-grow: 1;

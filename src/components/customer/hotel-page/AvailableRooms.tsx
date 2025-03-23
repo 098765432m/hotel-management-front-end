@@ -28,6 +28,10 @@ import { GetRoomTypeBookingDtoResponse } from "@/types/dto/room-types.dto";
 import { Prisma } from "@prisma/client";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 import MantineModal from "@/components/custom-component/modal/MantineModal";
+import { RootState } from "@/state/store";
+import { useSelector } from "react-redux";
+import useSWRImmutable from "swr/immutable";
+
 interface Props {
   hotel: Hotel;
 }
@@ -59,6 +63,14 @@ function bookingReducer(
         [action.payload.roomTypeName]: action.payload.count,
       };
 
+    case "RESET_ROOM_COUNT":
+      if (state != null)
+        return {
+          ...(Object.fromEntries(
+            Object.keys(state).map((key) => [key, 0])
+          ) as BookingState),
+        };
+
     default:
       return state;
   }
@@ -67,6 +79,8 @@ function bookingReducer(
 const AvailableRooms = forwardRef<HTMLDivElement, Props>(
   ({ hotel }: Props, ref) => {
     const [opened, { open, close }] = useDisclosure(false);
+
+    const authId = useSelector((state: RootState) => state.auth.authInfo?.id);
 
     // Get query params
     const filterDateRangeQuery = useSearchParams().get("filterDateRange");
@@ -82,9 +96,18 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     const [filterDateRange, setFilterDateRange] = useState<
       DatesRangeValue | [null, null]
     >(initialFilterDateRange);
-    console.log(filterDateRange);
 
-    // Fetch Nhung phong AVAILABLE
+    // Fetch thông tin người dùng
+    const { data: user } = useSWRImmutable<{
+      id: string;
+      email: string;
+      full_name: string;
+      phone_number: string;
+    }>(() => `/api/users/${authId}`, axiosCustomFetcher); // DTO user này lại
+
+    console.log(user);
+
+    // Fetch Những phòng AVAILABLE
     const {
       data: availableRoomTypes,
       isValidating: isAvailableRoomTypesValidating,
@@ -102,7 +125,6 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
       axiosCustomFetcher,
       {
         revalidateOnFocus: false,
-
         revalidateOnReconnect: false,
       }
     );
@@ -126,24 +148,27 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     //Tinh so ngay
     const countDays = useMemo(() => {
       return filterDateRange && filterDateRange[0] && filterDateRange[1]
-        ? dayjs(filterDateRange[1]).diff(dayjs(filterDateRange[0]), "day")
+        ? dayjs(filterDateRange[1]).diff(dayjs(filterDateRange[0]), "day") + 1
         : 0;
     }, [filterDateRange]);
 
     //Tinh tong gia tien voi so phong, loai phong va so ngay
-    const totalPrice = useMemo(
-      () =>
-        NumberToMoneyFormat(
-          hotel.room_types?.reduce((sum, roomType) => {
-            const count =
-              bookingRooms && hotel.room_types != null
-                ? bookingRooms[roomType.name]
-                : 0;
-            return sum + count * roomType.price * countDays;
-          }, 0)
-        ),
-      [bookingRooms, hotel.room_types, countDays]
-    );
+    const totalPrice = useMemo(() => {
+      return NumberToMoneyFormat(
+        hotel.room_types?.reduce((sum, roomType) => {
+          const count =
+            bookingRooms && hotel.room_types != null
+              ? bookingRooms[roomType.name]
+              : 0;
+
+          return sum + count * roomType.price * countDays;
+        }, 0)
+      );
+    }, [bookingRooms, hotel.room_types, countDays, filterDateRange]);
+
+    useEffect(() => {
+      dispatchBookingRooms({ type: "RESET_ROOM_COUNT" });
+    }, [filterDateRange]);
 
     return (
       <div ref={ref}>
@@ -168,7 +193,6 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
             <thead>
               <tr>
                 <th>Loại phòng</th>
-                <th>Số lượng khách</th>
                 <th>Giá</th>
                 <th>Chọn phòng</th>
                 <th>Tổng</th>
@@ -208,7 +232,6 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                       } `}
                     >
                       <td>{roomType.name}</td>
-                      <td>2</td> {/* Chỉnh lại số phòng có thể đặt */}
                       <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
                       <td>
                         <NumberInput
@@ -249,7 +272,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                 )
               ) : (
                 <tr>
-                  <td rowSpan={3} colSpan={5}>
+                  <td rowSpan={3} colSpan={4}>
                     <EmptyData></EmptyData>
                   </td>
                 </tr>
@@ -264,6 +287,16 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
             filterDateRange[1] &&
             bookingRooms && (
               <UserInfoBookingForm
+                user={
+                  user
+                    ? {
+                        id: user.id,
+                        full_name: user.full_name,
+                        phone_number: user.phone_number,
+                        email: user.email,
+                      }
+                    : null
+                }
                 hotelId={hotel.id}
                 totalPrice={parseInt(totalPrice)}
                 bookingRooms={bookingRooms}
@@ -275,5 +308,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     );
   }
 );
+
+AvailableRooms.displayName = "AvailableRooms";
 
 export default AvailableRooms;
