@@ -10,7 +10,7 @@ import { Prisma, Status_Room } from "@prisma/client";
 import { Button, Form, Input, InputNumber, message } from "antd";
 import { useEffect, useId, useMemo, useState } from "react";
 import dayjs from "dayjs";
-import { convertRoomStatusToLabel } from "@/utils/helpers";
+import { convertRoomStatusToLabel, NumberToMoneyFormat } from "@/utils/helpers";
 import billsService from "@/services/bills.service";
 import usersService from "@/services/users.service";
 import { AxiosError } from "axios";
@@ -21,6 +21,7 @@ import {
 } from "@/types/dto/room.dto";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
+import { useRoomDashboardSWRInfinite } from "@/hooks/use-dashboard-room-swr-infinite";
 
 //Type Prisma include relation
 
@@ -40,9 +41,10 @@ export default function PaymentPage() {
     size,
     setSize,
     mutate: roomListMutate,
-  } = useCustomSWRInfinite<RoomHotelListApiResponse>(
-    `/api/rooms/hotel/${authInfo?.hotelId}?limit=${5}`
-  );
+  } = useRoomDashboardSWRInfinite({ hotelId: authInfo?.hotelId as string });
+  // useCustomSWRInfinite<RoomHotelListApiResponse>(
+  //   `/api/rooms/hotel/${authInfo?.hotelId}?limit=${5}`
+  // );
 
   //Lấy tổng số phòng
   const roomData: { rooms: RoomHotelPayload[]; totalRoom: number } | null =
@@ -228,11 +230,12 @@ export default function PaymentPage() {
                 >
                   Giá
                 </label>
-                <Input
+                <InputNumber
                   readOnly
                   value={selectedRoom?.room_type.price}
+                  formatter={(value) => `${NumberToMoneyFormat(value)}`}
                   id={`price-payment-${paymentId}`}
-                ></Input>
+                ></InputNumber>
               </div>
               <div className={styles.payment_input_group}>
                 <label
@@ -328,13 +331,14 @@ export default function PaymentPage() {
                     className={styles.label_text}
                     htmlFor={`payment-total-price-${paymentId}`}
                   >
-                    Tổng tiền
+                    Tổng
                   </label>
                   <Form.Item name={["payment", "total"]} initialValue={0}>
                     <InputNumber
                       id={`payment-total-price-${paymentId}`}
                       readOnly
                       min={0}
+                      formatter={(value) => `${NumberToMoneyFormat(value)}`}
                     ></InputNumber>
                   </Form.Item>
                 </div>
@@ -401,7 +405,7 @@ export default function PaymentPage() {
                         <tr onClick={() => setSelectedRoom(room)} key={room.id}>
                           <td>{room.name}</td>
                           <td>{room.room_type.name}</td>
-                          <td>{room.room_type.price}</td>
+                          <td>{NumberToMoneyFormat(room.room_type.price)}đ</td>
                           <td>{convertRoomStatusToLabel(room.status_room)}</td>
                         </tr>
                       );

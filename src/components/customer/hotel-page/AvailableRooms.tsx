@@ -174,8 +174,10 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
       <div ref={ref}>
         <CardDefault className={styles.available_rooms_container}>
           <div className={styles.available_rooms_heading}>Tra cứu phòng </div>
-          <div className={styles.filter_control}>
+          <div className={styles.filter_control_container}>
+            <label htmlFor={"filterDateRange"}>Chọn ngày tra cứu</label>
             <MantineDatePicker
+              id="filterDateRange"
               minDate={new Date()}
               type="range"
               placeholder="Chọn ngày tra cứu"
@@ -187,6 +189,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                   setFilterDateRange([null, null]);
                 }
               }}
+              className={styles.filter_date_range_input}
             ></MantineDatePicker>
           </div>
           <CustomTable>

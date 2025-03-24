@@ -32,6 +32,7 @@ import { convertBookingStatusToLabel } from "@/utils/helpers";
 import EmptyData from "@/components/custom-component/EmptyData";
 import { RoomTypeHotelApiResponse } from "@/types/dto/room-types.dto";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
+import { useRoomDashboardSWRInfinite } from "@/hooks/use-dashboard-room-swr-infinite";
 
 interface ModalBookingForm
   extends Prisma.BookingGetPayload<{
@@ -76,6 +77,11 @@ export default function BookingPage() {
   const [selectedRoomTypeId, setSelectedRoomTypeId] = useState<string | null>(
     null
   );
+
+  // Mutate Giá trị của SWR
+  const { mutate: roomListDashboardMutate } = useRoomDashboardSWRInfinite({
+    hotelId: authInfo?.hotelId as string,
+  });
 
   const { data: bookings, mutate: bookingsMutate } = useSWR<ModalBookingForm[]>(
     () =>
@@ -178,6 +184,7 @@ export default function BookingPage() {
                               messageApi.success("Nhận phòng thành công");
 
                               bookingsMutate();
+                              roomListDashboardMutate();
                             } catch (error) {
                               if (error instanceof AxiosError) {
                                 alert(error.response?.data.message);
@@ -217,6 +224,7 @@ export default function BookingPage() {
                             form.setFieldValue(["roomId"], booking.room_id);
 
                             bookingsMutate();
+                            roomListDashboardMutate();
                           }}
                           disabled={booking.status === Status_Booking.PAID}
                           className="bg-yellow-400 border-0 rounded-md text-white cursor-pointer disabled:bg-slate-300 hover:bg-yellow-500 flex items-center py-2"
@@ -233,6 +241,7 @@ export default function BookingPage() {
                             );
                             bookingsMutate();
                             messageApi.success("Xóa thành công");
+                            roomListDashboardMutate();
                           }}
                           okText="Có"
                           cancelText="Không"
@@ -316,7 +325,9 @@ export default function BookingPage() {
             }
 
             bookingsMutate();
+
             form.resetFields();
+            roomListDashboardMutate();
           }}
         >
           <Form.Item

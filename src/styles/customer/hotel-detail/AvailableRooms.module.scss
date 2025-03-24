@@ -14,11 +14,12 @@
     align-items: center;
   }
 
-  .filter_control {
-    display: flex;
-    column-gap: 3rem;
-    & > div {
-      flex: 1;
+  .filter_control_container {
+    display: grid;
+    row-gap: 5px;
+
+    & > label {
+      @include global-scss.label-text;
     }
   }
 }

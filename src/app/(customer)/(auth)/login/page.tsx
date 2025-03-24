@@ -99,7 +99,7 @@ export default function LoginPage() {
           <TextInput
             withAsterisk
             label="Tên đăng nhập"
-            placeholder="Tên đăng nhập"
+            placeholder="Nhập tên đăng nhập hoặc email"
             key={form.key("username")}
             {...form.getInputProps("username")}
           ></TextInput>
