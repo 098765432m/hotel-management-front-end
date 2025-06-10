@@ -65,7 +65,7 @@ class HotelsService {
           ratingRange && ratingRange.length == 2
             ? `${ratingRange[0]}-${ratingRange[1]}`
             : ""
-        }&provinceId=${provinceId}`
+        }&provinceId=${provinceId ? provinceId : ""}`
       )
     ).data;
   }

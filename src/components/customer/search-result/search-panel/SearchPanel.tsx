@@ -7,7 +7,12 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { RangeSlider, Select, TextInput } from "@mantine/core";
 import { DatesRangeValue, DateValue } from "@mantine/dates";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
-import { useId } from "react";
+import { useEffect, useId, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { RootState, store } from "@/state/store";
+import { setField } from "@/state/search-hotel-form/searchHotelForm";
+import hotelsService from "@/services/hotels.service";
+import { SearchHotelForm } from "@/types/pages/searchResultPage.interface";
 
 interface Province {
   label: string;
@@ -15,22 +20,15 @@ interface Province {
 }
 
 interface Props {
-  hotelName: string;
-  setHotelName: (value: string) => void;
-  priceRange: [number, number] | [null, null];
-  setPriceRange: (value: [number, number] | [null, null]) => void;
-  ratingRange: [number, number] | [null, null];
-  setRatingRange: (value: [number, number] | [null, null]) => void;
-  filterDateRange: DatesRangeValue | [null, null];
-  setFilterDateRange: (value: DatesRangeValue | [null, null]) => void;
-  provinceId: string | null;
-  setProvinceId: (value: string | null) => void;
+  formValues: SearchHotelForm;
+  setFormValues: any;
   listProvince: Province[] | undefined;
-  performSearch: () => void;
+  onSearchClick: (params: SearchHotelForm) => Promise<void>;
 }
 
 export default function SearchPanel(props: Props) {
   const searchPanelId = useId();
+
   return (
     <CardDefault>
       <div className={styles.search_panel_container}>
@@ -45,10 +43,15 @@ export default function SearchPanel(props: Props) {
             </label>
             <TextInput
               id={`hotelName-${searchPanelId}`}
-              value={props.hotelName ?? ""}
-              onChange={(event) =>
-                props.setHotelName(event.currentTarget.value)
-              }
+              value={props.formValues.hotelName ?? ""}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const value = e.currentTarget.value;
+
+                props.setFormValues((prev: SearchHotelForm) => ({
+                  ...prev,
+                  hotelName: value,
+                }));
+              }}
               placeholder="Tên khách sạn"
               className={styles.search_input}
             ></TextInput>
@@ -66,9 +69,12 @@ export default function SearchPanel(props: Props) {
                 { label: "Tất cả", value: "" },
                 ...(props.listProvince ?? []),
               ]}
-              defaultValue={props.provinceId ?? ""}
+              value={props.formValues.provinceId ?? ""}
               onChange={(value: string | null) => {
-                props.setProvinceId(value);
+                props.setFormValues((prev: SearchHotelForm) => ({
+                  ...prev,
+                  provinceId: value,
+                }));
               }}
               placeholder="Chọn tỉnh thành"
             ></Select>
@@ -84,12 +90,25 @@ export default function SearchPanel(props: Props) {
               id={`hotelFilterDateRange-${searchPanelId}`}
               type="range"
               placeholder="Chọn ngày tra cứu"
-              defaultValue={props.filterDateRange} // <-- Causing Error
+              defaultValue={props.formValues.filterDateRange}
               onChange={(value: DatesRangeValue | DateValue | Date[]) => {
                 if (Array.isArray(value) && value.length === 2) {
-                  props.setFilterDateRange(value as DatesRangeValue);
+                  // setField({
+                  //   key: "filterDateRange",
+                  //   value: value as DatesRangeValue,
+                  // });
+                  // props.setFilterDateRange(value as DatesRangeValue);
+                  props.setFormValues((prev: SearchHotelForm) => ({
+                    ...prev,
+                    filterDateRange: value,
+                  }));
                 } else {
-                  props.setFilterDateRange([null, null]);
+                  // setField({ key: "filterDateRange", value: [null, null] });
+                  // props.setFilterDateRange([null, null]);
+                  props.setFormValues((prev: SearchHotelForm) => ({
+                    ...prev,
+                    filterDateRange: [null, null],
+                  }));
                 }
               }}
             ></MantineDatePicker>
@@ -110,12 +129,15 @@ export default function SearchPanel(props: Props) {
               step={50000}
               minRange={50000}
               value={
-                props.priceRange && props.priceRange[0]
-                  ? props.priceRange
+                props.formValues.priceRange && props.formValues.priceRange[0]
+                  ? props.formValues.priceRange
                   : undefined
               }
               onChange={(value: [number, number]) => {
-                props.setPriceRange(value);
+                props.setFormValues((prev: SearchHotelForm) => ({
+                  ...prev,
+                  priceRange: value,
+                }));
               }}
               marks={[
                 {
@@ -167,12 +189,15 @@ export default function SearchPanel(props: Props) {
               id={`hotelRatingRange-${searchPanelId}`}
               defaultValue={[1, 5]}
               value={
-                props.ratingRange && props.ratingRange[0]
-                  ? props.ratingRange
+                props.formValues.ratingRange && props.formValues.ratingRange[0]
+                  ? props.formValues.ratingRange
                   : undefined
               }
               onChange={(value: [number, number]) => {
-                props.setRatingRange(value);
+                props.setFormValues((prev: SearchHotelForm) => ({
+                  ...prev,
+                  ratingRange: value,
+                }));
               }}
               min={1}
               max={5}
@@ -203,7 +228,10 @@ export default function SearchPanel(props: Props) {
             ></RangeSlider>
           </div>
           <div className={styles.filter_button}>
-            <MantineButton fullWidth onClick={() => props.performSearch()}>
+            <MantineButton
+              fullWidth
+              onClick={() => props.onSearchClick(props.formValues)}
+            >
               Tìm kiếm
             </MantineButton>
           </div>

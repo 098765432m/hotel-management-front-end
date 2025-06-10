@@ -8,7 +8,6 @@ import EmptyData from "@/components/custom-component/EmptyData";
 import { DatesRangeValue } from "@mantine/dates";
 
 interface Props {
-  isSearching: boolean;
   filterDateRange: DatesRangeValue | [null, null];
   resultHotel: HotelResultCardDto[];
 }
@@ -21,7 +20,7 @@ export default function SearchResultList(props: Props) {
         <CardDefault>
           <div className={styles.heading}>Kết quả</div>
           <div className={styles.result}>
-            {!props.isSearching && props.resultHotel.length > 0 ? (
+            {props.resultHotel.length > 0 ? (
               props.resultHotel.map((hotel) => {
                 return (
                   <HotelResultCard
