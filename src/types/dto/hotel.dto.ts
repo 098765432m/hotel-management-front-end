@@ -57,8 +57,10 @@ interface HotelResultCardDto {
   hotelDescription: string;
   hotelAddress: AddressType;
   hotelRating: number;
-  hotelPrice: [number, number];
-  hotelImages: UploadedImageDto[];
+  hotalMinPrice: number;
+  hotalMaxPrice: number;
+  imagePublicId: string;
+  imageFormat: string;
 }
 
 export type {

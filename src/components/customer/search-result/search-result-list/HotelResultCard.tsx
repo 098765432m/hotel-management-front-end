@@ -3,9 +3,6 @@
 import styles from "@/styles/customer/search-result/HotelResultCard.module.scss";
 import NextImage from "@/components/custom-component/NextImage";
 import NextLink from "@/components/custom-component/NextLink";
-import { UploadedImageDto } from "@/types/dto/image.dto";
-import { AddressType } from "@/types/vietnamese-location-api/address";
-import { useToggle } from "@mantine/hooks";
 import {
   RiHeart3Line as FavoriteOutline,
   RiHeart3Fill as FavoriteFill,
@@ -45,10 +42,8 @@ export default function HotelResultCard(props: Props) {
           <div className={styles.result_card_image_container}>
             <NextImage
               src={
-                props.hotel.hotelImages &&
-                props.hotel.hotelImages.length > 0 &&
-                props.hotel.hotelImages[0].public_id
-                  ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${props.hotel.hotelImages[0].public_id}.${props.hotel.hotelImages[0].format}`
+                props.hotel.imagePublicId && props.hotel.imageFormat
+                  ? `${process.env.NEXT_PUBLIC_CLOUDINARY_PATHNAME}/${props.hotel.imagePublicId}.${props.hotel.imageFormat}`
                   : (process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string)
               }
               alt="pic"
@@ -96,7 +91,7 @@ export default function HotelResultCard(props: Props) {
           <div className={styles.hotel_price_container}>
             <span className={styles.label_text}>Chỉ từ:</span>{" "}
             <span className={styles.price_number}>
-              {NumberToMoneyFormat(props.hotel.hotelPrice[0])}đ
+              {NumberToMoneyFormat(props.hotel.hotalMinPrice)}đ
             </span>
           </div>
         </div>

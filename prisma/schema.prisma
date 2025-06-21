@@ -72,7 +72,7 @@ model Hotel {
   name                  String    @unique
   address               Json
   description           String?
-  average_rating        Float     @default(0)
+  average_rating        Float     @default(5)
 
   //Room
   rooms                 Room[]
