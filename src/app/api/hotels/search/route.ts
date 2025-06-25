@@ -26,6 +26,8 @@ export async function GET(request: NextRequest) {
   console.log(hotelName, priceRange, ratingRange, provinceId);
 
   const params: any[] = [`%${hotelName}%`];
+  // TODO We should consider replace left join join
+  // Because we dont want to include hotels that do not have room type. Same for roomtype and room.
   let query = `
     SELECT 
       h.id as hotel_id, 
@@ -33,7 +35,6 @@ export async function GET(request: NextRequest) {
       h.description AS hotel_description,
       h.address AS hotel_address,
       h.average_rating AS hotel_rating,
-      ARRAY [MIN(rt.price), MAX(rt.price)] AS hotel_price,
       MIN(rt.price) AS min_price,
       MAX(rt.price) AS max_price,
       i.public_id AS public_id,
@@ -41,9 +42,9 @@ export async function GET(request: NextRequest) {
     
     FROM 
       "Hotel" h 
-    LEFT JOIN 
+    JOIN 
       "RoomType" rt ON h.id = rt.hotel_id
-    LEFT JOIN 
+    JOIN 
       "Room" r ON r.room_type_id = rt.id
     LEFT JOIN LATERAL
       (

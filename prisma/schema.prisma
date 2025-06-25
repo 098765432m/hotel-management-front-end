@@ -87,6 +87,9 @@ model Hotel {
   images                Image[]       @relation("HotelImages")
 
   ratings               Rating[]      @relation("HotelRatings")
+
+  //Maintainance
+  maintainances         Maintainance[] @relation("HotelMaintainance")
 }
 
 model Room {
@@ -108,6 +111,9 @@ model Room {
 
   current_booking_id          String?      @unique
   current_booking             Booking?     @relation("CurrentBooking",fields: [current_booking_id], references: [id])
+
+  // Maintainance
+  maintainaces    Maintainance[] @relation("RoomMaintainance")
 
   @@unique([name, room_type_id])
 }
@@ -190,4 +196,16 @@ model Image {
   //one-to-many
   room_type_id      String?
   room_type         RoomType?     @relation("RoomTypeImages", fields: [room_type_id], references: [id], onDelete: Restrict)
+}
+
+model Maintainance {
+  id                String        @id @unique @default(cuid())
+  date_start        DateTime
+  date_expire       DateTime
+
+  hotel_id          String? 
+  hotel             Hotel?        @relation("HotelMaintainance", fields: [hotel_id], references: [id], onDelete: Cascade)
+
+  room_id           String?
+  room              Room?         @relation("RoomMaintainance", fields: [room_id], references: [id], onDelete: Cascade)
 }
