@@ -1,5 +1,4 @@
 import axiosInstance from "@/lib/axiosConfig";
-import { AddressType } from "@/types/address.interface";
 import {
   HotelContactCreateDto,
   HotelCreateDto,

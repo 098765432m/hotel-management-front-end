@@ -1,6 +1,5 @@
-import { Room, Image, Status_Room, Rating } from "@prisma/client";
+import { Status_Room, Rating } from "@prisma/client";
 import { AddressType } from "../address.interface";
-import { UploadedImageDto } from "./image.dto";
 import { RoomTypeCustomerFetchDto } from "./room-types.dto";
 
 interface HotelPutDto {

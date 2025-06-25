@@ -1,21 +1,12 @@
 "use client";
 
-import {
-  useCallback,
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import SearchPanel from "./search-panel/SearchPanel";
 import SearchResultList from "./search-result-list/SearchResultList";
 import { HotelResultCardDto } from "@/types/dto/hotel.dto";
 import { useSearchParams } from "next/navigation";
 import hotelsService from "@/services/hotels.service";
 import { DatesRangeValue } from "@mantine/dates";
-import { useSelector } from "react-redux";
-import { RootState } from "@/state/store";
 import {
   SearchHotelForm,
   searchHotelFormInitiaState,
