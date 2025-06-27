@@ -16,6 +16,7 @@ import { axiosCustomFetcher } from "@/lib/swr";
 import roomsServices from "@/services/rooms.services";
 import { RoomDtoUpdateRequest } from "@/types/dto/room.dto";
 import { RoomTypeHotelPayload } from "@/types/dto/room-types.dto";
+import { TbLockCog } from "react-icons/tb";
 
 interface Props {
   hotelId: string;
@@ -25,7 +26,12 @@ interface Props {
 }
 
 export default function RoomCard({ roomId, roomTypes, roomMutate }: Props) {
-  const [opened, { open, close }] = useDisclosure(false);
+  const [openedEditForm, { open: openEditForm, close: closeEditForm }] =
+    useDisclosure(false);
+  const [
+    openedMainteneceForm,
+    { open: openMainteneceForm, close: closeMainteneceForm },
+  ] = useDisclosure(false);
 
   // Hiển thị thông báo
   const [messageApi, contextHolder] = message.useMessage();
@@ -61,8 +67,20 @@ export default function RoomCard({ roomId, roomTypes, roomMutate }: Props) {
               <span className={styles.label_text}>Phòng:</span> {room.name}
             </span>
             <span>
-              <MantineButton color="yellow" size="compact-sm" onClick={open}>
+              <MantineButton
+                color="yellow"
+                size="compact-sm"
+                onClick={openEditForm}
+              >
                 <FaEdit></FaEdit>
+              </MantineButton>
+
+              <MantineButton
+                color="teal"
+                size="compact-sm"
+                onClick={openMainteneceForm}
+              >
+                <TbLockCog size={18}></TbLockCog>
               </MantineButton>
             </span>
           </div>
@@ -71,7 +89,87 @@ export default function RoomCard({ roomId, roomTypes, roomMutate }: Props) {
             {room.room_type.name}
           </div>
         </CardDefault>
-        <Modal title="Chỉnh sửa" opened={opened} onClose={close}>
+        <Modal
+          title="Chỉnh sửa"
+          opened={openedEditForm}
+          onClose={closeEditForm}
+        >
+          <Form<{
+            roomName: string;
+            roomDescription: string;
+            roomTypeId: string;
+          }>
+            labelAlign="left"
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 16 }}
+            className={styles.edit_form_container}
+            initialValues={{
+              roomName: room.name,
+              roomDescription: room.description ?? "",
+              roomTypeId: room.room_type_id,
+            }}
+            onFinish={(values) =>
+              handleSubmit(roomId, {
+                room_type_id: values.roomTypeId,
+                name: values.roomName,
+                description: values.roomDescription,
+              })
+            }
+          >
+            <Form.Item
+              name={"roomName"}
+              label={<span className={styles.label_text}>Phòng</span>}
+              required
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              name={"roomDescription"}
+              label={<span className={styles.label_text}>Miêu tả</span>}
+            >
+              <Input></Input>
+            </Form.Item>
+            <Form.Item
+              name={"roomTypeId"}
+              label={<span className={styles.label_text}>Loại phòng</span>}
+              required
+            >
+              <Select>
+                {roomTypes &&
+                  roomTypes.map((roomType: RoomType, index: number) => (
+                    <Select.Option value={roomType.id} key={index}>
+                      {roomType.name}
+                    </Select.Option>
+                  ))}
+              </Select>
+            </Form.Item>
+            <div className={styles.edit_form_control}>
+              <Form.Item>
+                <AntdButton type="primary" htmlType="submit">
+                  <IoMdCheckmarkCircleOutline
+                    size={20}
+                  ></IoMdCheckmarkCircleOutline>{" "}
+                  Lưu
+                </AntdButton>
+              </Form.Item>
+
+              <AntdButton
+                type="primary"
+                danger
+                onClick={() => {
+                  handleDelete(roomId);
+                }}
+              >
+                <IoTrashBinOutline size="20"></IoTrashBinOutline>Xóa
+              </AntdButton>
+            </div>
+          </Form>
+        </Modal>
+        <Modal
+          title="Bao tri"
+          opened={openedMainteneceForm}
+          onClose={closeMainteneceForm}
+        >
           <Form<{
             roomName: string;
             roomDescription: string;

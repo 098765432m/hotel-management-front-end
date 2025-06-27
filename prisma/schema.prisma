@@ -89,7 +89,7 @@ model Hotel {
   ratings               Rating[]      @relation("HotelRatings")
 
   //Maintainance
-  maintainances         Maintainance[] @relation("HotelMaintainance")
+  maintainances         Maintenance[] @relation("HotelMaintenance")
 }
 
 model Room {
@@ -112,8 +112,8 @@ model Room {
   current_booking_id          String?      @unique
   current_booking             Booking?     @relation("CurrentBooking",fields: [current_booking_id], references: [id])
 
-  // Maintainance
-  maintainaces    Maintainance[] @relation("RoomMaintainance")
+  // Maintenance
+  maintainaces    Maintenance[] @relation("RoomMaintenance")
 
   @@unique([name, room_type_id])
 }
@@ -146,6 +146,9 @@ model Booking {
   // @@index([status], type: Hash)    
 }
 
+// TODO Each room_type should have each price for their own type per time or something like
+// 1h: 60, 2h: 80k
+// or in Date 22/06/2026 - 22/07/2026: room price is 100k
 model RoomType {
   id                String    @default(cuid()) @id @unique
   name              String    
@@ -198,14 +201,14 @@ model Image {
   room_type         RoomType?     @relation("RoomTypeImages", fields: [room_type_id], references: [id], onDelete: Restrict)
 }
 
-model Maintainance {
+model Maintenance {
   id                String        @id @unique @default(cuid())
   date_start        DateTime
   date_expire       DateTime
 
   hotel_id          String? 
-  hotel             Hotel?        @relation("HotelMaintainance", fields: [hotel_id], references: [id], onDelete: Cascade)
+  hotel             Hotel?        @relation("HotelMaintenance", fields: [hotel_id], references: [id], onDelete: Cascade)
 
   room_id           String?
-  room              Room?         @relation("RoomMaintainance", fields: [room_id], references: [id], onDelete: Cascade)
+  room              Room?         @relation("RoomMaintenance", fields: [room_id], references: [id], onDelete: Cascade)
 }

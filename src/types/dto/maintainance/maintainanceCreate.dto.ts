@@ -1,4 +1,4 @@
-export interface MaintainaceCreateRequest {
+export interface MaintenaceCreateRequest {
   dateStart: Date;
   dateExpire: Date;
 }

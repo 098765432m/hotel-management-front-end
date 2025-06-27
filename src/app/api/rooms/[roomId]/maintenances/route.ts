@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/client";
-import { MaintainaceCreateRequest } from "@/types/dto/maintainance/maintainanceCreate.dto";
+import { MaintenaceCreateRequest } from "@/types/dto/maintainance/maintainanceCreate.dto";
 import { NextResponse } from "next/server";
 
 export async function POST(
   request: Request,
   { params }: { params: { roomId: string } }
 ) {
-  const body: MaintainaceCreateRequest = await request.json();
+  const body: MaintenaceCreateRequest = await request.json();
   const roomId = params.roomId;
-  await prisma.maintainance.create({
+  await prisma.maintenance.create({
     data: {
       date_start: body.dateStart,
       date_expire: body.dateExpire,

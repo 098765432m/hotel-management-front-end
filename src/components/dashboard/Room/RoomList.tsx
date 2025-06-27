@@ -37,8 +37,6 @@ export default function RoomList(props: Props) {
     ? roomsApiResponse[sizeRoom - 1]?.data ?? null
     : null;
 
-  console.log(roomsApiResponse);
-
   const { data: roomTypeApiResponse } = useSWR<RoomTypeHotelApiResponse>(
     () => `/api/roomTypes/hotel/${authInfo!.hotelId}`,
     axiosCustomFetcher
