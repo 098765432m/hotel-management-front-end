@@ -32,7 +32,7 @@ interface HotelContactCreateDto extends AddressType {
 export interface HotelCustomerPageDto {
   id: string;
   name: string;
-  address: AddressType;
+  address: string;
   description?: string;
   average_rating: number;
 

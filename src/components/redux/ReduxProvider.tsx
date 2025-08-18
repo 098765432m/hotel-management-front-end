@@ -3,11 +3,11 @@
 import React, { useEffect } from "react";
 import { Provider } from "react-redux";
 import { store } from "@/state/store";
-import { UserCookieResponse } from "@/types/dto/user.dto";
+import { UserRedux } from "@/types/dto/user.dto";
 import { logIn } from "@/state/user/authSlice";
 
 interface Props {
-  authInfo: UserCookieResponse;
+  authInfo: UserRedux;
   children: React.ReactNode;
 }
 

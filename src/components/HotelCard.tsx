@@ -30,7 +30,7 @@ export default function HotelCard({ hotel }: Props) {
       onClick={() => router.push(`/hotel/${hotel.id}`)}
     >
       <div className={styles.card_image_container}>
-        {hotel.images.length > 0 ? (
+        {hotel.images?.length > 0 ? (
           <NextImage
             priority
             src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
@@ -52,9 +52,7 @@ export default function HotelCard({ hotel }: Props) {
       <div className={styles.info}>
         <div className={styles.card_info_heading}>
           <div className={styles.card_info_hotel_name}>{hotel.name}</div>
-          <div
-            className={styles.card_info_address}
-          >{`${hotel.address.district.name}, ${hotel.address.province.name}`}</div>
+          <div className={styles.card_info_address}>{hotel.address}</div>
         </div>
         <div className={styles.card_info_main}>
           {hotel.ratings && hotel.ratings.length > 0 && (

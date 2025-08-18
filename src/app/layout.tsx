@@ -22,10 +22,12 @@ import ReduxProvider from "@/components/redux/ReduxProvider";
 //import Redux End
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { cookies } from "next/headers";
-import { UserCookieResponse } from "@/types/dto/user.dto";
 import { decrypt, SessionPayload } from "@/lib/session";
 import { mantineTheme } from "@/lib/theme";
 import MantineCustomThemeProvider from "@/components/lib/MantineCustomThemeProvider";
+import axios, { AxiosResponse } from "axios";
+import { UserRedux } from "@/types/dto/user.dto";
+import { error } from "console";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,8 +42,26 @@ export default async function RootLayout({
 }>) {
   const cookiesStore = cookies(); // Get Cookie on SSR
 
-  const authCookie = await decrypt(cookiesStore.get("login")?.value as string); // Decrypt JWT
-  const authInfo: UserCookieResponse = (authCookie as SessionPayload) ?? null; // Convert JWT payload to auth type
+  const authCookie = await decrypt(cookiesStore.get("user")?.value as string); // Decrypt JWT
+
+  console.log(1235);
+
+  const authInfo: any = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${authCookie?.sub}`,
+      { withCredentials: true }
+    )
+    .catch(function (err) {
+      console.log(err);
+    });
+
+  console.log(
+    `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${authCookie?.sub}`
+  );
+
+  console.log("Auth Info");
+
+  console.log(authInfo);
 
   return (
     <html lang="en">
@@ -67,7 +87,7 @@ export default async function RootLayout({
               }}
             >
               <DatesProvider settings={{ locale: "vi" }}>
-                <ReduxProvider authInfo={authInfo}>
+                <ReduxProvider authInfo={authInfo?.data?.result}>
                   <MantineProvider theme={mantineTheme}>
                     {children}
                   </MantineProvider>

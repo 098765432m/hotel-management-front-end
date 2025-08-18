@@ -19,11 +19,15 @@ export default function ProfileDropDownMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const userInfo = useSelector((state: RootState) => state.auth.authInfo);
+  console.log("Redux", userInfo);
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: user } = useSWR<
-    Prisma.UserGetPayload<{ include: { image: true } }>
-  >(() => `/api/users/${userInfo?.id}`, axiosCustomFetcher);
+  const { data: user } = useSWR(
+    // >(() => `/api/users/${userInfo?.id}`, axiosCustomFetcher);
+    () => `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${userInfo?.id}`,
+    axiosCustomFetcher
+  );
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {

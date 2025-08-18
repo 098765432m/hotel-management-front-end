@@ -1,8 +1,8 @@
-import { UserCookieResponse } from "@/types/dto/user.dto";
+import { UserRedux } from "@/types/dto/user.dto";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-  authInfo: UserCookieResponse | null;
+  authInfo: UserRedux | null;
   isLogin: boolean;
 }
 
@@ -15,9 +15,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    logIn: (state, action: PayloadAction<UserCookieResponse>) => {
+    logIn: (state, action: PayloadAction<UserRedux>) => {
       state.authInfo = action.payload;
       state.isLogin = true;
+      console.log("Login: ", state);
     },
     logOut: (state) => {
       state.authInfo = null;

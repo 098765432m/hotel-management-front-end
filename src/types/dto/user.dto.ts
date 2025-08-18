@@ -1,9 +1,10 @@
 import { Prisma, Role } from "@prisma/client";
 import { ApiResponse } from "../common/api-response";
 
-export interface UserCookieResponse {
+export interface UserRedux {
   id: string;
   username: string;
+  email: string;
   role: string;
   hotelId?: string | null;
 }
