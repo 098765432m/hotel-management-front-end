@@ -14,7 +14,7 @@ import { Box, LoadingOverlay, PasswordInput, TextInput } from "@mantine/core";
 import MantineButton from "@/components/custom-component/MantineButton";
 import NextLink from "@/components/custom-component/NextLink";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { RiLoginBoxLine } from "react-icons/ri";
 import { UserRedux } from "@/types/dto/user.dto";
 
@@ -46,31 +46,24 @@ export default function LoginPage() {
   const handleSubmit = async (username: string, password: string) => {
     // form.validate();
     try {
-      const signInRes: ApiResponse<UserRedux> = (
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/sign-in`,
-          {
-            username: username,
-            password: password,
-          },
-          {
-            withCredentials: true,
-          }
-        )
-      ).data;
-
       setLoginStatus({ status: "LOADING", message: "" });
-      // const user: UserCookieResponse | null = await authService.login(
-      //   username,
-      //   password
-      // ); //Get user info
+      const signInRes: AxiosResponse<ApiResponse<UserRedux>> = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/sign-in`,
+        {
+          username: username,
+          password: password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       setLoginStatus(null);
 
-      if (signInRes.success == true) {
-        dispatch(logIn(signInRes.result));
+      if (signInRes?.data.success == true) {
+        dispatch(logIn(signInRes?.data.result));
 
         // Chuyển hướng trang tùy theo role
-        switch (signInRes.result.role) {
+        switch (signInRes?.data.result.role) {
           case roleEnum.ADMIN:
             router.push("/admin");
             break;
@@ -85,36 +78,20 @@ export default function LoginPage() {
             break;
         }
       }
-
-      // if (user != null) {
-      //   dispatch(logIn(user));
-
-      //   // Chuyển hướng trang tùy theo role
-      //   switch (user.role) {
-      //     case roleEnum.ADMIN:
-      //       router.push("/admin");
-      //       break;
-      //     case roleEnum.MANAGER || roleEnum.STAFF:
-      //       router.push("/dashboard");
-      //       break;
-      //     case roleEnum.GUEST:
-      //       router.push("/");
-      //       break;
-
-      //     default:
-      //       break;
-      //   }
-      // }
     } catch (error) {
-      setLoginStatus({ status: "ERROR", message: "Đã có lỗi xảy ra" });
+      // setLoginStatus({ status: "ERROR", message: "Đã có lỗi xảy ra" });
       if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+
         setLoginStatus({
           status: "ERROR",
-          message: error.response!.data.message,
+          message: error.response?.data.message,
         });
       }
     }
   };
+  console.log(loginStatus);
+
   return (
     <CardDefault className={styles.login_form_container}>
       <Box pos={"relative"}>

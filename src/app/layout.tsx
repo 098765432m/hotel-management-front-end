@@ -44,25 +44,14 @@ export default async function RootLayout({
 
   const authCookie = await decrypt(cookiesStore.get("user")?.value as string); // Decrypt JWT
 
-  console.log(1235);
-
   const authInfo: any = await axios
     .get(
       `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${authCookie?.sub}`,
       { withCredentials: true }
     )
     .catch(function (err) {
-      console.log(err);
+      console.log("Khong lay duoc tai khoan tu cookie");
     });
-
-  console.log(
-    `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${authCookie?.sub}`
-  );
-
-  console.log("Auth Info");
-
-  console.log(authInfo);
-
   return (
     <html lang="en">
       <head>

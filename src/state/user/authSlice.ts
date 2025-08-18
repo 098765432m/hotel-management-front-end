@@ -18,7 +18,6 @@ const authSlice = createSlice({
     logIn: (state, action: PayloadAction<UserRedux>) => {
       state.authInfo = action.payload;
       state.isLogin = true;
-      console.log("Login: ", state);
     },
     logOut: (state) => {
       state.authInfo = null;
