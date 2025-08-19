@@ -27,6 +27,7 @@ import NextImage from "@/components/custom-component/NextImage";
 import { useToggle } from "@mantine/hooks";
 import CommentSection from "@/components/customer/hotel-page/comment/CommentSection";
 import { roundToNearestHalf } from "@/utils/math";
+import { Hotel } from "@/types/hotel.interface";
 const contentStyle: React.CSSProperties = {
   height: "160px",
   color: "#fff",
@@ -47,62 +48,66 @@ export default function HotelDetail({
     process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME +
     "/image/upload/v1";
 
-  const { data: hotel } = useSWR(
-    () => `/api/hotels/${params.hotel_id}`,
+  const { data: hotelRes } = useSWR<ApiResponse<Hotel>>(
+    () =>
+      `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels/${params.hotel_id}`,
     axiosCustomFetcher
   );
 
-  return (
-    <div className={styles.hotel}>
-      {/* Card thông tin phòng*/}
-      <div>
-        <CardDefault>
-          <div className={styles.hotel_detail}>
-            <span className={styles.hotel_detail_images_container}>
-              {hotel && hotel.images.length > 0 ? (
-                hotel && (
+  const hotel = hotelRes?.result;
+
+  if (hotel)
+    return (
+      <div className={styles.hotel}>
+        {/* Card thông tin phòng*/}
+        <div>
+          <CardDefault>
+            <div className={styles.hotel_detail}>
+              <span className={styles.hotel_detail_images_container}>
+                {hotel.images && hotel.images.length > 0 ? (
+                  hotel && (
+                    <NextImage
+                      src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
+                      fill
+                      sizes="30vw"
+                      alt={hotel.name}
+                      priority
+                      className={styles.carousel_image_container}
+                    ></NextImage>
+                  )
+                ) : (
                   <NextImage
-                    src={`${cloudinary_path}/${hotel.images[0].public_id}.${hotel.images[0].format}`}
+                    src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
                     fill
                     sizes="30vw"
-                    alt={hotel.name}
+                    alt={hotel?.name}
                     priority
-                    className={styles.carousel_image_container}
                   ></NextImage>
-                )
-              ) : (
-                <NextImage
-                  src={`${process.env.NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE}`}
-                  fill
-                  sizes="30vw"
-                  alt={hotel?.name}
-                  priority
-                ></NextImage>
-              )}
-            </span>
-            <span className={styles.hotel_detail_heading_container}>
-              <div>
-                <div className={styles.hotel_detail_heading}>
-                  <span className={styles.hotel_name}>{hotel?.name}</span>
-                  <span className={styles.button_control}>
-                    {hotel && (
-                      <span className={styles.hotel_heading_rating_container}>
-                        <span className={styles.rating_number}>
-                          {hotel.average_rating}
+                )}
+              </span>
+              <span className={styles.hotel_detail_heading_container}>
+                <div>
+                  <div className={styles.hotel_detail_heading}>
+                    <span className={styles.hotel_name}>{hotel?.name}</span>
+                    <span className={styles.button_control}>
+                      {hotel && (
+                        <span className={styles.hotel_heading_rating_container}>
+                          <span className={styles.rating_number}>
+                            {hotel.average_rating}
+                          </span>
+                          <span className={styles.rating_icon_container}>
+                            <Rating
+                              fractions={2}
+                              defaultValue={roundToNearestHalf(
+                                hotel.average_rating
+                              )}
+                              size="lg"
+                              readOnly
+                            ></Rating>
+                          </span>
                         </span>
-                        <span className={styles.rating_icon_container}>
-                          <Rating
-                            fractions={2}
-                            defaultValue={roundToNearestHalf(
-                              hotel.average_rating
-                            )}
-                            size="lg"
-                            readOnly
-                          ></Rating>
-                        </span>
-                      </span>
-                    )}
-                    {/* <span className={styles.favorite_button_container}>
+                      )}
+                      {/* <span className={styles.favorite_button_container}>
                       {isFavorite ? (
                         <FavoriteFill
                           onClick={() => toggleFavorite()}
@@ -117,14 +122,14 @@ export default function HotelDetail({
                         ></FavoriteOutline>
                       )}
                     </span> */}
-                  </span>
-                </div>
-                <div className={styles.hotel_detail_heading_description}>
-                  {hotel && hotel.description != undefined ? (
-                    <p>{hotel.description}</p>
-                  ) : (
-                    // prettier-ignore
-                    <p>
+                    </span>
+                  </div>
+                  <div className={styles.hotel_detail_heading_description}>
+                    {hotel && hotel.description != undefined ? (
+                      <p>{hotel.description}</p>
+                    ) : (
+                      // prettier-ignore
+                      <p>
                     Bạn có thể đủ điều kiện hưởng giảm giá Genius tại Peaceful Hill Homestay. Để biết giảm giá Genius có áp dụng cho ngày bạn đã chọn hay không, hãy đăng nhập.<br></br>
                     Giảm giá Genius tại chỗ nghỉ này tùy thuộc vào ngày đặt phòng, ngày lưu trú và các ưu đãi có sẵn khác. <br></br>
                     Cách Bãi biển Kê Gà 3 phút đi bộ, Peaceful Hill Homestay có khu vườn, sân hiên, điều hòa, sân trong và Wi-Fi miễn phí. <br></br>
@@ -132,24 +137,24 @@ export default function HotelDetail({
                     Lodge có phục vụ bữa sáng kiểu Á mỗi sáng.
                     Peaceful Hill Homestay cách Hải đăng Mũi Kê Gà 1.7 km và Núi Tà Cú 25 km.
                   </p>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.heading_button}>
-                <MantineButton onClick={() => scrollIntoView()}>
-                  Đặt ngay
-                </MantineButton>
-              </div>
-            </span>
-          </div>
-        </CardDefault>
+                <div className={styles.heading_button}>
+                  <MantineButton onClick={() => scrollIntoView()}>
+                    Đặt ngay
+                  </MantineButton>
+                </div>
+              </span>
+            </div>
+          </CardDefault>
+        </div>
+        <div>
+          {hotel && (
+            <AvailableRooms ref={targetRef} hotel={hotel}></AvailableRooms>
+          )}
+        </div>
+        <CommentSection hotelId={params.hotel_id}></CommentSection>
       </div>
-      <div>
-        {hotel && (
-          <AvailableRooms ref={targetRef} hotel={hotel}></AvailableRooms>
-        )}
-      </div>
-      <CommentSection hotelId={params.hotel_id}></CommentSection>
-    </div>
-  );
+    );
 }

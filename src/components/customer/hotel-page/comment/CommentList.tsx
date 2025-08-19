@@ -5,6 +5,7 @@ import CardDefault from "@/components/custom-component/CardDefault";
 import NextImage from "@/components/custom-component/NextImage";
 import useCustomSWRInfinite from "@/hooks/use-swr-infinite";
 import {
+  RatingResponse,
   RatingHotelApiResponse,
   RatingHotelPayload,
 } from "@/types/dto/rating.dto";
@@ -31,21 +32,28 @@ export default function CommentList(props: Props) {
     ratingId: string | null;
   }>({ opened: false, ratingId: null });
 
-  const { data: ratingApiResponse, mutate: ratingMutate } = useSWR(
-    props.hotelId ? () => `/api/ratings/hotel/${props.hotelId}` : null,
+  const { data: ratingApiResponse, mutate: ratingMutate } = useSWR<
+    ApiResponse<RatingResponse[]>
+  >(
+    props.hotelId
+      ? () =>
+          `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels/${props.hotelId}/ratings`
+      : null,
     axiosCustomFetcher
   );
 
-  const ratingData: RatingHotelPayload[] | null =
-    ratingApiResponse?.success && ratingApiResponse?.data
-      ? ratingApiResponse.data.ratings
-      : null;
+  const ratings = ratingApiResponse?.result;
+
+  // const ratingData: RatingHotelPayload[] | null =
+  //   ratingApiResponse?.success && ratingApiResponse?.data
+  //     ? ratingApiResponse.data.ratings
+  //     : null;
 
   return (
     <>
       <div className={styles.comment_list_container}>
-        {ratingData &&
-          ratingData.map((rating) => {
+        {ratings &&
+          ratings.map((rating) => {
             return (
               <div key={rating.id} className={styles.comment_card}>
                 <div className={styles.comment_card_left_section}>
@@ -57,10 +65,10 @@ export default function CommentList(props: Props) {
                         process.env
                           .NEXT_PUBLIC_CLOUDINARY_DEFAULT_IMAGE as string
                       }
-                      alt={rating.guest.full_name ?? "Ảnh đại diện"}
+                      alt={"Ảnh đại diện"}
                     ></NextImage>
                   </div>
-                  <div>{rating.guest.username}</div>
+                  <div>{rating.user.username}</div>
                   <div>
                     <Rating readOnly defaultValue={rating.score}></Rating>
                   </div>
@@ -68,11 +76,11 @@ export default function CommentList(props: Props) {
 
                 <div className={styles.comment_card_right_section}>
                   {rating.comment && <div>{rating.comment}</div>}
-                  <div className={styles.comment_card_right_section_bottom}>
+                  {/* <div className={styles.comment_card_right_section_bottom}>
                     <div>{dayjs(rating.updateAt).format("DD/MM/YYYY")}</div>{" "}
-                  </div>
+                  </div> */}
                 </div>
-                {rating.guest_id === props.userId && (
+                {rating.user.user_id === props.userId && (
                   <div className={styles.comment_card_delete_button_container}>
                     <MantineButton
                       color="red"
