@@ -23,6 +23,6 @@ export default async function isAuthenticated() {
 }
 
 export async function logOut() {
-  if (cookies().has("login")) cookies().delete("login");
+  if (cookies().has("user")) cookies().delete("user");
 }
 // bcrypt.compare('113446', '$2a$10$fUor9jOu5QrGL195fKp2Tesu8R0NZslAOobnA1VvtpVqmIvZk1W4m').then(value => console.log("brypt compare: " + value));

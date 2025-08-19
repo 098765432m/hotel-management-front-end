@@ -54,7 +54,7 @@ export default function LoginPage() {
           password: password,
         },
         {
-          withCredentials: true,
+          withCredentials: true, // De cho backend set cookie va tra ve cho frontend. Neu false thi se khong set duoc cookie
         }
       );
       setLoginStatus(null);

@@ -4,28 +4,30 @@ import HotelCard from "@/components/HotelCard";
 import EmptyData from "@/components/custom-component/EmptyData";
 import CardDefault from "@/components/custom-component/CardDefault";
 import CustomerSearchPanel from "@/components/customer/main-page/CustomerSearchPanel";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { transformAddressSelectInput } from "@/utils/helpers";
-import ProvinceCard from "@/components/customer/main-page/ProvinceCard";
 import { HotelCustomerPageDto } from "@/types/dto/hotel.dto";
 
 export default async function Home() {
-  const hotelsRes: AxiosResponse<ApiResponse<HotelCustomerPageDto[]>> =
-    await axios.get<ApiResponse<any>>(
-      `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels/`
-    );
-  console.log("hotels:");
+  const hotelsRes = await axios
+    .get<ApiResponse<any>>(
+      `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels`
+    )
+    .catch(function (error) {
+      console.log("Khong ton tai khach san nao");
+    });
 
-  console.log(hotelsRes.data.result);
-
-  // const hotels: HotelCustomerPageDto[] = await hotelsService.getAll();
-  const listProvinceResponse = await axios.get(
-    `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}` as string
-  );
+  const listProvinceResponse = await axios
+    .get(
+      `${process.env.NEXT_PUBLIC_VN_ADDRESS_URL}/provinces/?size=${process.env.NEXT_PUBLIC_VN_ADDRESS_DEFAULT_SIZE}` as string
+    )
+    .catch(function (error) {
+      console.log("Khong lay duoc danh sach tinh");
+    });
 
   const listProvince =
-    transformAddressSelectInput(listProvinceResponse.data) ?? undefined;
-  if (hotelsRes.data.success)
+    transformAddressSelectInput(listProvinceResponse?.data) ?? undefined;
+  if (hotelsRes?.data.success)
     return (
       <div className={styles.main_page_container}>
         <CustomerSearchPanel listProvince={listProvince}></CustomerSearchPanel>
@@ -35,11 +37,9 @@ export default async function Home() {
           </div>
           <div className={styles.hotel_list}>
             {hotelsRes.data.result.length > 0 ? (
-              hotelsRes.data.result.map(
-                (hotel: HotelCustomerPageDto, index) => (
-                  <HotelCard key={hotel.id + index} hotel={hotel}></HotelCard>
-                )
-              )
+              hotelsRes.data.result.map((hotel: HotelCustomerPageDto) => (
+                <HotelCard key={hotel.id} hotel={hotel}></HotelCard>
+              ))
             ) : (
               <EmptyData></EmptyData>
             )}

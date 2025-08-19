@@ -10,13 +10,14 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { RiLoginBoxLine } from "react-icons/ri";
 import { FaUserPlus } from "react-icons/fa6";
 
 interface RegisterForm {
   username: string;
   password: string;
+  address: string;
   checkedPassword: string;
   fullName: string;
   email: string;
@@ -34,6 +35,7 @@ export default function RegisterPage() {
     initialValues: {
       username: "",
       password: "",
+      address: "",
       checkedPassword: "",
       fullName: "",
       email: "",
@@ -65,29 +67,39 @@ export default function RegisterPage() {
   // Xử lý submit của form
   const handleSubmit = async (body: RegisterForm) => {
     // Đăng ký tài khoản GUEST mới và chuyển trang
-    console.log(body);
+    console.log("body: ", body);
 
     try {
-      // setRegisterStatus({ status: "LOADING", message: "" });
+      setRegisterStatus({ status: "LOADING", message: "" });
       if (body.password === body.checkedPassword) {
-        await authService.register(
-          body.username,
-          body.password,
-          body.fullName,
-          body.email,
-          body.phoneNumber
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/sign-up`,
+          {
+            username: body.username,
+            password: body.password,
+            address: body.address,
+            email: body.email,
+            phone_number: body.phoneNumber,
+            full_name: body.fullName,
+          }
         );
+        // await authService.register(
+        //   body.username,
+        //   body.password,
+        //   body.fullName,
+        //   body.email,
+        //   body.phoneNumber
+        // );
         setRegisterStatus(null);
         router.push("/login");
       }
     } catch (error) {
-      console.error(error);
-      setRegisterStatus(null);
-      if (error instanceof AxiosError)
+      if (error instanceof AxiosError) {
         setRegisterStatus({
           status: "ERROR",
-          message: error.response!.data.message,
+          message: error.response?.data.message,
         });
+      }
     }
   };
 
@@ -127,6 +139,13 @@ export default function RegisterPage() {
               key={form.key("checkedPassword")}
               {...form.getInputProps("checkedPassword")}
             ></PasswordInput>
+            <TextInput
+              withAsterisk
+              label="Địa chỉ"
+              placeholder="địa chỉ"
+              key={form.key("address")}
+              {...form.getInputProps("address")}
+            ></TextInput>
             <TextInput
               withAsterisk
               label="Họ và tên"
