@@ -10,3 +10,13 @@ export function rangeISOToRangeDayJS(rangeString: string) {
     return null;
   }
 }
+
+// Change to YYYY-MM-DD format
+export function formatDateToYYYYMMDD(date: dayjs.Dayjs) {
+  switch (date.isValid()) {
+    case true:
+      return date.format("YYYY-MM-DD");
+    case false:
+      return "";
+  }
+}

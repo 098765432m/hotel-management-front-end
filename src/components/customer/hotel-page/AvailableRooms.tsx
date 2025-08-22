@@ -31,6 +31,9 @@ import MantineModal from "@/components/custom-component/modal/MantineModal";
 import { RootState } from "@/state/store";
 import { useSelector } from "react-redux";
 import useSWRImmutable from "swr/immutable";
+import { AxiosResponse } from "axios";
+import { UserRedux } from "@/types/dto/user.dto";
+import { formatDateToYYYYMMDD } from "@/utils/dayjs";
 
 interface Props {
   hotel: Hotel;
@@ -98,14 +101,47 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     >(initialFilterDateRange);
 
     // Fetch thông tin người dùng
-    const { data: user } = useSWRImmutable<{
-      id: string;
-      email: string;
-      full_name: string;
-      phone_number: string;
-    }>(() => `/api/users/${authId}`, axiosCustomFetcher); // DTO user này lại
+    const { data: userResult } = useSWRImmutable<ApiResponse<any>>(
+      () => `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${authId}`,
+      axiosCustomFetcher
+    );
+
+    const user:
+      | {
+          id: string;
+          username: string;
+          email: string;
+          phoneNumber: string;
+          fullName: string;
+          role: string;
+        }
+      | undefined = userResult?.result;
+
+    console.log("User Info: ");
 
     console.log(user);
+
+    // // Fetch Những phòng AVAILABLE
+    // const {
+    //   data: availableRoomTypes,
+    //   isValidating: isAvailableRoomTypesValidating,
+    // } = useSWR(
+    //   () =>
+    //     hotel && filterDateRange
+    //       ? `/api/roomTypes/hotel/${
+    //           hotel.id
+    //         }/booking?filterDateRange=${encodeURIComponent(
+    //           JSON.stringify(
+    //             filterDateRange.map((date) => date?.toISOString() ?? null)
+    //           )
+    //         )}`
+    //       : null,
+    //   axiosCustomFetcher,
+    //   {
+    //     revalidateOnFocus: false,
+    //     revalidateOnReconnect: false,
+    //   }
+    // );
 
     // Fetch Những phòng AVAILABLE
     const {
@@ -114,13 +150,11 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     } = useSWR(
       () =>
         hotel && filterDateRange
-          ? `/api/roomTypes/hotel/${
+          ? `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels/${
               hotel.id
-            }/booking?filterDateRange=${encodeURIComponent(
-              JSON.stringify(
-                filterDateRange.map((date) => date?.toISOString() ?? null)
-              )
-            )}`
+            }/available-room-types?check_in=${formatDateToYYYYMMDD(
+              dayjs(filterDateRange[0])
+            )}&check_out=${formatDateToYYYYMMDD(dayjs(filterDateRange[1]))}`
           : null,
       axiosCustomFetcher,
       {
@@ -128,6 +162,16 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
         revalidateOnReconnect: false,
       }
     );
+
+    console.log("Check-in Check-out");
+    console.log(
+      `${formatDateToYYYYMMDD(
+        dayjs(filterDateRange[0])
+      )} - ${formatDateToYYYYMMDD(dayjs(filterDateRange[1]))}`
+    );
+
+    console.log("Available Room Types: ");
+    console.log(availableRoomTypes);
 
     const initialBookingState: BookingState | null = hotel.room_types
       ? hotel.room_types.reduce(
@@ -294,8 +338,8 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                   user
                     ? {
                         id: user.id,
-                        full_name: user.full_name,
-                        phone_number: user.phone_number,
+                        full_name: user.fullName,
+                        phone_number: user.phoneNumber,
                         email: user.email,
                       }
                     : null
