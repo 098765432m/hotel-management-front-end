@@ -79,6 +79,20 @@ function bookingReducer(
   }
 }
 
+interface AvailableRoomType {
+  id: string;
+  name: string;
+  price: number;
+  hotel_id: string;
+  images: {
+    id: string;
+    public_id: string;
+    format: string;
+    room_type_id: string;
+  }[];
+  number_of_available_rooms: number;
+}
+
 const AvailableRooms = forwardRef<HTMLDivElement, Props>(
   ({ hotel }: Props, ref) => {
     const [opened, { open, close }] = useDisclosure(false);
@@ -123,8 +137,8 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
 
     // // Fetch Những phòng AVAILABLE
     // const {
-    //   data: availableRoomTypes,
-    //   isValidating: isAvailableRoomTypesValidating,
+    //   data: availableRoomTypesResult,
+    //   isValidating: isAvailableRoomTypesResultValidating,
     // } = useSWR(
     //   () =>
     //     hotel && filterDateRange
@@ -145,9 +159,9 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
 
     // Fetch Những phòng AVAILABLE
     const {
-      data: availableRoomTypes,
-      isValidating: isAvailableRoomTypesValidating,
-    } = useSWR(
+      data: availableRoomTypesResult,
+      isValidating: isAvailableRoomTypesResultValidating,
+    } = useSWR<ApiResponse<AvailableRoomType[]>>(
       () =>
         hotel && filterDateRange
           ? `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/hotels/${
@@ -171,7 +185,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
     );
 
     console.log("Available Room Types: ");
-    console.log(availableRoomTypes);
+    console.log(availableRoomTypesResult);
 
     const initialBookingState: BookingState | null = hotel.room_types
       ? hotel.room_types.reduce(
@@ -247,42 +261,24 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
             </thead>
 
             <tbody>
-              {isAvailableRoomTypesValidating ? (
+              {isAvailableRoomTypesResultValidating ? (
                 <tr>
                   <td rowSpan={3} colSpan={5}>
                     <MantineLoading></MantineLoading>
                   </td>
                 </tr>
-              ) : availableRoomTypes?.length > 0 ? (
-                availableRoomTypes.map(
-                  (
-                    roomType: Prisma.RoomTypeGetPayload<{
-                      include: {
-                        rooms: {
-                          include: {
-                            bookings: true;
-                          };
-                        };
-                      };
-                    }>,
-                    index: number
-                  ) => (
-                    <tr
-                      key={index}
-                      className={`${
-                        roomType.rooms.some((room) => {
-                          //Make row blur when roomType not have A Single room AVAILABLE
-                          return room.bookings?.length > 0;
-                        })
-                          ? "opacity-35"
-                          : ""
-                      } `}
-                    >
-                      <td>{roomType.name}</td>
+              ) : availableRoomTypesResult?.success ? (
+                availableRoomTypesResult.result.map(
+                  (roomType, index: number) => (
+                    <tr key={roomType.id}>
+                      <td>
+                        {roomType.name}
+                        {`<${roomType.number_of_available_rooms}>`}
+                      </td>
                       <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
                       <td>
                         <NumberInput
-                          disabled={roomType.rooms.length == 0}
+                          disabled={roomType.number_of_available_rooms == 0}
                           placeholder="Nhập số"
                           step={1}
                           defaultValue={0}
@@ -305,7 +301,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                         ></NumberInput>
                       </td>
                       {index === 0 && (
-                        <td rowSpan={0} className="opacity-100">
+                        <td rowSpan={0}>
                           <div className={styles.booking_control}>
                             {totalPrice} Đ
                             <MantineButton onClick={open}>

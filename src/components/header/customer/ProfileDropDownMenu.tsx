@@ -23,11 +23,15 @@ export default function ProfileDropDownMenu() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { data: user } = useSWR(
+  const { data: userApiResult } = useSWR<ApiResponse<any>>(
     // >(() => `/api/users/${userInfo?.id}`, axiosCustomFetcher);
     () => `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api/users/${userInfo?.id}`,
     axiosCustomFetcher
   );
+
+  const user = userApiResult?.result;
+
+  console.log("SWR login", user);
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {

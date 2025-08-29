@@ -1,5 +1,4 @@
 import styles from "@/styles/customer/main-page/MainPage.module.scss";
-import hotelsService from "@/services/hotels.service";
 import HotelCard from "@/components/HotelCard";
 import EmptyData from "@/components/custom-component/EmptyData";
 import CardDefault from "@/components/custom-component/CardDefault";
