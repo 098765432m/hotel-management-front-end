@@ -3,13 +3,13 @@
 import styles from "@/styles/customer/search-result/SearchResultPage.module.scss";
 import CardDefault from "@/components/custom-component/CardDefault";
 import HotelResultCard from "@/components/customer/search-result/search-result-list/HotelResultCard";
-import { HotelResultCardDto } from "@/types/dto/hotel.dto";
 import EmptyData from "@/components/custom-component/EmptyData";
 import { DatesRangeValue } from "@mantine/dates";
+import { FilterHotel } from "@/types/dto/hotel.dto";
 
 interface Props {
   filterDateRange: DatesRangeValue | [null, null];
-  resultHotel: HotelResultCardDto[];
+  filterHotels: FilterHotel[];
 }
 
 export default function SearchResultList(props: Props) {
@@ -20,13 +20,13 @@ export default function SearchResultList(props: Props) {
         <CardDefault>
           <div className={styles.heading}>Kết quả</div>
           <div className={styles.result}>
-            {props.resultHotel.length > 0 ? (
-              props.resultHotel.map((hotel) => {
+            {props.filterHotels && props.filterHotels.length > 0 ? (
+              props.filterHotels.map((hotel) => {
                 return (
                   <HotelResultCard
                     filterDateRange={props.filterDateRange}
                     hotel={hotel}
-                    key={hotel.hotelId}
+                    key={hotel.hotel_id}
                   ></HotelResultCard>
                 );
               })

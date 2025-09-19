@@ -6,33 +6,22 @@ import CustomTable from "@/components/custom-component/CustomTable";
 import { Hotel } from "@/types/hotel.interface";
 import EmptyData from "@/components/custom-component/EmptyData";
 import MantineButton from "@/components/custom-component/MantineButton";
-import {
-  Modal,
-  Notification,
-  NumberInput,
-  RemoveScroll,
-  TextInput,
-} from "@mantine/core";
+import { NumberInput } from "@mantine/core";
 import { forwardRef, useEffect, useMemo, useReducer, useState } from "react";
 import { NumberToMoneyFormat } from "@/utils/helpers";
 import { useDisclosure, useScrollIntoView } from "@mantine/hooks";
-import { useForm } from "@mantine/form";
 import UserInfoBookingForm from "./UserInfoBookingForm";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
 import dayjs, { Dayjs } from "dayjs";
-import { DatePickerType, DatesRangeValue, DateValue } from "@mantine/dates";
+import { DatesRangeValue, DateValue } from "@mantine/dates";
 import useSWR from "swr";
 import { axiosCustomFetcher } from "@/lib/swr";
-import { GetRoomTypeBookingDtoResponse } from "@/types/dto/room-types.dto";
-import { Prisma } from "@prisma/client";
 import MantineLoading from "@/components/custom-component/loading/MantineLoading";
 import MantineModal from "@/components/custom-component/modal/MantineModal";
 import { RootState } from "@/state/store";
 import { useSelector } from "react-redux";
 import useSWRImmutable from "swr/immutable";
-import { AxiosResponse } from "axios";
-import { UserRedux } from "@/types/dto/user.dto";
 import { formatDateToYYYYMMDD } from "@/utils/dayjs";
 
 interface Props {
@@ -95,6 +84,8 @@ interface AvailableRoomType {
 
 const AvailableRooms = forwardRef<HTMLDivElement, Props>(
   ({ hotel }: Props, ref) => {
+    console.log("Hotel in head: ", hotel);
+
     const [opened, { open, close }] = useDisclosure(false);
 
     const authId = useSelector((state: RootState) => state.auth.authInfo?.id);
@@ -129,33 +120,18 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
           fullName: string;
           role: string;
         }
-      | undefined = userResult?.result;
+      | undefined = userResult
+      ? {
+          id: userResult.result.id,
+          username: userResult.result.username,
+          email: userResult.result.email,
+          phoneNumber: userResult.result.phone_number,
+          fullName: userResult.result.full_name,
+          role: userResult.result.role,
+        }
+      : undefined;
 
-    console.log("User Info: ");
-
-    console.log(user);
-
-    // // Fetch Những phòng AVAILABLE
-    // const {
-    //   data: availableRoomTypesResult,
-    //   isValidating: isAvailableRoomTypesResultValidating,
-    // } = useSWR(
-    //   () =>
-    //     hotel && filterDateRange
-    //       ? `/api/roomTypes/hotel/${
-    //           hotel.id
-    //         }/booking?filterDateRange=${encodeURIComponent(
-    //           JSON.stringify(
-    //             filterDateRange.map((date) => date?.toISOString() ?? null)
-    //           )
-    //         )}`
-    //       : null,
-    //   axiosCustomFetcher,
-    //   {
-    //     revalidateOnFocus: false,
-    //     revalidateOnReconnect: false,
-    //   }
-    // );
+    console.log("User: ", user);
 
     // Fetch Những phòng AVAILABLE
     const {
@@ -177,18 +153,10 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
       }
     );
 
-    console.log("Check-in Check-out");
-    console.log(
-      `${formatDateToYYYYMMDD(
-        dayjs(filterDateRange[0])
-      )} - ${formatDateToYYYYMMDD(dayjs(filterDateRange[1]))}`
-    );
+    const availableRoomTypes = availableRoomTypesResult?.result;
 
-    console.log("Available Room Types: ");
-    console.log(availableRoomTypesResult);
-
-    const initialBookingState: BookingState | null = hotel.room_types
-      ? hotel.room_types.reduce(
+    const initialBookingState: BookingState | null = availableRoomTypes
+      ? availableRoomTypes.reduce(
           (state, roomType) => ({
             ...state,
             [roomType.name]: 0,
@@ -203,6 +171,8 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
       initialBookingState
     );
 
+    console.log("Watched Booking rooms: ", bookingRooms);
+
     //Tinh so ngay
     const countDays = useMemo(() => {
       return filterDateRange && filterDateRange[0] && filterDateRange[1]
@@ -212,17 +182,27 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
 
     //Tinh tong gia tien voi so phong, loai phong va so ngay
     const totalPrice = useMemo(() => {
-      return NumberToMoneyFormat(
-        hotel.room_types?.reduce((sum, roomType) => {
+      console.log("Recalculating total price...");
+      console.log("AvailableRoomTypes: ", availableRoomTypes);
+      console.log("BookingRooms: ", bookingRooms);
+      console.log("CountDays: ", countDays);
+
+      return (
+        availableRoomTypes?.reduce((sum, roomType) => {
           const count =
-            bookingRooms && hotel.room_types != null
+            bookingRooms && bookingRooms[roomType.name]
               ? bookingRooms[roomType.name]
               : 0;
+          console.log(
+            `Calculating for room type ${roomType.name}: count = ${count}, price = ${roomType.price}`
+          );
 
           return sum + count * roomType.price * countDays;
-        }, 0)
+        }, 0) ?? 0
       );
-    }, [bookingRooms, hotel.room_types, countDays, filterDateRange]);
+    }, [bookingRooms, countDays, filterDateRange]);
+
+    console.log("Watched total price: ", totalPrice);
 
     useEffect(() => {
       dispatchBookingRooms({ type: "RESET_ROOM_COUNT" });
@@ -255,6 +235,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
               <tr>
                 <th>Loại phòng</th>
                 <th>Giá</th>
+                <th>Còn trống</th>
                 <th>Chọn phòng</th>
                 <th>Tổng</th>
               </tr>
@@ -267,55 +248,58 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                     <MantineLoading></MantineLoading>
                   </td>
                 </tr>
-              ) : availableRoomTypesResult?.success ? (
-                availableRoomTypesResult.result.map(
-                  (roomType, index: number) => (
-                    <tr key={roomType.id}>
-                      <td>
-                        {roomType.name}
-                        {`<${roomType.number_of_available_rooms}>`}
+              ) : availableRoomTypes && availableRoomTypes.length > 0 ? (
+                availableRoomTypes.map((roomType, index: number) => (
+                  <tr key={roomType.id}>
+                    <td>{roomType.name} </td>
+                    <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
+                    <td>{roomType.number_of_available_rooms}</td>
+                    <td>
+                      <NumberInput
+                        disabled={roomType.number_of_available_rooms == 0}
+                        placeholder="Nhập số"
+                        step={1}
+                        value={
+                          bookingRooms && bookingRooms[roomType.name] != null
+                            ? bookingRooms[roomType.name]
+                            : 0
+                        }
+                        min={0}
+                        max={roomType.number_of_available_rooms}
+                        suffix=" Phòng"
+                        clampBehavior="strict"
+                        onChange={(value: number | string) =>
+                          dispatchBookingRooms({
+                            type: "SET_ROOM_COUNT",
+                            payload: {
+                              roomTypeName: roomType.name,
+                              count:
+                                typeof value == "string"
+                                  ? parseInt(value)
+                                  : value,
+                            },
+                          })
+                        }
+                      ></NumberInput>
+                    </td>
+                    {index === 0 && (
+                      <td rowSpan={0}>
+                        <div className={styles.booking_control}>
+                          {NumberToMoneyFormat(totalPrice)} Đ
+                          <MantineButton
+                            onClick={open}
+                            disabled={bookingRooms == null || totalPrice == 0}
+                          >
+                            Đặt ngay
+                          </MantineButton>
+                        </div>
                       </td>
-                      <td>{NumberToMoneyFormat(roomType.price)} Đ</td>
-                      <td>
-                        <NumberInput
-                          disabled={roomType.number_of_available_rooms == 0}
-                          placeholder="Nhập số"
-                          step={1}
-                          defaultValue={0}
-                          min={0}
-                          max={10}
-                          suffix=" Phòng"
-                          clampBehavior="strict"
-                          onChange={(value: number | string) =>
-                            dispatchBookingRooms({
-                              type: "SET_ROOM_COUNT",
-                              payload: {
-                                roomTypeName: roomType.name,
-                                count:
-                                  typeof value == "string"
-                                    ? parseInt(value)
-                                    : value,
-                              },
-                            })
-                          }
-                        ></NumberInput>
-                      </td>
-                      {index === 0 && (
-                        <td rowSpan={0}>
-                          <div className={styles.booking_control}>
-                            {totalPrice} Đ
-                            <MantineButton onClick={open}>
-                              Đặt ngay
-                            </MantineButton>
-                          </div>
-                        </td>
-                      )}
-                    </tr>
-                  )
-                )
+                    )}
+                  </tr>
+                ))
               ) : (
                 <tr>
-                  <td rowSpan={3} colSpan={4}>
+                  <td rowSpan={3} colSpan={5}>
                     <EmptyData></EmptyData>
                   </td>
                 </tr>
@@ -341,7 +325,7 @@ const AvailableRooms = forwardRef<HTMLDivElement, Props>(
                     : null
                 }
                 hotelId={hotel.id}
-                totalPrice={parseInt(totalPrice)}
+                totalPrice={totalPrice}
                 bookingRooms={bookingRooms}
                 filterDateRange={filterDateRange}
               ></UserInfoBookingForm>

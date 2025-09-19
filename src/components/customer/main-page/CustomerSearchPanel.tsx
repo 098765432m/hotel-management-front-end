@@ -146,7 +146,7 @@ export default function CustomerSearchPanel({ listProvince }: Props) {
                     router.push(
                       `/search-result?hotelName=${hotelName}&rangePrice=${JSON.stringify(
                         priceRange
-                      )}&provinceId=${encodeURIComponent(
+                      )}&provinceName=${encodeURIComponent(
                         selectedProvince as string
                       )}&filterDateRange=${encodeURIComponent(
                         JSON.stringify(

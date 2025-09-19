@@ -46,4 +46,7 @@ export default async function Home() {
         </CardDefault>
       </div>
     );
+  else {
+    return <EmptyData></EmptyData>;
+  }
 }

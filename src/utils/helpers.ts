@@ -35,7 +35,7 @@ export function transformAddressSelectInput<T extends Entity>(
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((entity) => ({
           label: entity.name,
-          value: entity.id,
+          value: entity.name,
         }))
     : null;
 }

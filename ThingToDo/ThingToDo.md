@@ -1,5 +1,7 @@
 - (Dashboard) Tìm kiếm tài khoản
 
+- Cho phép Booking với 1 ngày (Hotel detail page).
+
 - Cần xử lý khi Booking liên tiếp thì tự động đổi sang phòng khác.
 
 - (Hotel-detail) Chỉnh giới hạn số phòng có thể đặt trên móc thời gian.
@@ -19,3 +21,7 @@
 - (Dashboard) Trang Thanh toán, có nút refresh dữ liệu, có nút filter theo trạng thái phòng.
 
 - (Dashboard) Tạo một trang thống kê hóa đơn.
+
+- Chi nhung nguoi co tai khoan moi Booking duoc
+
+- Cho phep co the Undo hoan tac Booking moi tuc thi

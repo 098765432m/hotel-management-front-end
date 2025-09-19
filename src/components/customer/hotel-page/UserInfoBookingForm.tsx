@@ -4,12 +4,9 @@ import styles from "@/styles/customer/hotel-detail/AvailableRooms.module.scss";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import bookingsService from "@/services/bookings.service";
 import { BookingsDtoCreate } from "@/types/dto/booking.dto";
-import { useSelector } from "react-redux";
-import { RootState } from "@/state/store";
 import ErrorCustomNotify from "@/components/custom-component/notification/ErrorCustomNotify";
-import { AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { DatesRangeValue } from "@mantine/dates";
 import { message } from "antd";
@@ -73,7 +70,7 @@ export default function UserInfoBookingForm(props: Props) {
 
       const body: BookingsDtoCreate = {
         hotelId: props.hotelId,
-        bookingTypeList: filteredBookingRooms,
+        bookingRoomTypeList: filteredBookingRooms,
         checkInDate: props.filterDateRange[0]!.toISOString(),
         checkOutDate: props.filterDateRange[1]!.toISOString(),
         userId: props.user?.id ?? undefined,
@@ -81,7 +78,12 @@ export default function UserInfoBookingForm(props: Props) {
         phoneNumber: formData.phoneNumber,
       };
 
-      await bookingsService.CreateOne(body);
+      // await bookingsService.CreateOne(body);
+      // TODO handle booking here
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/bookings/`,
+        body
+      );
       messageApi.success("Đặt phòng thành công!");
     } catch (error) {
       messageApi.error("Đặt phòng thất bại!");

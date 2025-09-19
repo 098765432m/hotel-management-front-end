@@ -10,7 +10,7 @@ import {
 import CardDefault from "@/components/custom-component/CardDefault";
 import MantineButton from "@/components/custom-component/MantineButton";
 import { useRouter } from "next/navigation";
-import { HotelResultCardDto } from "@/types/dto/hotel.dto";
+import { FilterHotel } from "@/types/dto/hotel.dto";
 import { DatesRangeValue } from "@mantine/dates";
 import { Rating } from "@mantine/core";
 import { roundToNearestHalf } from "@/utils/math";
@@ -19,7 +19,7 @@ import { NumberToMoneyFormat } from "@/utils/helpers";
 
 interface Props {
   filterDateRange: DatesRangeValue | [null, null];
-  hotel: HotelResultCardDto;
+  hotel: FilterHotel;
 }
 
 export default function HotelResultCard(props: Props) {
@@ -32,13 +32,16 @@ export default function HotelResultCard(props: Props) {
         className={styles.result_card}
         onClick={() =>
           router.push(
-            `/hotel/${props.hotel.hotelId}?filterDateRange=${encodeURIComponent(
+            `/hotel/${
+              props.hotel.hotel_id
+            }?filterDateRange=${encodeURIComponent(
               JSON.stringify(props.filterDateRange)
             )}`
           )
         }
       >
-        <div className={styles.result_image_layout}>
+        {/* TODO: Add public id image here */}
+        {/* <div className={styles.result_image_layout}>
           <div className={styles.result_card_image_container}>
             <NextImage
               src={
@@ -52,23 +55,24 @@ export default function HotelResultCard(props: Props) {
               className="object-cover"
             ></NextImage>
           </div>
-        </div>
+        </div> */}
         <div className={styles.hotel_info_layout}>
           <div className={styles.hotel_upper_container}>
             <div className={styles.hotel_name}>
               <NextLink
                 href={`/hotel/${
-                  props.hotel.hotelId
+                  props.hotel.hotel_id
                 }?filterDateRange=${encodeURIComponent(
                   JSON.stringify(props.filterDateRange)
                 )}`}
               >
-                {props.hotel.hotelName}
+                {props.hotel.hotel_name}
               </NextLink>
             </div>
 
             <div className={styles.hotel_rating_container}>
-              <Rating
+              {/* TODO: ADD hotel Rating here too */}
+              {/* <Rating
                 size={"lg"}
                 fractions={2}
                 readOnly
@@ -79,19 +83,20 @@ export default function HotelResultCard(props: Props) {
                   {props.hotel.hotelRating}
                 </span>
                 /5
-              </span>
+              </span> */}
             </div>
           </div>
-          <div className={styles.hotel_address}>
+          {/* Add hotel address or province here too */}
+          {/* <div className={styles.hotel_address}>
             <span className={styles.icon_location}>
               <FaLocationDot size={12}></FaLocationDot>
             </span>
             {`${props.hotel.hotelAddress.district.name}, ${props.hotel.hotelAddress.province.name}`}
-          </div>
+          </div> */}
           <div className={styles.hotel_price_container}>
             <span className={styles.label_text}>Chỉ từ:</span>{" "}
             <span className={styles.price_number}>
-              {NumberToMoneyFormat(props.hotel.hotalMinPrice)}đ
+              {NumberToMoneyFormat(props.hotel.min_price)}đ
             </span>
           </div>
         </div>

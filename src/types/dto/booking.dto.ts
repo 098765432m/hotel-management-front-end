@@ -4,7 +4,7 @@ import { Prisma, Status_Booking } from "@prisma/client";
 export interface BookingsDtoCreate {
   checkInDate: string;
   checkOutDate: string;
-  bookingTypeList: (string | number)[][];
+  bookingRoomTypeList: (string | number)[][];
   hotelId: string;
   status?: Status_Booking;
   userId?: string;

@@ -20,3 +20,13 @@ export function formatDateToYYYYMMDD(date: dayjs.Dayjs) {
       return "";
   }
 }
+
+// Change to DD-MM-YYYY format
+export function formatDateToDDMMYYYY(date: dayjs.Dayjs) {
+  switch (date.isValid()) {
+    case true:
+      return date.format("DD-MM-YYYY");
+    case false:
+      return "";
+  }
+}

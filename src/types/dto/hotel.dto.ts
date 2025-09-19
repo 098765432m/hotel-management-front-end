@@ -50,16 +50,15 @@ export interface HotelCustomerPageDto {
   }[];
 }
 
-interface HotelResultCardDto {
-  hotelId: string;
-  hotelName: string;
-  hotelDescription: string;
-  hotelAddress: AddressType;
-  hotelRating: number;
-  hotalMinPrice: number;
-  hotalMaxPrice: number;
-  imagePublicId: string;
-  imageFormat: string;
+interface FilterHotel {
+  hotel_id: string;
+  hotel_name: string;
+  hotel_des: string;
+  hotel_address: string;
+  min_price: number;
+  hotel_rating: number;
+  image_public_id: string;
+  image_format: string;
 }
 
 export type {
@@ -67,5 +66,5 @@ export type {
   HotelFormCreateProps,
   HotelCreateDto,
   HotelContactCreateDto,
-  HotelResultCardDto,
+  FilterHotel,
 };

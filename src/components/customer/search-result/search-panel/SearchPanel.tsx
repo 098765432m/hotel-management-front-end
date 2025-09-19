@@ -7,12 +7,8 @@ import MantineButton from "@/components/custom-component/MantineButton";
 import { RangeSlider, Select, TextInput } from "@mantine/core";
 import { DatesRangeValue, DateValue } from "@mantine/dates";
 import MantineDatePicker from "@/components/custom-component/date-picker/MantineDatePicker";
-import { useEffect, useId, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { RootState, store } from "@/state/store";
-import { setField } from "@/state/search-hotel-form/searchHotelForm";
-import hotelsService from "@/services/hotels.service";
-import { SearchHotelForm } from "@/types/pages/searchResultPage.interface";
+import { useId } from "react";
+import { FilterHotelForm } from "@/types/pages/searchResultPage.interface";
 
 interface Province {
   label: string;
@@ -20,10 +16,10 @@ interface Province {
 }
 
 interface Props {
-  formValues: SearchHotelForm;
+  formValues: FilterHotelForm;
   setFormValues: any;
   listProvince: Province[] | undefined;
-  onSearchClick: (params: SearchHotelForm) => Promise<void>;
+  onSearchClick: (params: FilterHotelForm) => Promise<void>;
 }
 
 export default function SearchPanel(props: Props) {
@@ -47,7 +43,7 @@ export default function SearchPanel(props: Props) {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const value = e.currentTarget.value;
 
-                props.setFormValues((prev: SearchHotelForm) => ({
+                props.setFormValues((prev: FilterHotelForm) => ({
                   ...prev,
                   hotelName: value,
                 }));
@@ -69,11 +65,11 @@ export default function SearchPanel(props: Props) {
                 { label: "Tất cả", value: "" },
                 ...(props.listProvince ?? []),
               ]}
-              value={props.formValues.provinceId ?? ""}
+              value={props.formValues.provinceName ?? ""}
               onChange={(value: string | null) => {
-                props.setFormValues((prev: SearchHotelForm) => ({
+                props.setFormValues((prev: FilterHotelForm) => ({
                   ...prev,
-                  provinceId: value,
+                  provinceName: value,
                 }));
               }}
               placeholder="Chọn tỉnh thành"
@@ -98,14 +94,14 @@ export default function SearchPanel(props: Props) {
                   //   value: value as DatesRangeValue,
                   // });
                   // props.setFilterDateRange(value as DatesRangeValue);
-                  props.setFormValues((prev: SearchHotelForm) => ({
+                  props.setFormValues((prev: FilterHotelForm) => ({
                     ...prev,
                     filterDateRange: value,
                   }));
                 } else {
                   // setField({ key: "filterDateRange", value: [null, null] });
                   // props.setFilterDateRange([null, null]);
-                  props.setFormValues((prev: SearchHotelForm) => ({
+                  props.setFormValues((prev: FilterHotelForm) => ({
                     ...prev,
                     filterDateRange: [null, null],
                   }));
@@ -134,7 +130,7 @@ export default function SearchPanel(props: Props) {
                   : undefined
               }
               onChange={(value: [number, number]) => {
-                props.setFormValues((prev: SearchHotelForm) => ({
+                props.setFormValues((prev: FilterHotelForm) => ({
                   ...prev,
                   priceRange: value,
                 }));
@@ -194,7 +190,7 @@ export default function SearchPanel(props: Props) {
                   : undefined
               }
               onChange={(value: [number, number]) => {
-                props.setFormValues((prev: SearchHotelForm) => ({
+                props.setFormValues((prev: FilterHotelForm) => ({
                   ...prev,
                   ratingRange: value,
                 }));
